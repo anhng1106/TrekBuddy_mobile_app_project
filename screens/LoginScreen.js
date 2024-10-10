@@ -21,7 +21,7 @@ const LoginScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Login or Signup</Text>
+      <Text style={styles.title}>Welcome to TrekBuddy!</Text>
       <TextInput
         style={styles.input}
         placeholder="Email"
