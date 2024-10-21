@@ -1,5 +1,13 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, Button, StyleSheet, Image } from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  Button,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+} from "react-native";
 
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
@@ -40,8 +48,15 @@ const LoginScreen = ({ navigation }) => {
         onChangeText={setPassword}
         secureTextEntry
       />
-      <Button title="Login" onPress={handleLogin} />
-      <Button title="Signup" onPress={handleSignup} />
+      <TouchableOpacity style={styles.button} onPress={handleLogin}>
+        <Text style={styles.buttonText}>Sign In</Text>
+      </TouchableOpacity>
+      <TouchableOpacity onPress={handleSignup}>
+        <Text style={styles.signupText}>
+          Do not have an account yet?{" "}
+          <Text style={styles.signupLink}>Sign Up</Text>
+        </Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -70,6 +85,31 @@ const styles = StyleSheet.create({
     padding: 10,
     marginBottom: 20,
     borderRadius: 5,
+    fontSize: 18,
+  },
+  button: {
+    backgroundColor: "#fc8fa7",
+    padding: 13,
+    borderRadius: 20,
+    alignItems: "center",
+    alignSelf: "center", // Center the button horizontally
+    marginBottom: 10,
+    width: "50%", // Set a percentage width to control button size
+  },
+  buttonText: {
+    color: "#fff",
+    fontSize: 20,
+    fontWeight: "bold",
+  },
+  signupText: {
+    textAlign: "center",
+    color: "#000",
+    fontSize: 17,
+    marginTop: 20,
+  },
+  signupLink: {
+    color: "#fc8fa7",
+    fontWeight: "bold",
   },
 });
 
