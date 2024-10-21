@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, Button, StyleSheet } from "react-native";
+import { View, Text, TextInput, Button, StyleSheet, Image } from "react-native";
 
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
@@ -21,7 +21,10 @@ const LoginScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Welcome to TrekBuddy!</Text>
+      <Image
+        source={require("../assets/app_name.png")} // Adjust the path based on your directory structure
+        style={styles.logo}
+      />
       <TextInput
         style={styles.input}
         placeholder="Email"
@@ -48,6 +51,13 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     padding: 20,
+  },
+  logo: {
+    width: 450,
+    height: 250,
+    alignSelf: "center",
+    marginBottom: 5,
+    marginTop: -200,
   },
   title: {
     fontSize: 24,
