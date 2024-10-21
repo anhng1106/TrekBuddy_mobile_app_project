@@ -3,32 +3,49 @@ import {
   View,
   Text,
   TextInput,
-  Button,
   StyleSheet,
   Image,
   TouchableOpacity,
+  useColorScheme,
 } from "react-native";
+import Icon from "react-native-vector-icons/Ionicons";
 
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  // system theme (light or dark)
+  const systemTheme = useColorScheme();
+  const [theme, setTheme] = useState(systemTheme); // manually switch between themes if needed
+
   const handleLogin = () => {
-    // Handle login functionality here
+    // handle login functionality
     console.log("Login with:", email, password);
-    // Navigate to the Home/Search screen
+    // navigate to the Home/Search screen
     navigation.navigate("HomeScreen");
   };
 
   const handleSignup = () => {
-    // Handle signup functionality here
-    console.log("Signup with:", email, password);
-    // Navigate to the Home/Search screen
-    navigation.navigate("HomeScreen");
+    // navigate to the Signup screen
+    navigation.navigate("SignupScreen");
   };
+
+  // toggle theme manually
+  const toggleTheme = () => {
+    setTheme(theme === "light" ? "dark" : "light");
+  };
+
+  const styles = theme === "light" ? lightTheme : darkTheme;
 
   return (
     <View style={styles.container}>
+      <TouchableOpacity style={styles.toggleButton} onPress={toggleTheme}>
+        <Icon
+          name={theme === "light" ? "moon" : "sunny"}
+          size={30}
+          color={theme === "light" ? "#000" : "#fff"}
+        />
+      </TouchableOpacity>
       <Image
         source={require("../assets/app_name.png")} // Adjust the path based on your directory structure
         style={styles.logo}
@@ -36,6 +53,7 @@ const LoginScreen = ({ navigation }) => {
       <TextInput
         style={styles.input}
         placeholder="Email"
+        placeholderTextColor={theme === "light" ? "#999" : "#888"}
         value={email}
         onChangeText={setEmail}
         keyboardType="email-address"
@@ -44,6 +62,7 @@ const LoginScreen = ({ navigation }) => {
       <TextInput
         style={styles.input}
         placeholder="Password"
+        placeholderTextColor={theme === "light" ? "#999" : "#888"}
         value={password}
         onChangeText={setPassword}
         secureTextEntry
@@ -61,10 +80,12 @@ const LoginScreen = ({ navigation }) => {
   );
 };
 
-const styles = StyleSheet.create({
+// Light and dark theme styles
+const lightTheme = {
   container: {
     flex: 1,
     justifyContent: "center",
+    backgroundColor: "#fff",
     padding: 20,
   },
   logo: {
@@ -74,11 +95,6 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     marginTop: -200,
   },
-  title: {
-    fontSize: 24,
-    marginBottom: 20,
-    textAlign: "center",
-  },
   input: {
     borderWidth: 1,
     borderColor: "#ccc",
@@ -86,15 +102,17 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     borderRadius: 5,
     fontSize: 18,
+    backgroundColor: "#f9f9f9",
+    color: "#000",
   },
   button: {
     backgroundColor: "#fc8fa7",
     padding: 13,
     borderRadius: 20,
     alignItems: "center",
-    alignSelf: "center", // Center the button horizontally
+    alignSelf: "center",
     marginBottom: 10,
-    width: "50%", // Set a percentage width to control button size
+    width: "50%",
   },
   buttonText: {
     color: "#fff",
@@ -111,6 +129,68 @@ const styles = StyleSheet.create({
     color: "#fc8fa7",
     fontWeight: "bold",
   },
-});
+  toggleButton: {
+    position: "absolute",
+    top: 5, // Move the icon closer to the very top
+    right: 20,
+    zIndex: 1, // Ensure it's on top of other components
+  },
+};
+
+const darkTheme = {
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    backgroundColor: "#121212",
+    padding: 20,
+  },
+  logo: {
+    width: 450,
+    height: 250,
+    alignSelf: "center",
+    marginBottom: 5,
+    marginTop: -200,
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: "#444",
+    padding: 10,
+    marginBottom: 20,
+    borderRadius: 5,
+    fontSize: 18,
+    backgroundColor: "#333",
+    color: "#fff",
+  },
+  button: {
+    backgroundColor: "#fc8fa7",
+    padding: 13,
+    borderRadius: 20,
+    alignItems: "center",
+    alignSelf: "center",
+    marginBottom: 10,
+    width: "50%",
+  },
+  buttonText: {
+    color: "#fff",
+    fontSize: 20,
+    fontWeight: "bold",
+  },
+  signupText: {
+    textAlign: "center",
+    color: "#fff",
+    fontSize: 17,
+    marginTop: 20,
+  },
+  signupLink: {
+    color: "#fc8fa7",
+    fontWeight: "bold",
+  },
+  toggleButton: {
+    position: "absolute",
+    top: 5, // Move the icon closer to the very top
+    right: 20,
+    zIndex: 1, // Ensure it's on top of other components
+  },
+};
 
 export default LoginScreen;
