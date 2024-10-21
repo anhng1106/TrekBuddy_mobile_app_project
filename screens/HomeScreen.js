@@ -22,8 +22,8 @@ const HomeScreen = ({ navigation }) => {
           style={styles.logo}
         />
 
-        <TouchableOpacity onPress={handleProfile}>
-          <Icon name="person-circle-outline" size={35} color="#000" />
+        <TouchableOpacity onPress={handleProfile} style={styles.iconContainer}>
+          <Icon name="person-circle-outline" size={30} style={styles.icon} />
         </TouchableOpacity>
       </View>
 
@@ -57,20 +57,36 @@ const styles = StyleSheet.create({
   },
   logo: {
     width: 100,
-    height: 40,
+    height: 50,
+    width: "35%",
+    marginTop: -30,
+    marginLeft: -30,
   },
   searchContainer: {
-    paddingHorizontal: 20,
-    paddingTop: 10,
+    flex: 1,
+    paddingHorizontal: 10,
   },
   searchBar: {
     borderWidth: 1,
     borderColor: "#ccc",
     borderRadius: 25,
-    paddingHorizontal: 15,
-    height: 40,
+    paddingHorizontal: 20,
+    height: 30,
     backgroundColor: "#f9f9f9",
     fontSize: 16,
+    width: "60%",
+    alignItems: "center",
+    alignSelf: "center",
+    marginTop: -52,
+    marginLeft: 50,
+  },
+  iconContainer: {
+    padding: 5,
+  },
+  icon: {
+    color: "#000",
+    marginRight: -10,
+    marginTop: -33,
   },
   content: {
     paddingHorizontal: 20,
