@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import {
   View,
   Text,
@@ -6,17 +6,15 @@ import {
   StyleSheet,
   Image,
   TouchableOpacity,
-  useColorScheme,
 } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
+import { ThemeContext } from "../ThemeContext";
 
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  // system theme (light or dark)
-  const systemTheme = useColorScheme();
-  const [theme, setTheme] = useState(systemTheme); // manually switch between themes if needed
+  const { theme, toggleTheme } = useContext(ThemeContext);
 
   const handleLogin = () => {
     // handle login functionality
@@ -28,11 +26,6 @@ const LoginScreen = ({ navigation }) => {
   const handleSignup = () => {
     // navigate to the Signup screen
     navigation.navigate("SignupScreen");
-  };
-
-  // toggle theme manually
-  const toggleTheme = () => {
-    setTheme(theme === "light" ? "dark" : "light");
   };
 
   const styles = theme === "light" ? lightTheme : darkTheme;
@@ -85,7 +78,7 @@ const lightTheme = {
   container: {
     flex: 1,
     justifyContent: "center",
-    backgroundColor: "#fff",
+    backgroundColor: "#fdeae2",
     padding: 20,
   },
   logo: {
@@ -141,7 +134,7 @@ const darkTheme = {
   container: {
     flex: 1,
     justifyContent: "center",
-    backgroundColor: "#121212",
+    backgroundColor: "#545454",
     padding: 20,
   },
   logo: {

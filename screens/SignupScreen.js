@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import {
   View,
   Text,
@@ -6,13 +6,17 @@ import {
   TouchableOpacity,
   StyleSheet,
   Alert,
+  Image,
 } from "react-native";
+import { ThemeContext } from "../ThemeContext";
 
 const SignupScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+
+  const { theme, toggleTheme } = useContext(ThemeContext);
 
   // Handle the sign-up button press
   const handleSignUp = () => {
@@ -29,12 +33,18 @@ const SignupScreen = ({ navigation }) => {
     navigation.navigate("HomeScreen");
   };
 
+  const styles = theme === "light" ? lightTheme : darkTheme;
+
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Create an Account</Text>
+      <Image
+        source={require("../assets/create_account.png")} // Adjust the path based on your directory structure
+        style={styles.logo}
+      />
       <TextInput
         style={styles.input}
         placeholder="Email"
+        placeholderTextColor={theme === "light" ? "#999" : "#888"}
         value={email}
         onChangeText={setEmail}
         keyboardType="email-address"
@@ -43,6 +53,7 @@ const SignupScreen = ({ navigation }) => {
       <TextInput
         style={styles.input}
         placeholder="Username"
+        placeholderTextColor={theme === "light" ? "#999" : "#888"}
         value={username}
         onChangeText={setUsername}
         autoCapitalize="none"
@@ -50,6 +61,7 @@ const SignupScreen = ({ navigation }) => {
       <TextInput
         style={styles.input}
         placeholder="Password"
+        placeholderTextColor={theme === "light" ? "#999" : "#888"}
         value={password}
         onChangeText={setPassword}
         secureTextEntry
@@ -57,6 +69,7 @@ const SignupScreen = ({ navigation }) => {
       <TextInput
         style={styles.input}
         placeholder="Confirm Password"
+        placeholderTextColor={theme === "light" ? "#999" : "#888"}
         value={confirmPassword}
         onChangeText={setConfirmPassword}
         secureTextEntry
@@ -68,17 +81,20 @@ const SignupScreen = ({ navigation }) => {
   );
 };
 
-const styles = StyleSheet.create({
+// Light and dark theme styles
+const lightTheme = {
   container: {
     flex: 1,
     justifyContent: "center",
+    backgroundColor: "#fdeae2",
     padding: 20,
   },
-  title: {
-    fontSize: 24,
-    marginBottom: 20,
-    textAlign: "center",
-    fontWeight: "bold",
+  logo: {
+    width: 450,
+    height: 250,
+    alignSelf: "center",
+    marginBottom: 5,
+    marginTop: -100,
   },
   input: {
     borderWidth: 1,
@@ -87,20 +103,95 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     borderRadius: 5,
     fontSize: 18,
+    backgroundColor: "#f9f9f9",
+    color: "#000",
   },
   button: {
-    backgroundColor: "#4CAF50",
-    padding: 15,
-    borderRadius: 10,
+    backgroundColor: "#fc8fa7",
+    padding: 13,
+    borderRadius: 20,
     alignItems: "center",
     alignSelf: "center",
-    width: "60%",
+    marginBottom: 10,
+    width: "50%",
   },
   buttonText: {
     color: "#fff",
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: "bold",
   },
-});
+  signupText: {
+    textAlign: "center",
+    color: "#000",
+    fontSize: 17,
+    marginTop: 20,
+  },
+  signupLink: {
+    color: "#fc8fa7",
+    fontWeight: "bold",
+  },
+  toggleButton: {
+    position: "absolute",
+    top: 5, // Move the icon closer to the very top
+    right: 20,
+    zIndex: 1, // Ensure it's on top of other components
+  },
+};
+
+const darkTheme = {
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    backgroundColor: "#545454",
+    padding: 20,
+  },
+  logo: {
+    width: 450,
+    height: 250,
+    alignSelf: "center",
+    marginBottom: 5,
+    marginTop: -100,
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: "#444",
+    padding: 10,
+    marginBottom: 20,
+    borderRadius: 5,
+    fontSize: 18,
+    backgroundColor: "#333",
+    color: "#fff",
+  },
+  button: {
+    backgroundColor: "#fc8fa7",
+    padding: 13,
+    borderRadius: 20,
+    alignItems: "center",
+    alignSelf: "center",
+    marginBottom: 10,
+    width: "50%",
+  },
+  buttonText: {
+    color: "#fff",
+    fontSize: 20,
+    fontWeight: "bold",
+  },
+  signupText: {
+    textAlign: "center",
+    color: "#fff",
+    fontSize: 17,
+    marginTop: 20,
+  },
+  signupLink: {
+    color: "#fc8fa7",
+    fontWeight: "bold",
+  },
+  toggleButton: {
+    position: "absolute",
+    top: 5, // Move the icon closer to the very top
+    right: 20,
+    zIndex: 1, // Ensure it's on top of other components
+  },
+};
 
 export default SignupScreen;
