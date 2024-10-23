@@ -19,7 +19,7 @@ const SignupScreen = ({ navigation }) => {
   const { theme, toggleTheme } = useContext(ThemeContext);
 
   // Handle the sign-up button press
-  const handleSignUp = () => {
+  const handleSignUp = async () => {
     if (password !== confirmPassword) {
       Alert.alert(
         "Passwords do not match",
@@ -27,10 +27,27 @@ const SignupScreen = ({ navigation }) => {
       );
       return;
     }
-    // Handle the actual sign-up functionality here (e.g., API call)
-    console.log("Signing up with", email, username, password);
-    // Navigate to the home screen or next screen after successful sign-up
-    navigation.navigate("HomeScreen");
+    try {
+      // Create user with email and password using Firebase Authentication
+      const userCredential = await auth().createUserWithEmailAndPassword(
+        email,
+        password
+      );
+      const user = userCredential.user;
+
+      // store the username and additional user data in Firestore
+      firestore().collection("Users").doc(user.uid).set({
+        username: username,
+        email: email,
+      });
+
+      console.log("User account created & signed in:", user);
+
+      // Navigate to the home screen or next screen after successful sign-up
+      navigation.navigate("HomeScreen");
+    } catch (error) {
+      Alert.alert("Sign Up Failed", error.message);
+    }
   };
 
   const styles = theme === "light" ? lightTheme : darkTheme;

@@ -95,8 +95,8 @@ const lightTheme = StyleSheet.create({
     marginTop: -33,
   },
   content: {
-    paddingHorizontal: 20,
-    paddingTop: 20,
+    alignItems: "center",
+    alignSelf: "center",
   },
 });
 
