@@ -5,7 +5,7 @@ import { ThemeProvider } from "./ThemeContext";
 import LoginScreen from "./screens/LoginScreen";
 import SignupScreen from "./screens/SignupScreen";
 import HomeScreen from "./screens/HomeScreen";
-import { app } from "./firebaseConfig";
+import ProfileScreen from "./screens/ProfileScreen";
 
 const Stack = createStackNavigator();
 
@@ -27,9 +27,13 @@ export default function App() {
           <Stack.Screen
             name="HomeScreen"
             component={HomeScreen}
-            options={{ title: "Home" }}
+            options={{ title: "TREKBUDDY - Home" }}
           />
-          {/* You will add more screens (Home, Profile, etc.) here */}
+          <Stack.Screen
+            name="ProfileScreen"
+            component={ProfileScreen}
+            options={{ title: "TREKBUDDY - Profile" }}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     </ThemeProvider>
