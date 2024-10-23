@@ -5,6 +5,7 @@ import { ThemeProvider } from "./ThemeContext";
 import LoginScreen from "./screens/LoginScreen";
 import SignupScreen from "./screens/SignupScreen";
 import HomeScreen from "./screens/HomeScreen";
+import { app } from "./firebaseConfig";
 
 const Stack = createStackNavigator();
 

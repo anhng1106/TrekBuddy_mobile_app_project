@@ -1,5 +1,6 @@
-import firebase from "@react-native-firebase/app";
-import "@react-native-firebase/auth"; // Import Firebase Authentication
+import { initializeApp } from "firebase/app";
+import { getAuth } from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAss8YyS-Rml70B8_cvmwm3BTZnMJyRJsw",
@@ -7,11 +8,12 @@ const firebaseConfig = {
   projectId: "trekbuddy-95089",
   storageBucket: "trekbuddy-95089.appspot.com",
   messagingSenderId: "849900630550",
-  appId: "YOUR_APP_ID",
+  appId: "1:849900630550:web:8f3b86fd97cc3059a5bb37",
 };
 
-if (!firebase.apps.length) {
-  firebase.initializeApp(firebaseConfig);
-}
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
 
-export default firebase;
+// Initialize Firebase Authentication and Firestore
+export const auth = getAuth(app);
+export const db = getFirestore(app); // Export Firestore instance

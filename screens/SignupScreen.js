@@ -9,6 +9,9 @@ import {
   Image,
 } from "react-native";
 import { ThemeContext } from "../ThemeContext";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { doc, setDoc } from "firebase/firestore"; // Import Firestore methods
+import { auth, db } from "../firebaseConfig"; // Import Firestore instance
 
 const SignupScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
@@ -28,23 +31,32 @@ const SignupScreen = ({ navigation }) => {
       return;
     }
     try {
-      // Create user with email and password using Firebase Authentication
-      const userCredential = await auth().createUserWithEmailAndPassword(
+      // Create user with Firebase Authentication
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
         email,
         password
       );
       const user = userCredential.user;
 
-      // store the username and additional user data in Firestore
-      firestore().collection("Users").doc(user.uid).set({
+      console.log("User account created:", user);
+
+      // Store the username and email in Firestore
+      await setDoc(doc(db, "Users", user.uid), {
         username: username,
         email: email,
       });
 
-      console.log("User account created & signed in:", user);
-
-      // Navigate to the home screen or next screen after successful sign-up
-      navigation.navigate("HomeScreen");
+      Alert.alert(
+        "Account Created",
+        "Your account has been created successfully",
+        [
+          {
+            text: "OK",
+            onPress: () => navigation.navigate("HomeScreen"), // Navigate to HomeScreen after pressing OK
+          },
+        ]
+      );
     } catch (error) {
       Alert.alert("Sign Up Failed", error.message);
     }
