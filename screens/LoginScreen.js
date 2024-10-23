@@ -6,9 +6,12 @@ import {
   StyleSheet,
   Image,
   TouchableOpacity,
+  Alert,
 } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
 import { ThemeContext } from "../ThemeContext";
+import { signInWithEmailAndPassword } from "firebase/auth"; // Import Firebase Auth
+import { auth } from "../firebaseConfig";
 
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
@@ -16,11 +19,29 @@ const LoginScreen = ({ navigation }) => {
 
   const { theme, toggleTheme } = useContext(ThemeContext);
 
-  const handleLogin = () => {
-    // handle login functionality
-    console.log("Login with:", email, password);
-    // navigate to the Home/Search screen
-    navigation.navigate("HomeScreen");
+  const handleLogin = async () => {
+    if (!email || !password) {
+      Alert.alert("Missing Fields", "Please fill in both email and password.");
+      return;
+    }
+    try {
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      console.log("User logged in:", userCredential.user);
+      navigation.navigate("HomeScreen"); // Navigate to HomeScreen upon successful login
+    } catch (error) {
+      // Handle authentication errors
+      if (error.code === "auth/user-not-found") {
+        Alert.alert("Error", "User not found. Please sign up.");
+      } else if (error.code === "auth/wrong-password") {
+        Alert.alert("Error", "Incorrect password. Please try again.");
+      } else {
+        Alert.alert("Error", error.message);
+      }
+    }
   };
 
   const handleSignup = () => {
