@@ -23,6 +23,14 @@ const SignupScreen = ({ navigation }) => {
 
   // Handle the sign-up button press
   const handleSignUp = async () => {
+    if (!email || !username || !password || !confirmPassword) {
+      Alert.alert(
+        "Missing Fields",
+        "Please fill in all fields before signing up."
+      );
+      return;
+    }
+
     if (password !== confirmPassword) {
       Alert.alert(
         "Passwords do not match",
