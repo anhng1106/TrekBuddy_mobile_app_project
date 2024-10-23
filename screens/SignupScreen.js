@@ -53,12 +53,19 @@ const SignupScreen = ({ navigation }) => {
         [
           {
             text: "OK",
-            onPress: () => navigation.navigate("HomeScreen"), // Navigate to HomeScreen after pressing OK
+            onPress: () => navigation.navigate("LoginScreen"), // Navigate to HomeScreen after pressing OK
           },
         ]
       );
     } catch (error) {
-      Alert.alert("Sign Up Failed", error.message);
+      if (error.code === "auth/email-already-in-use") {
+        Alert.alert(
+          "Email Already Exists",
+          "The email address is already in use by another account. Please use a different email."
+        );
+      } else {
+        Alert.alert("Sign Up Failed", error.message);
+      }
     }
   };
 
