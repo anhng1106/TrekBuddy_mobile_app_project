@@ -14,6 +14,7 @@ import { auth, db, storage } from "../firebaseConfig";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { launchImageLibrary } from "react-native-image-picker";
+import Icon from "react-native-vector-icons/Ionicons";
 
 const ProfileScreen = ({ navigation }) => {
   const [email, setEmail] = useState(auth.currentUser.email || "");
@@ -109,6 +110,13 @@ const ProfileScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
+      <TouchableOpacity
+        onPress={() => navigation.goBack()}
+        style={styles.backButton}
+      >
+        <Icon name="arrow-back" size={24} color="#007AFF" />
+      </TouchableOpacity>
+
       <View style={styles.profilePictureContainer}>
         <Image
           source={
