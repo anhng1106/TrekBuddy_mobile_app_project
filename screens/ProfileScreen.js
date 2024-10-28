@@ -7,9 +7,10 @@ import {
   Image,
   Alert,
   StyleSheet,
+  Modal,
   Button,
 } from "react-native";
-import { auth, db, storage } from "../firebaseConfig"; // Make sure to import your Firebase config
+import { auth, db, storage } from "../firebaseConfig";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { launchImageLibrary } from "react-native-image-picker";
@@ -20,8 +21,8 @@ const ProfileScreen = ({ navigation }) => {
   const [photoURL, setPhotoURL] = useState(auth.currentUser.photoURL || "");
   const [errorMessage, setErrorMessage] = useState("");
   const [usernameInput, setUsernameInput] = useState("");
+  const [isModalVisible, setModalVisible] = useState(false);
 
-  // Fetch user data when the profile page is initialized
   useEffect(() => {
     const fetchUsername = async () => {
       try {
@@ -36,7 +37,6 @@ const ProfileScreen = ({ navigation }) => {
     fetchUsername();
   }, []);
 
-  // Update the username in Firestore
   const updateUsername = async () => {
     if (usernameInput.trim() === "") {
       setErrorMessage("Username cannot be empty.");
@@ -49,17 +49,17 @@ const ProfileScreen = ({ navigation }) => {
       });
       setUsername(usernameInput.trim());
       setErrorMessage("");
+      setModalVisible(false); // Close the modal
       Alert.alert("Success", "Username updated successfully!");
     } catch (error) {
       setErrorMessage("Failed to update username: " + error.message);
     }
   };
 
-  // Update the profile picture
   const updateProfilePicture = async () => {
     const result = await launchImageLibrary();
     if (result.didCancel || !result.assets || result.assets.length === 0) {
-      return; // User canceled or no image selected
+      return;
     }
 
     const imageUri = result.assets[0].uri;
@@ -89,7 +89,6 @@ const ProfileScreen = ({ navigation }) => {
     }
   };
 
-  // Update the email
   const updateEmail = async () => {
     try {
       await auth.currentUser.updateEmail(email);
@@ -99,7 +98,6 @@ const ProfileScreen = ({ navigation }) => {
     }
   };
 
-  // Log out the user
   const signOut = async () => {
     try {
       await auth.signOut();
@@ -128,17 +126,43 @@ const ProfileScreen = ({ navigation }) => {
         </TouchableOpacity>
       </View>
 
-      <Text style={styles.label}>Username</Text>
-      <Text style={styles.usernameText}>{username}</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Enter new username"
-        value={usernameInput}
-        onChangeText={setUsernameInput}
-      />
-      <TouchableOpacity style={styles.button} onPress={updateUsername}>
-        <Text style={styles.buttonText}>Update Username</Text>
-      </TouchableOpacity>
+      <View style={styles.usernameContainer}>
+        <Text style={styles.usernameText}>{username}</Text>
+        <TouchableOpacity onPress={() => setModalVisible(true)}>
+          <Text style={styles.editIcon}>✏️</Text>
+        </TouchableOpacity>
+      </View>
+
+      {/* Modal for editing username */}
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={isModalVisible}
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContainer}>
+            <Text style={styles.modalTitle}>Edit Username</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Enter new username"
+              value={usernameInput}
+              onChangeText={setUsernameInput}
+            />
+            <View style={styles.modalButtons}>
+              <TouchableOpacity style={styles.button} onPress={updateUsername}>
+                <Text style={styles.buttonText}>Save</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.button, styles.cancelButton]}
+                onPress={() => setModalVisible(false)}
+              >
+                <Text style={styles.buttonText}>Cancel</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
 
       <Text style={styles.label}>Email</Text>
       <TextInput
@@ -190,16 +214,26 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 18,
   },
-  label: {
-    fontSize: 16,
-    fontWeight: "bold",
-    marginVertical: 10,
+  usernameContainer: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: 20,
   },
   usernameText: {
     fontSize: 18,
     fontWeight: "bold",
     textAlign: "center",
-    marginBottom: 10,
+  },
+  editIcon: {
+    fontSize: 18,
+    marginLeft: 8,
+    color: "#007AFF",
+  },
+  label: {
+    fontSize: 16,
+    fontWeight: "bold",
+    marginVertical: 10,
   },
   input: {
     borderWidth: 1,
@@ -225,6 +259,30 @@ const styles = StyleSheet.create({
     color: "red",
     textAlign: "center",
     marginTop: 20,
+  },
+  modalOverlay: {
+    flex: 1,
+    justifyContent: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  modalContainer: {
+    backgroundColor: "white",
+    padding: 20,
+    marginHorizontal: 20,
+    borderRadius: 8,
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginBottom: 10,
+    textAlign: "center",
+  },
+  modalButtons: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  cancelButton: {
+    backgroundColor: "#ff4d4d",
   },
 });
 
