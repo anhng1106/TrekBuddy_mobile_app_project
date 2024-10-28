@@ -11,27 +11,20 @@ import Icon from "react-native-vector-icons/Ionicons";
 import { ThemeContext } from "../ThemeContext";
 
 const HomeScreen = ({ navigation }) => {
-  const handleProfile = () => {
-    navigation.navigate("ProfileScreen"); // Navigate to a profile screen (you should create this)
-  };
-
-  const { theme, toggleTheme } = useContext(ThemeContext);
-
+  const { theme } = useContext(ThemeContext);
   const styles = theme === "light" ? lightTheme : darkTheme;
 
   return (
     <View style={styles.container}>
       <View style={styles.topBar}>
-        <Image
-          source={require("../assets/app_logo.png")} // Adjust the path as needed
-          style={styles.logo}
-        />
-
-        <TouchableOpacity onPress={handleProfile} style={styles.iconContainer}>
+        <Image source={require("../assets/app_logo.png")} style={styles.logo} />
+        <TouchableOpacity
+          onPress={() => navigation.navigate("ProfileScreen")}
+          style={styles.iconContainer}
+        >
           <Icon name="person-circle-outline" size={30} style={styles.icon} />
         </TouchableOpacity>
       </View>
-
       <View style={styles.searchContainer}>
         <TextInput
           style={styles.searchBar}
@@ -39,7 +32,6 @@ const HomeScreen = ({ navigation }) => {
           placeholderTextColor="#888"
         />
       </View>
-
       <View style={styles.content}>
         <Text>Welcome to the Home Page!</Text>
       </View>

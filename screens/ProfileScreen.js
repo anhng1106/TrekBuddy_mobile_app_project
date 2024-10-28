@@ -110,12 +110,12 @@ const ProfileScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity
+      {/* <TouchableOpacity
         onPress={() => navigation.goBack()}
         style={styles.backButton}
       >
         <Icon name="arrow-back" size={24} color="#007AFF" />
-      </TouchableOpacity>
+      </TouchableOpacity> */}
 
       <View style={styles.profilePictureContainer}>
         <Image
@@ -137,7 +137,7 @@ const ProfileScreen = ({ navigation }) => {
       <View style={styles.usernameContainer}>
         <Text style={styles.usernameText}>{username}</Text>
         <TouchableOpacity onPress={() => setModalVisible(true)}>
-          <Text style={styles.editIcon}>✏️</Text>
+          <Icon name="pencil" size={24} color="#007AFF" />
         </TouchableOpacity>
       </View>
 
