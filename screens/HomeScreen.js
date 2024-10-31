@@ -33,7 +33,18 @@ const HomeScreen = ({ navigation }) => {
         />
       </View>
       <View style={styles.content}>
-        <Text>Welcome to the Home Page!</Text>
+        <TouchableOpacity
+          style={styles.flightsButton}
+          onPress={() => navigation.navigate("FlightsScreen")}
+        >
+          <Icon
+            name="airplane-outline"
+            size={35}
+            color="#fff"
+            style={styles.flightIcon}
+          />
+        </TouchableOpacity>
+        <Text style={styles.content}>Flights</Text>
       </View>
     </View>
   );
@@ -88,6 +99,27 @@ const lightTheme = StyleSheet.create({
   content: {
     alignItems: "center",
     alignSelf: "center",
+    marginBottom: "63%",
+    marginLeft: "-25%",
+  },
+  flightsButton: {
+    backgroundColor: "#fc8fa7",
+    paddingVertical: 15,
+    paddingHorizontal: 18,
+    borderRadius: 50,
+    alignItems: "center",
+    justifyContent: "center",
+    marginLeft: "-25%",
+  },
+  flightIcon: {
+    marginBottom: 3,
+    alignItems: "center",
+    alignSelf: "center", // Space between icon and text
+  },
+  buttonText: {
+    color: "#fff",
+    fontSize: 18,
+    fontWeight: "bold",
   },
 });
 
@@ -117,11 +149,11 @@ const darkTheme = StyleSheet.create({
   },
   searchBar: {
     borderWidth: 1,
-    borderColor: "#444", // Darker border for dark theme
+    borderColor: "#444",
     borderRadius: 25,
     paddingHorizontal: 20,
     height: 30,
-    backgroundColor: "#333", // Dark background for search
+    backgroundColor: "#333",
     fontSize: 16,
     width: "60%",
     alignItems: "center",
@@ -133,13 +165,32 @@ const darkTheme = StyleSheet.create({
     padding: 5,
   },
   icon: {
-    color: "#fff", // White icon for dark theme
+    color: "#fff",
     marginRight: -10,
     marginTop: -33,
   },
   content: {
-    paddingHorizontal: 20,
-    paddingTop: 20,
+    alignItems: "center",
+    alignSelf: "center",
+    marginBottom: "63%",
+    marginLeft: "-25%",
+  },
+  flightsButton: {
+    backgroundColor: "#fc8fa7",
+    paddingVertical: 15,
+    paddingHorizontal: 18,
+    borderRadius: 50,
+    alignItems: "center",
+    justifyContent: "center",
+    marginLeft: "-25%",
+  },
+  flightIcon: {
+    marginBottom: 5, // Space between icon and text
+  },
+  buttonText: {
+    color: "#fff",
+    fontSize: 18,
+    fontWeight: "bold",
   },
 });
 

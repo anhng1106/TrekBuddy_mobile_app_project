@@ -9,6 +9,7 @@ import LoginScreen from "./screens/LoginScreen";
 import SignupScreen from "./screens/SignupScreen";
 import HomeScreen from "./screens/HomeScreen";
 import ProfileScreen from "./screens/ProfileScreen";
+import FlightsScreen from "./screens/FlightsScreen";
 
 // Stack Navigator for screens outside bottom tabs
 const Stack = createStackNavigator();
@@ -82,6 +83,11 @@ export default function App() {
             name="ProfileScreen"
             component={ProfileScreen} // Ensure ProfileScreen is here
             options={{ title: "TREKBUDDY - Profile" }}
+          />
+          <Stack.Screen
+            name="FlightsScreen"
+            component={FlightsScreen}
+            options={{ title: "TREKBUDDY - Flights" }}
           />
         </Stack.Navigator>
       </NavigationContainer>
