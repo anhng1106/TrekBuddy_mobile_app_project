@@ -121,6 +121,13 @@ const SignupScreen = ({ navigation }) => {
       <TouchableOpacity style={styles.button} onPress={handleSignUp}>
         <Text style={styles.buttonText}>Sign Up</Text>
       </TouchableOpacity>
+
+      <TouchableOpacity onPress={() => navigation.navigate("LoginScreen")}>
+        <Text style={styles.signupText}>
+          Already have an account?{" "}
+          <Text style={styles.signupLink}>Sign In</Text>
+        </Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -174,12 +181,6 @@ const lightTheme = {
     color: "#fc8fa7",
     fontWeight: "bold",
   },
-  toggleButton: {
-    position: "absolute",
-    top: 5, // Move the icon closer to the very top
-    right: 20,
-    zIndex: 1, // Ensure it's on top of other components
-  },
 };
 
 const darkTheme = {
@@ -229,12 +230,6 @@ const darkTheme = {
   signupLink: {
     color: "#fc8fa7",
     fontWeight: "bold",
-  },
-  toggleButton: {
-    position: "absolute",
-    top: 5, // Move the icon closer to the very top
-    right: 20,
-    zIndex: 1, // Ensure it's on top of other components
   },
 };
 
