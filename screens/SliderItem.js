@@ -16,7 +16,15 @@ const SliderItem = ({ item, index, scrollX }) => {
           translateX: interpolate(
             scrollX.value,
             [(index - 1) * width, index * width, (index + 1) * width],
-            [-width * 0.1, 0, width * 0.1],
+            [-width * 0.2, 0, width * 0.1],
+            Extrapolation.CLAMP
+          ),
+        },
+        {
+          scale: interpolate(
+            scrollX.value,
+            [(index - 1) * width, index * width, (index + 1) * width],
+            [0.9, 1, 0.9],
             Extrapolation.CLAMP
           ),
         },
@@ -36,13 +44,12 @@ const styles = StyleSheet.create({
   itemContainer: {
     justifyContent: "center",
     alignItems: "center",
-    width: width,
-    gap: 20,
+    width: width * 0.8,
+    marginHorizontal: 5,
   },
   image: {
     width: "100%",
-    height: width * 0.8,
-    borderRadius: 10,
-    resizeMode: "cover",
+    height: 250,
+    borderRadius: 15,
   },
 });

@@ -100,7 +100,7 @@ const lightTheme = StyleSheet.create({
   },
   sliderContainer: {
     justifyContent: "center", // Center the slider vertically
-    alignItems: "center",
+    // alignItems: "center",
     marginBottom: "30%",
   },
 });
