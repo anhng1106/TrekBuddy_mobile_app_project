@@ -54,7 +54,6 @@ const lightTheme = StyleSheet.create({
     paddingBottom: 10,
   },
   logo: {
-    width: 100,
     height: 50,
     width: "35%",
     marginTop: -30,
@@ -107,7 +106,6 @@ const darkTheme = StyleSheet.create({
     paddingBottom: 10,
   },
   logo: {
-    width: 100,
     height: 50,
     width: "35%",
     marginTop: -30,

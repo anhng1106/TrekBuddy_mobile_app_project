@@ -78,6 +78,11 @@ export default function App() {
             component={HomeTabs} // Replace HomeScreen with HomeTabs
             options={{ title: "TREKBUDDY - Home", headerShown: false }}
           />
+          <Stack.Screen
+            name="ProfileScreen"
+            component={ProfileScreen} // Ensure ProfileScreen is here
+            options={{ title: "TREKBUDDY - Profile" }}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     </ThemeProvider>

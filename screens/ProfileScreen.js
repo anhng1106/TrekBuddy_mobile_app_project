@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import {
   View,
   Text,
@@ -15,6 +15,7 @@ import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { launchImageLibrary } from "react-native-image-picker";
 import Icon from "react-native-vector-icons/Ionicons";
+import { ThemeContext } from "../ThemeContext";
 
 const ProfileScreen = ({ navigation }) => {
   const [email, setEmail] = useState(auth.currentUser.email || "");
@@ -23,6 +24,9 @@ const ProfileScreen = ({ navigation }) => {
   const [errorMessage, setErrorMessage] = useState("");
   const [usernameInput, setUsernameInput] = useState("");
   const [isModalVisible, setModalVisible] = useState(false);
+
+  const { theme } = useContext(ThemeContext);
+  const styles = theme === "light" ? lightTheme : darkTheme;
 
   useEffect(() => {
     const fetchUsername = async () => {
@@ -110,13 +114,6 @@ const ProfileScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      {/* <TouchableOpacity
-        onPress={() => navigation.goBack()}
-        style={styles.backButton}
-      >
-        <Icon name="arrow-back" size={24} color="#007AFF" />
-      </TouchableOpacity> */}
-
       <View style={styles.profilePictureContainer}>
         <Image
           source={
@@ -130,14 +127,14 @@ const ProfileScreen = ({ navigation }) => {
           onPress={updateProfilePicture}
           style={styles.cameraIcon}
         >
-          <Text style={styles.cameraIconText}>📸</Text>
+          <Icon name="camera" size={24} color="#fc8fa7" />
         </TouchableOpacity>
       </View>
 
       <View style={styles.usernameContainer}>
         <Text style={styles.usernameText}>{username}</Text>
         <TouchableOpacity onPress={() => setModalVisible(true)}>
-          <Icon name="pencil" size={24} color="#007AFF" />
+          <Icon name="pencil" size={24} color="#fc8fa7" />
         </TouchableOpacity>
       </View>
 
@@ -194,11 +191,12 @@ const ProfileScreen = ({ navigation }) => {
   );
 };
 
-const styles = StyleSheet.create({
+// Light theme styles
+const lightTheme = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "#fdeae2", // Light theme background
     padding: 20,
-    backgroundColor: "#f5f5f5",
   },
   profilePictureContainer: {
     alignItems: "center",
@@ -213,10 +211,7 @@ const styles = StyleSheet.create({
   cameraIcon: {
     position: "absolute",
     bottom: 0,
-    right: 0,
-    backgroundColor: "#007AFF",
-    borderRadius: 20,
-    padding: 5,
+    right: "35%",
   },
   cameraIconText: {
     color: "#fff",
@@ -252,7 +247,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   button: {
-    backgroundColor: "#007AFF",
+    backgroundColor: "#fc8fa7",
     padding: 15,
     borderRadius: 8,
     alignItems: "center",
@@ -284,6 +279,109 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginBottom: 10,
     textAlign: "center",
+  },
+  modalButtons: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  cancelButton: {
+    backgroundColor: "#ff4d4d",
+  },
+});
+
+// Dark theme styles
+const darkTheme = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#545454", // Dark theme background
+    padding: 20,
+  },
+  profilePictureContainer: {
+    alignItems: "center",
+    marginBottom: 20,
+  },
+  profilePicture: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    backgroundColor: "#ccc",
+  },
+  cameraIcon: {
+    position: "absolute",
+    bottom: 0,
+    right: "35%",
+  },
+  cameraIconText: {
+    color: "#fc8fa7", // Icon color
+    fontSize: 18,
+  },
+  usernameContainer: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: 20,
+  },
+  usernameText: {
+    fontSize: 18,
+    fontWeight: "bold",
+    textAlign: "center",
+    color: "#fff", // White text for dark theme
+  },
+  editIcon: {
+    fontSize: 18,
+    marginLeft: 8,
+    color: "#fc8fa7", // Icon color
+  },
+  label: {
+    fontSize: 16,
+    fontWeight: "bold",
+    marginVertical: 10,
+    color: "#fff", // White label text
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: "#444",
+    borderRadius: 8,
+    padding: 10,
+    marginBottom: 20,
+    fontSize: 16,
+    backgroundColor: "#333", // Dark background for input
+    color: "#fff", // White text in input
+  },
+  button: {
+    backgroundColor: "#fc8fa7", // Updated button color
+    padding: 15,
+    borderRadius: 8,
+    alignItems: "center",
+    marginBottom: 10,
+  },
+  buttonText: {
+    color: "#fff", // White text for buttons
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+  errorText: {
+    color: "red",
+    textAlign: "center",
+    marginTop: 20,
+  },
+  modalOverlay: {
+    flex: 1,
+    justifyContent: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  modalContainer: {
+    backgroundColor: "#333", // Dark background for modal
+    padding: 20,
+    marginHorizontal: 20,
+    borderRadius: 8,
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginBottom: 10,
+    textAlign: "center",
+    color: "#fff", // White text for modal title
   },
   modalButtons: {
     flexDirection: "row",
