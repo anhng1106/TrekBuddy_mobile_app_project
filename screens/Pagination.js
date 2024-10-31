@@ -1,15 +1,33 @@
-import { StyleSheet, View, Text } from "react-native";
+import { StyleSheet, View, Text, Dimensions } from "react-native";
 import React from "react";
+import Animated, {
+  interpolate,
+  useAnimatedStyle,
+} from "react-native-reanimated";
+
+const { width } = Dimensions.get("screen");
 
 const Pagination = ({ items, paginationIndex, scrollX }) => {
   return (
     <View style={styles.container}>
       {items.map((_, index) => {
+        const pgAnimationStyle = useAnimatedStyle(() => {
+          const dotWidth = interpolate(
+            scrollX.value,
+            [(index - 1) * width, index * width, (index + 1) * width],
+            [8, 20, 8]
+          );
+
+          return {
+            width: dotWidth,
+          };
+        });
         return (
-          <View
+          <Animated.View
             key={index}
             style={[
               styles.dot,
+              pgAnimationStyle,
               { backgroundColor: paginationIndex === index ? "#222" : "#aaa" },
             ]}
           />

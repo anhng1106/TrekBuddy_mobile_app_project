@@ -49,7 +49,6 @@ const Slider = ({ itemList }) => {
         horizontal
         showsHorizontalScrollIndicator={false}
         pagingEnabled
-        keyExtractor={(item) => item.id.toString()} // Ensure key is a string
         onScroll={onScrollHandler}
         viewabilityConfigCallbackPairs={viewabilityConfigCallbackPairs.current}
       />
