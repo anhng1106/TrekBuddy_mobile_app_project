@@ -1,0 +1,48 @@
+import { StyleSheet, View, Image, Text, Dimensions } from "react-native";
+import React from "react";
+import { ImageSlider } from "../data/SliderData";
+import Animated, {
+  Extrapolation,
+  interpolate,
+  useAnimatedStyle,
+} from "react-native-reanimated";
+
+const { width } = Dimensions.get("screen");
+const SliderItem = ({ item, index, scrollX }) => {
+  const animatedStyle = useAnimatedStyle(() => {
+    return {
+      transform: [
+        {
+          translateX: interpolate(
+            scrollX.value,
+            [(index - 1) * width, index * width, (index + 1) * width],
+            [-width * 0.1, 0, width * 0.1],
+            Extrapolation.CLAMP
+          ),
+        },
+      ],
+    };
+  });
+  return (
+    <Animated.View style={[styles.itemContainer, animatedStyle]}>
+      <Image source={item.image} style={styles.image} />
+    </Animated.View>
+  );
+};
+
+export default SliderItem;
+
+const styles = StyleSheet.create({
+  itemContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+    width: width,
+    gap: 20,
+  },
+  image: {
+    width: "100%",
+    height: width * 0.8,
+    borderRadius: 10,
+    resizeMode: "cover",
+  },
+});

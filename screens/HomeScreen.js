@@ -6,9 +6,15 @@ import {
   StyleSheet,
   Image,
   TouchableOpacity,
+  Dimensions,
+  FlatList,
 } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
 import { ThemeContext } from "../ThemeContext";
+import Slider from "./Slider";
+import { ImageSlider } from "../data/SliderData";
+
+Dimensions.get("window");
 
 const HomeScreen = ({ navigation }) => {
   const { theme } = useContext(ThemeContext);
@@ -21,10 +27,9 @@ const HomeScreen = ({ navigation }) => {
         <TouchableOpacity
           onPress={() => navigation.navigate("ProfileScreen")}
           style={styles.iconContainer}
-        >
-          <Icon name="person-circle-outline" size={30} style={styles.icon} />
-        </TouchableOpacity>
+        ></TouchableOpacity>
       </View>
+
       <View style={styles.searchContainer}>
         <TextInput
           style={styles.searchBar}
@@ -32,19 +37,9 @@ const HomeScreen = ({ navigation }) => {
           placeholderTextColor="#888"
         />
       </View>
-      <View style={styles.content}>
-        <TouchableOpacity
-          style={styles.flightsButton}
-          onPress={() => navigation.navigate("FlightsScreen")}
-        >
-          <Icon
-            name="airplane-outline"
-            size={35}
-            color="#fff"
-            style={styles.flightIcon}
-          />
-        </TouchableOpacity>
-        <Text style={styles.content}>Flights</Text>
+
+      <View style={styles.sliderContainer}>
+        <Slider itemList={ImageSlider}></Slider>
       </View>
     </View>
   );
@@ -54,7 +49,7 @@ const HomeScreen = ({ navigation }) => {
 const lightTheme = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fdeae2", // Light theme background
+    backgroundColor: "#fdeae2",
     paddingTop: 40,
   },
   topBar: {
@@ -73,53 +68,40 @@ const lightTheme = StyleSheet.create({
   searchContainer: {
     flex: 1,
     paddingHorizontal: 10,
+    marginTop: -50,
+    marginLeft: "25%",
   },
   searchBar: {
     borderWidth: 1,
     borderColor: "#ccc",
     borderRadius: 25,
-    paddingHorizontal: 20,
+    paddingHorizontal: 12,
     height: 30,
-    backgroundColor: "#f9f9f9", // Light background for search
+    backgroundColor: "#f9f9f9",
     fontSize: 16,
-    width: "60%",
-    alignItems: "center",
+    width: "100%",
     alignSelf: "center",
-    marginTop: -52,
-    marginLeft: 50,
   },
   iconContainer: {
     padding: 5,
   },
   icon: {
-    color: "#000", // Black icon for light theme
-    marginRight: -10,
-    marginTop: -33,
+    color: "#000",
   },
   content: {
     alignItems: "center",
-    alignSelf: "center",
-    marginBottom: "63%",
-    marginLeft: "-25%",
-  },
-  flightsButton: {
-    backgroundColor: "#fc8fa7",
-    paddingVertical: 15,
-    paddingHorizontal: 18,
-    borderRadius: 50,
-    alignItems: "center",
-    justifyContent: "center",
-    marginLeft: "-25%",
-  },
-  flightIcon: {
-    marginBottom: 3,
-    alignItems: "center",
-    alignSelf: "center", // Space between icon and text
+    marginTop: 20,
   },
   buttonText: {
     color: "#fff",
     fontSize: 18,
     fontWeight: "bold",
+    textAlign: "center",
+  },
+  sliderContainer: {
+    justifyContent: "center", // Center the slider vertically
+    alignItems: "center",
+    marginBottom: "30%",
   },
 });
 
@@ -127,7 +109,7 @@ const lightTheme = StyleSheet.create({
 const darkTheme = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#545454", // Dark theme background
+    backgroundColor: "#545454",
     paddingTop: 40,
   },
   topBar: {
@@ -146,6 +128,7 @@ const darkTheme = StyleSheet.create({
   searchContainer: {
     flex: 1,
     paddingHorizontal: 10,
+    marginTop: 20,
   },
   searchBar: {
     borderWidth: 1,
@@ -156,41 +139,28 @@ const darkTheme = StyleSheet.create({
     backgroundColor: "#333",
     fontSize: 16,
     width: "60%",
-    alignItems: "center",
     alignSelf: "center",
-    marginTop: -52,
-    marginLeft: 50,
   },
   iconContainer: {
     padding: 5,
   },
   icon: {
     color: "#fff",
-    marginRight: -10,
-    marginTop: -33,
   },
   content: {
     alignItems: "center",
-    alignSelf: "center",
-    marginBottom: "63%",
-    marginLeft: "-25%",
-  },
-  flightsButton: {
-    backgroundColor: "#fc8fa7",
-    paddingVertical: 15,
-    paddingHorizontal: 18,
-    borderRadius: 50,
-    alignItems: "center",
-    justifyContent: "center",
-    marginLeft: "-25%",
-  },
-  flightIcon: {
-    marginBottom: 5, // Space between icon and text
+    marginTop: 20,
   },
   buttonText: {
     color: "#fff",
     fontSize: 18,
     fontWeight: "bold",
+    textAlign: "center",
+  },
+  carouselImage: {
+    width: "100%",
+    height: 200,
+    borderRadius: 15,
   },
 });
 
