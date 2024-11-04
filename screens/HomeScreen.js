@@ -97,7 +97,7 @@ const lightTheme = StyleSheet.create({
     width: "60%",
     height: 100,
     resizeMode: "cover",
-    marginVertical: 30,
+    marginVertical: 15,
     marginHorizontal: "20%",
   },
   content: {
@@ -111,8 +111,7 @@ const lightTheme = StyleSheet.create({
     textAlign: "center",
   },
   sliderContainer: {
-    justifyContent: "center", // Center the slider vertically
-    // alignItems: "center",
+    justifyContent: "center",
     marginBottom: "30%",
   },
 });
@@ -159,6 +158,13 @@ const darkTheme = StyleSheet.create({
   icon: {
     color: "#fff",
   },
+  bannerImage: {
+    width: "60%",
+    height: 100,
+    resizeMode: "cover",
+    marginVertical: 15,
+    marginHorizontal: "20%",
+  },
   content: {
     alignItems: "center",
     marginTop: 20,
@@ -169,10 +175,9 @@ const darkTheme = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center",
   },
-  carouselImage: {
-    width: "100%",
-    height: 200,
-    borderRadius: 15,
+  sliderContainer: {
+    justifyContent: "center",
+    marginBottom: "30%",
   },
 });
 

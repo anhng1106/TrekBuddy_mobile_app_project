@@ -54,6 +54,5 @@ const styles = StyleSheet.create({
     width: 8,
     marginHorizontal: 2,
     borderRadius: 8,
-    marginBottom: "-55%",
   },
 });
