@@ -44,12 +44,12 @@ const styles = StyleSheet.create({
   itemContainer: {
     justifyContent: "center",
     alignItems: "center",
-    width: width * 0.8,
+    width: width,
     marginHorizontal: 5,
   },
   image: {
-    width: "100%",
-    height: 250,
+    width: 300,
+    height: 500,
     borderRadius: 15,
   },
 });
