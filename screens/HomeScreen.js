@@ -38,6 +38,11 @@ const HomeScreen = ({ navigation }) => {
         />
       </View>
 
+      <Image
+        source={require("../assets/explore.png")}
+        style={styles.bannerImage}
+      />
+
       <View style={styles.sliderContainer}>
         <Slider itemList={ImageSlider}></Slider>
       </View>
@@ -87,6 +92,13 @@ const lightTheme = StyleSheet.create({
   },
   icon: {
     color: "#000",
+  },
+  bannerImage: {
+    width: "60%",
+    height: 100,
+    resizeMode: "cover",
+    marginVertical: 30,
+    marginHorizontal: "20%",
   },
   content: {
     alignItems: "center",

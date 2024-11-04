@@ -18,7 +18,7 @@ const Slider = ({ itemList }) => {
   const [paginationIndex, setPaginationIndex] = useState(0);
   const [data, setData] = useState(itemList);
   const ref = useAnimatedRef();
-  const [isAutoPlay, setIsAutoPlay] = useState(true);
+  const [isAutoPlay, setIsAutoPlay] = useState(false);
   const interval = useRef(null);
   const offset = useSharedValue(0);
 
@@ -32,28 +32,27 @@ const Slider = ({ itemList }) => {
   });
 
   useEffect(() => {
-    if (isAutoPlay == true) {
+    if (isAutoPlay) {
       interval.current = setInterval(() => {
-        offset.value = offset.value + width;
+        offset.value += width;
+        scrollTo(ref, offset.value, 0, true); // Use offset.value explicitly
       }, 2000);
-    } else {
+    } else if (interval.current) {
       clearInterval(interval.current);
+      interval.current = null;
     }
 
     return () => {
-      clearInterval(interval.current);
+      if (interval.current) clearInterval(interval.current);
     };
-  }, [isAutoPlay, offset, width]);
+  }, [isAutoPlay]);
 
   useDerivedValue(() => {
-    scrollTo(ref, offset, 0, true);
+    scrollTo(ref, offset.value, 0, true); // Explicitly use offset.value
   });
 
   const onViewableItemsChanged = ({ viewableItems }) => {
-    if (
-      viewableItems[0].index !== undefined &&
-      viewableItems[0].index !== null
-    ) {
+    if (viewableItems[0]?.index !== undefined) {
       setPaginationIndex(viewableItems[0].index % itemList.length);
     }
   };
@@ -85,12 +84,8 @@ const Slider = ({ itemList }) => {
         viewabilityConfigCallbackPairs={viewabilityConfigCallbackPairs.current}
         onEndReached={() => setData([...data, ...itemList])}
         onEndReachedThreshold={0.5}
-        onScrollBeginDrag={() => {
-          setIsAutoPlay(false);
-        }}
-        onScrollEndDrag={() => {
-          setIsAutoPlay(true);
-        }}
+        onScrollBeginDrag={() => setIsAutoPlay(false)}
+        onScrollEndDrag={() => setIsAutoPlay(true)}
       />
       <Pagination
         items={itemList}

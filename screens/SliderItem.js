@@ -16,7 +16,7 @@ const SliderItem = ({ item, index, scrollX }) => {
           translateX: interpolate(
             scrollX.value,
             [(index - 1) * width, index * width, (index + 1) * width],
-            [-width * 0.2, 0, width * 0.1],
+            [-width * 0.25, 0, width * 0.25],
             Extrapolation.CLAMP
           ),
         },
@@ -42,10 +42,11 @@ export default SliderItem;
 
 const styles = StyleSheet.create({
   itemContainer: {
+    flex: 1,
     justifyContent: "center",
     alignItems: "center",
     width: width,
-    marginHorizontal: 5,
+    gap: 20,
   },
   image: {
     width: 300,
