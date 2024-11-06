@@ -9,6 +9,7 @@ import LoginScreen from "./screens/LoginScreen";
 import SignupScreen from "./screens/SignupScreen";
 import HomeScreen from "./screens/HomeScreen";
 import ProfileScreen from "./screens/ProfileScreen";
+import SettingScreen from "./screens/SettingScreen";
 
 // Stack Navigator for screens outside bottom tabs
 const Stack = createStackNavigator();
@@ -19,12 +20,6 @@ const Tab = createBottomTabNavigator();
 const SavedScreen = () => (
   <View style={styles.centeredView}>
     <Text>Saved Screen</Text>
-  </View>
-);
-
-const SettingScreen = () => (
-  <View style={styles.centeredView}>
-    <Text>Setting Screen</Text>
   </View>
 );
 

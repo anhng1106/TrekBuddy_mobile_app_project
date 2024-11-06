@@ -21,10 +21,10 @@ export const ImageSlider = [
     title: "pic3",
     image: require("../assets/image3.jpg"),
   },
-  // {
-  //   title: "pic2",
-  //   image: require("../assets/image2.jpg"),
-  // },
+  {
+    title: "pic2",
+    image: require("../assets/image2.jpg"),
+  },
   // {
   //   title: "pic4",
   //   image: require("../assets/image4.jpg"),
