@@ -11,6 +11,9 @@ import { Ionicons } from "@expo/vector-icons";
 import AboutPage from "./About";
 
 const SettingScreen = () => {
+  const { theme } = useContext(ThemeContext);
+  const styles = theme === "light" ? lightTheme : darkTheme;
+
   const navigation = useNavigation();
 
   const settingsData = [
@@ -56,10 +59,60 @@ const SettingScreen = () => {
   );
 };
 
-const styles = StyleSheet.create({
+// Light theme styles
+const lightTheme = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "#fdeae2",
+    paddingTop: 40,
+  },
+  //   header: {
+  //     backgroundColor: "#fff",
+  //     paddingVertical: 16,
+  //     borderBottomWidth: 1,
+  //     borderBottomColor: "#ddd",
+  //     alignItems: "center",
+  //   },
+  //   headerTitle: {
+  //     fontSize: 20,
+  //     fontWeight: "bold",
+  //     color: "#000",
+  //   },
+  listContainer: {
+    paddingVertical: 16,
+  },
+  settingItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    padding: 16,
+    marginHorizontal: 12,
+    marginVertical: 8,
+    borderRadius: 12,
+    backgroundColor: "#f9f9f9",
+    elevation: 2,
+    shadowColor: "#000",
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+  },
+  icon: {
+    marginRight: 16,
+  },
+  title: {
+    flex: 1,
+    fontSize: 18,
+    fontWeight: "500",
+  },
+  arrow: {
+    marginLeft: 8,
+  },
+});
+
+// Dark theme styles
+const darkTheme = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#545454",
+    paddingTop: 40,
   },
   //   header: {
   //     backgroundColor: "#fff",
