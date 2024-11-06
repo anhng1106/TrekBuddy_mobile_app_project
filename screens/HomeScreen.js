@@ -123,6 +123,13 @@ const darkTheme = StyleSheet.create({
     backgroundColor: "#545454",
     paddingTop: 40,
   },
+  header: {
+    backgroundColor: "#fff",
+    paddingVertical: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: "#ddd",
+    alignItems: "center",
+  },
   topBar: {
     flexDirection: "row",
     justifyContent: "space-between",

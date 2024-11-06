@@ -10,18 +10,13 @@ import SignupScreen from "./screens/SignupScreen";
 import HomeScreen from "./screens/HomeScreen";
 import ProfileScreen from "./screens/ProfileScreen";
 import SettingScreen from "./screens/SettingScreen";
+import SavedScreen from "./screens/SavedScreen";
+import AboutPage from "./screens/About";
 
 // Stack Navigator for screens outside bottom tabs
 const Stack = createStackNavigator();
 // Bottom Tab Navigator for HomeScreen tabs
 const Tab = createBottomTabNavigator();
-
-// Placeholder screens for Saved and Setting
-const SavedScreen = () => (
-  <View style={styles.centeredView}>
-    <Text>Saved Screen</Text>
-  </View>
-);
 
 // Bottom Tab Navigator component
 function HomeTabs() {
@@ -77,6 +72,11 @@ export default function App() {
             name="ProfileScreen"
             component={ProfileScreen} // Ensure ProfileScreen is here
             options={{ title: "TREKBUDDY - Profile" }}
+          />
+          <Stack.Screen
+            name="AboutPage"
+            component={AboutPage}
+            options={{ title: "About" }}
           />
         </Stack.Navigator>
       </NavigationContainer>

@@ -8,6 +8,7 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
+import AboutPage from "./About";
 
 const SettingScreen = () => {
   const navigation = useNavigation();
@@ -23,7 +24,7 @@ const SettingScreen = () => {
       id: "2",
       icon: "information-circle-outline",
       title: "About",
-      route: "About",
+      route: "AboutPage",
     },
   ];
 
@@ -45,9 +46,6 @@ const SettingScreen = () => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.headerTitle}>Settings</Text>
-      </View>
       <FlatList
         data={settingsData}
         renderItem={renderSettingItem}
@@ -63,18 +61,18 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fff",
   },
-  header: {
-    backgroundColor: "#fff",
-    paddingVertical: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: "#ddd",
-    alignItems: "center",
-  },
-  headerTitle: {
-    fontSize: 20,
-    fontWeight: "bold",
-    color: "#000",
-  },
+  //   header: {
+  //     backgroundColor: "#fff",
+  //     paddingVertical: 16,
+  //     borderBottomWidth: 1,
+  //     borderBottomColor: "#ddd",
+  //     alignItems: "center",
+  //   },
+  //   headerTitle: {
+  //     fontSize: 20,
+  //     fontWeight: "bold",
+  //     color: "#000",
+  //   },
   listContainer: {
     paddingVertical: 16,
   },
