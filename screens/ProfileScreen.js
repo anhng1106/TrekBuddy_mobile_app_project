@@ -114,6 +114,9 @@ const ProfileScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
+      <View style={styles.header}>
+        <Text style={styles.headerTitle}>Profile</Text>
+      </View>
       <View style={styles.profilePictureContainer}>
         <Image
           source={
@@ -196,11 +199,24 @@ const lightTheme = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fdeae2", // Light theme background
-    padding: 20,
+    paddingHorizontal: 20,
+  },
+  header: {
+    backgroundColor: "#fdeae2",
+    paddingVertical: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: "#ddd",
+    alignItems: "center",
+  },
+  headerTitle: {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "#000",
   },
   profilePictureContainer: {
     alignItems: "center",
     marginBottom: 20,
+    marginTop: 20,
   },
   profilePicture: {
     width: 100,
@@ -294,11 +310,24 @@ const darkTheme = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#545454", // Dark theme background
-    padding: 20,
+    paddingHorizontal: 20,
+  },
+  header: {
+    backgroundColor: "#545454",
+    paddingVertical: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: "#ddd",
+    alignItems: "center",
+  },
+  headerTitle: {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "#fff",
   },
   profilePictureContainer: {
     alignItems: "center",
     marginBottom: 20,
+    marginTop: 20,
   },
   profilePicture: {
     width: 100,
