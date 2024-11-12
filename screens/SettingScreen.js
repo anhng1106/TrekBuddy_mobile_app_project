@@ -28,7 +28,7 @@ const SettingScreen = () => {
     {
       id: "2",
       icon: "information-circle-outline",
-      title: "About",
+      title: "About TrekBuddy",
       route: "AboutPage",
     },
     {
