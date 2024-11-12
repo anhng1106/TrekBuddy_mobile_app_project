@@ -5,6 +5,7 @@ import {
   StyleSheet,
   FlatList,
   TouchableOpacity,
+  Switch,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
@@ -12,7 +13,7 @@ import { ThemeContext } from "../ThemeContext";
 import AboutPage from "./About";
 
 const SettingScreen = () => {
-  const { theme } = useContext(ThemeContext);
+  const { theme, toggleTheme } = useContext(ThemeContext);
   const styles = theme === "light" ? lightTheme : darkTheme;
 
   const navigation = useNavigation();
@@ -30,26 +31,50 @@ const SettingScreen = () => {
       title: "About",
       route: "AboutPage",
     },
+    {
+      id: "3",
+      icon: "moon-outline",
+      title: "Dark Mode",
+      isToggle: true,
+    },
   ];
 
   const renderSettingItem = ({ item }) => (
     <TouchableOpacity
       style={styles.settingItem}
-      onPress={() => navigation.navigate(item.route)}
+      onPress={() => {
+        if (!item.isToggle) navigation.navigate(item.route);
+      }}
     >
-      <Ionicons name={item.icon} size={28} color="blue" style={styles.icon} />
-      <Text style={styles.title}>{item.title}</Text>
       <Ionicons
-        name="chevron-forward-outline"
-        size={16}
-        color="#888"
-        style={styles.arrow}
+        name={item.icon}
+        size={28}
+        color="#fc8fa7"
+        style={styles.icon}
       />
+      <Text style={styles.title}>{item.title}</Text>
+      {item.isToggle ? (
+        <Switch
+          value={theme === "dark"}
+          onValueChange={toggleTheme}
+          style={styles.toggleSwitch}
+        />
+      ) : (
+        <Ionicons
+          name="chevron-forward-outline"
+          size={16}
+          color="#888"
+          style={styles.arrow}
+        />
+      )}
     </TouchableOpacity>
   );
 
   return (
     <View style={styles.container}>
+      <View style={styles.header}>
+        <Text style={styles.headerTitle}>Settings</Text>
+      </View>
       <FlatList
         data={settingsData}
         renderItem={renderSettingItem}
@@ -65,20 +90,19 @@ const lightTheme = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fdeae2",
-    paddingTop: 40,
   },
-  //   header: {
-  //     backgroundColor: "#fff",
-  //     paddingVertical: 16,
-  //     borderBottomWidth: 1,
-  //     borderBottomColor: "#ddd",
-  //     alignItems: "center",
-  //   },
-  //   headerTitle: {
-  //     fontSize: 20,
-  //     fontWeight: "bold",
-  //     color: "#000",
-  //   },
+  header: {
+    backgroundColor: "#fdeae2",
+    paddingVertical: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: "#ddd",
+    alignItems: "center",
+  },
+  headerTitle: {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "#000",
+  },
   listContainer: {
     paddingVertical: 16,
   },
@@ -105,6 +129,17 @@ const lightTheme = StyleSheet.create({
   },
   arrow: {
     marginLeft: 8,
+  },
+  themeToggleContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    padding: 16,
+  },
+  themeToggleText: {
+    fontSize: 18,
+    fontWeight: "500",
+    marginRight: 8,
   },
 });
 
@@ -113,20 +148,19 @@ const darkTheme = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#545454",
-    paddingTop: 40,
   },
-  //   header: {
-  //     backgroundColor: "#fff",
-  //     paddingVertical: 16,
-  //     borderBottomWidth: 1,
-  //     borderBottomColor: "#ddd",
-  //     alignItems: "center",
-  //   },
-  //   headerTitle: {
-  //     fontSize: 20,
-  //     fontWeight: "bold",
-  //     color: "#000",
-  //   },
+  header: {
+    backgroundColor: "#545454",
+    paddingVertical: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: "#ddd",
+    alignItems: "center",
+  },
+  headerTitle: {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "#fff",
+  },
   listContainer: {
     paddingVertical: 16,
   },
@@ -153,6 +187,17 @@ const darkTheme = StyleSheet.create({
   },
   arrow: {
     marginLeft: 8,
+  },
+  themeToggleContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    padding: 16,
+  },
+  themeToggleText: {
+    fontSize: 18,
+    fontWeight: "500",
+    marginRight: 8,
   },
 });
 
