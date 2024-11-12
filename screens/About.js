@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import {
   View,
   Text,
@@ -9,9 +9,14 @@ import {
   Alert,
   Image,
 } from "react-native";
+import Icon from "react-native-vector-icons/Ionicons";
+import { ThemeContext } from "../ThemeContext";
 
 // AboutPage component displays information about the app
 const AboutPage = ({ navigation }) => {
+  const { theme } = useContext(ThemeContext); // Access theme from context
+  const styles = theme === "light" ? lightTheme : darkTheme;
+
   // Function to build a section title with padding and styling
   const renderSectionTitle = (text) => (
     <View style={styles.sectionTitleContainer}>
@@ -55,6 +60,16 @@ const AboutPage = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
+        <TouchableOpacity
+          onPress={() => navigation.goBack()}
+          style={styles.backButton}
+        >
+          <Icon
+            name="arrow-back"
+            size={24}
+            color={theme === "light" ? "#000" : "#fff"}
+          />
+        </TouchableOpacity>
         <Text style={styles.headerTitle}>About</Text>
       </View>
       <ScrollView contentContainerStyle={styles.contentContainer}>
@@ -81,30 +96,39 @@ const AboutPage = ({ navigation }) => {
   );
 };
 
-const styles = StyleSheet.create({
+// Light theme styles
+const lightTheme = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "#fdeae2",
   },
   header: {
-    backgroundColor: "#fff",
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#fdeae2",
     paddingVertical: 16,
+    paddingHorizontal: 20,
     borderBottomWidth: 1,
     borderBottomColor: "#ddd",
-    alignItems: "center",
+  },
+  backButton: {
+    position: "absolute",
+    left: 5,
   },
   headerTitle: {
+    flex: 1,
     fontSize: 20,
     fontWeight: "bold",
     color: "#000",
+    textAlign: "center",
   },
   contentContainer: {
     paddingHorizontal: 16,
     paddingVertical: 20,
   },
   appLogo: {
-    width: 300, // Adjust width
-    height: 100, // Adjust height
+    width: 300,
+    height: 100,
     alignSelf: "center",
     marginBottom: 20,
   },
@@ -114,6 +138,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 22,
     fontWeight: "bold",
+    color: "#000",
   },
   paragraphContainer: {
     marginBottom: 12,
@@ -121,6 +146,7 @@ const styles = StyleSheet.create({
   paragraph: {
     fontSize: 16,
     lineHeight: 24,
+    color: "#000",
   },
   bulletPointContainer: {
     flexDirection: "row",
@@ -131,14 +157,92 @@ const styles = StyleSheet.create({
   bulletSymbol: {
     fontSize: 16,
     marginRight: 8,
+    color: "#000",
   },
   bulletText: {
     fontSize: 16,
     lineHeight: 24,
+    color: "#000",
   },
   emailLink: {
     fontSize: 16,
     color: "#fc8fa7",
+    textDecorationLine: "underline",
+  },
+});
+
+// Dark theme styles
+const darkTheme = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#545454",
+  },
+  header: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#545454",
+    paddingVertical: 16,
+    paddingHorizontal: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: "#ddd",
+  },
+  backButton: {
+    position: "absolute",
+    left: 5,
+    color: "#fff",
+  },
+  headerTitle: {
+    flex: 1,
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "#fff",
+    textAlign: "center",
+  },
+  contentContainer: {
+    paddingHorizontal: 16,
+    paddingVertical: 20,
+  },
+  appLogo: {
+    width: 300,
+    height: 100,
+    alignSelf: "center",
+    marginBottom: 20,
+  },
+  sectionTitleContainer: {
+    marginVertical: 12,
+  },
+  sectionTitle: {
+    fontSize: 22,
+    fontWeight: "bold",
+    color: "#fff",
+  },
+  paragraphContainer: {
+    marginBottom: 12,
+  },
+  paragraph: {
+    fontSize: 16,
+    lineHeight: 24,
+    color: "#ddd",
+  },
+  bulletPointContainer: {
+    flexDirection: "row",
+    alignItems: "flex-start",
+    paddingLeft: 16,
+    marginBottom: 8,
+  },
+  bulletSymbol: {
+    fontSize: 16,
+    marginRight: 8,
+    color: "#ddd",
+  },
+  bulletText: {
+    fontSize: 16,
+    lineHeight: 24,
+    color: "#ddd",
+  },
+  emailLink: {
+    fontSize: 16,
+    color: "#ff8a8a",
     textDecorationLine: "underline",
   },
 });

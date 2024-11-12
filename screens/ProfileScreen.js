@@ -115,6 +115,16 @@ const ProfileScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
+        <TouchableOpacity
+          onPress={() => navigation.goBack()}
+          style={styles.backButton}
+        >
+          <Icon
+            name="arrow-back"
+            size={24}
+            color={theme === "light" ? "#000" : "#fff"}
+          />
+        </TouchableOpacity>
         <Text style={styles.headerTitle}>Profile</Text>
       </View>
       <View style={styles.profilePictureContainer}>
@@ -199,19 +209,27 @@ const lightTheme = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fdeae2", // Light theme background
-    paddingHorizontal: 20,
+    paddingHorizontal: 15,
   },
   header: {
+    flexDirection: "row",
+    alignItems: "center",
     backgroundColor: "#fdeae2",
     paddingVertical: 16,
+    paddingHorizontal: 20,
     borderBottomWidth: 1,
     borderBottomColor: "#ddd",
-    alignItems: "center",
+  },
+  backButton: {
+    position: "absolute",
+    left: 5, // Align to the left
   },
   headerTitle: {
+    flex: 1,
     fontSize: 20,
     fontWeight: "bold",
     color: "#000",
+    textAlign: "center",
   },
   profilePictureContainer: {
     alignItems: "center",
@@ -313,16 +331,24 @@ const darkTheme = StyleSheet.create({
     paddingHorizontal: 20,
   },
   header: {
+    flexDirection: "row",
+    alignItems: "center",
     backgroundColor: "#545454",
     paddingVertical: 16,
+    paddingHorizontal: 20,
     borderBottomWidth: 1,
     borderBottomColor: "#ddd",
-    alignItems: "center",
+  },
+  backButton: {
+    position: "absolute",
+    left: 5, // Align to the left
   },
   headerTitle: {
+    flex: 1,
     fontSize: 20,
     fontWeight: "bold",
     color: "#fff",
+    textAlign: "center",
   },
   profilePictureContainer: {
     alignItems: "center",

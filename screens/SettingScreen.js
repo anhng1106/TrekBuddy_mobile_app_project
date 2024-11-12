@@ -10,7 +10,7 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 import { ThemeContext } from "../ThemeContext";
-import AboutPage from "./About";
+import Icon from "react-native-vector-icons/Ionicons";
 
 const SettingScreen = () => {
   const { theme, toggleTheme } = useContext(ThemeContext);
@@ -73,6 +73,16 @@ const SettingScreen = () => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
+        <TouchableOpacity
+          onPress={() => navigation.goBack()}
+          style={styles.backButton}
+        >
+          <Icon
+            name="arrow-back"
+            size={24}
+            color={theme === "light" ? "#000" : "#fff"}
+          />
+        </TouchableOpacity>
         <Text style={styles.headerTitle}>Settings</Text>
       </View>
       <FlatList
@@ -92,16 +102,24 @@ const lightTheme = StyleSheet.create({
     backgroundColor: "#fdeae2",
   },
   header: {
+    flexDirection: "row",
+    alignItems: "center",
     backgroundColor: "#fdeae2",
     paddingVertical: 16,
+    paddingHorizontal: 20,
     borderBottomWidth: 1,
     borderBottomColor: "#ddd",
-    alignItems: "center",
+  },
+  backButton: {
+    position: "absolute",
+    left: 5, // Align to the left
   },
   headerTitle: {
+    flex: 1,
     fontSize: 20,
     fontWeight: "bold",
     color: "#000",
+    textAlign: "center",
   },
   listContainer: {
     paddingVertical: 16,
@@ -150,16 +168,24 @@ const darkTheme = StyleSheet.create({
     backgroundColor: "#545454",
   },
   header: {
+    flexDirection: "row",
+    alignItems: "center",
     backgroundColor: "#545454",
     paddingVertical: 16,
+    paddingHorizontal: 20,
     borderBottomWidth: 1,
     borderBottomColor: "#ddd",
-    alignItems: "center",
+  },
+  backButton: {
+    position: "absolute",
+    left: 5, // Align to the left
   },
   headerTitle: {
+    flex: 1,
     fontSize: 20,
     fontWeight: "bold",
     color: "#fff",
+    textAlign: "center",
   },
   listContainer: {
     paddingVertical: 16,
