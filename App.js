@@ -12,6 +12,7 @@ import ProfileScreen from "./screens/ProfileScreen";
 import SettingScreen from "./screens/SettingScreen";
 import SavedScreen from "./screens/SavedScreen";
 import AboutPage from "./screens/About";
+import DataProtectionPolicyPage from "./screens/Data_Policy";
 
 // Stack Navigator for screens outside bottom tabs
 const Stack = createStackNavigator();
@@ -77,6 +78,11 @@ export default function App() {
             name="AboutPage"
             component={AboutPage}
             options={{ title: "About" }}
+          />
+          <Stack.Screen
+            name="DataProtectionPolicyPage"
+            component={DataProtectionPolicyPage}
+            options={{ title: "Data Protection Policy" }}
           />
         </Stack.Navigator>
       </NavigationContainer>

@@ -23,7 +23,7 @@ const SettingScreen = () => {
       id: "1",
       icon: "shield-checkmark-outline",
       title: "Data Protection Policy",
-      route: "DataProtectionPolicy",
+      route: "DataProtectionPolicyPage",
     },
     {
       id: "2",
