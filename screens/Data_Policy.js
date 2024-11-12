@@ -6,6 +6,7 @@ import {
   ScrollView,
   TouchableOpacity,
   Alert,
+  Image,
 } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
 import Mailer from "react-native-mail";
@@ -65,7 +66,11 @@ const DataProtectionPolicyPage = ({ navigation }) => {
         <Text style={styles.headerTitle}>Data Protection Policy</Text>
       </View>
       <ScrollView contentContainerStyle={styles.contentContainer}>
-        {renderSectionTitle("Data Protection Policy")}
+        <Image
+          source={require("../assets/6.png")} // Replace with your image path
+          style={styles.appLogo}
+        />
+        {/* {renderSectionTitle("Data Protection Policy")} */}
         {renderSectionTitle("1. Introduction")}
         {renderParagraph(
           "We are committed to protecting your personal data and ensuring its privacy, security, and confidentiality."
@@ -130,6 +135,12 @@ const lightTheme = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 20,
   },
+  appLogo: {
+    width: 330,
+    height: 150,
+    alignSelf: "center",
+    marginBottom: "5%",
+  },
   sectionTitleContainer: {
     marginVertical: 12,
   },
@@ -146,7 +157,7 @@ const lightTheme = StyleSheet.create({
   },
   emailLink: {
     fontSize: 16,
-    color: "#007AFF",
+    color: "#ff8a8a",
     textDecorationLine: "underline",
   },
 });

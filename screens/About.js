@@ -74,10 +74,10 @@ const AboutPage = ({ navigation }) => {
       </View>
       <ScrollView contentContainerStyle={styles.contentContainer}>
         <Image
-          source={require("../assets/app_logo.png")} // Replace with your image path
+          source={require("../assets/7.png")} // Replace with your image path
           style={styles.appLogo}
         />
-        {renderSectionTitle("About TrekBuddy")}
+        {/* {renderSectionTitle("About TrekBuddy")} */}
         {renderParagraph(
           "This app is designed to provide a fun and engaging gaming experience. Our goal is to create a platform where users can enjoy a variety of games and connect with friends."
         )}
@@ -127,10 +127,10 @@ const lightTheme = StyleSheet.create({
     paddingVertical: 20,
   },
   appLogo: {
-    width: 300,
-    height: 100,
+    width: 330,
+    height: 200,
     alignSelf: "center",
-    marginBottom: 20,
+    marginBottom: "-10%",
   },
   sectionTitleContainer: {
     marginVertical: 12,
@@ -203,10 +203,10 @@ const darkTheme = StyleSheet.create({
     paddingVertical: 20,
   },
   appLogo: {
-    width: 300,
-    height: 100,
+    width: 330,
+    height: 200,
     alignSelf: "center",
-    marginBottom: 20,
+    marginBottom: "-10%",
   },
   sectionTitleContainer: {
     marginVertical: 12,
