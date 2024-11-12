@@ -123,13 +123,6 @@ const darkTheme = StyleSheet.create({
     backgroundColor: "#545454",
     paddingTop: 40,
   },
-  header: {
-    backgroundColor: "#fff",
-    paddingVertical: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: "#ddd",
-    alignItems: "center",
-  },
   topBar: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -146,24 +139,25 @@ const darkTheme = StyleSheet.create({
   searchContainer: {
     flex: 1,
     paddingHorizontal: 10,
-    marginTop: 20,
+    marginTop: -50,
+    marginLeft: "25%",
   },
   searchBar: {
     borderWidth: 1,
-    borderColor: "#444",
+    borderColor: "#ccc",
     borderRadius: 25,
-    paddingHorizontal: 20,
+    paddingHorizontal: 12,
     height: 30,
-    backgroundColor: "#333",
+    backgroundColor: "#f9f9f9",
     fontSize: 16,
-    width: "60%",
+    width: "100%",
     alignSelf: "center",
   },
   iconContainer: {
     padding: 5,
   },
   icon: {
-    color: "#fff",
+    color: "#000",
   },
   bannerImage: {
     width: "60%",
