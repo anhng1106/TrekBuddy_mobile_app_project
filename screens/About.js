@@ -79,13 +79,15 @@ const AboutPage = ({ navigation }) => {
         />
         {/* {renderSectionTitle("About TrekBuddy")} */}
         {renderParagraph(
-          "This app is designed to provide a fun and engaging gaming experience. Our goal is to create a platform where users can enjoy a variety of games and connect with friends."
+          "TrekBuddy is your ultimate travel companion, designed to help you discover amazing places to visit. Our goal is to create a platform where users can explore new destinations and share their experiences with friends."
         )}
         {renderSectionTitle("Features")}
-        {renderBulletPoint("Multiple games to choose from")}
-        {renderBulletPoint("User-friendly interface")}
-        {renderBulletPoint("Connect with friends and compete")}
-        {renderBulletPoint("Regular updates and new content")}
+        {renderBulletPoint("Explore a wide range of travel destinations")}
+        {renderBulletPoint("User-friendly interface for easy navigation")}
+        {renderBulletPoint("Connect with friends and share your journeys")}
+        {renderBulletPoint(
+          "Regular updates with new travel spots and features"
+        )}
         {renderSectionTitle("Contact Us")}
         {renderParagraph(
           "If you have any questions or feedback, please contact us at:"
