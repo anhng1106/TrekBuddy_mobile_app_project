@@ -13,8 +13,7 @@ import Icon from "react-native-vector-icons/Ionicons";
 import { ThemeContext } from "../ThemeContext";
 import Slider from "./Slider";
 import { ImageSlider } from "../data/SliderData";
-
-const GOOGLE_PLACES_API_KEY = "AIzaSyAss8YyS-Rml70B8_cvmwm3BTZnMJyRJswEY";
+import { GOOGLE_API_KEY } from "@env";
 
 const HomeScreen = ({ navigation }) => {
   const { theme } = useContext(ThemeContext);
@@ -29,9 +28,7 @@ const HomeScreen = ({ navigation }) => {
 
     try {
       const response = await fetch(
-        `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${searchTerm}&key=${
-          AIzaSyAss8YyS - Rml70B8_cvmwm3BTZnMJyRJsw
-        }`
+        `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${searchTerm}&key=${GOOGLE_API_KEY}`
       );
       const data = await response.json();
 
@@ -50,9 +47,7 @@ const HomeScreen = ({ navigation }) => {
       <Image
         source={{
           uri: item.photos
-            ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${
-                item.photos[0].photo_reference
-              }&key=${AIzaSyAss8YyS - Rml70B8_cvmwm3BTZnMJyRJsw}`
+            ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${item.photos[0].photo_reference}&key=${GOOGLE_API_KEY}`
             : "https://via.placeholder.com/150",
         }}
         style={styles.placeImage}
@@ -146,8 +141,8 @@ const lightTheme = StyleSheet.create({
     width: "60%",
     height: 100,
     resizeMode: "cover",
-    marginVertical: 15,
-    marginHorizontal: "20%",
+    marginVertical: 25,
+    marginHorizontal: "23%",
   },
   content: {
     alignItems: "center",
@@ -161,7 +156,7 @@ const lightTheme = StyleSheet.create({
   },
   sliderContainer: {
     justifyContent: "center",
-    marginBottom: "30%",
+    marginBottom: "43%",
   },
   placesList: {
     paddingBottom: 20,
@@ -244,8 +239,8 @@ const darkTheme = StyleSheet.create({
     width: "60%",
     height: 100,
     resizeMode: "cover",
-    marginVertical: 15,
-    marginHorizontal: "20%",
+    marginVertical: 25,
+    marginHorizontal: "23%",
   },
   content: {
     alignItems: "center",
@@ -259,7 +254,7 @@ const darkTheme = StyleSheet.create({
   },
   sliderContainer: {
     justifyContent: "center",
-    marginBottom: "30%",
+    marginBottom: "43%",
   },
   placeImage: {
     width: 80,
