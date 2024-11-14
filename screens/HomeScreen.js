@@ -21,6 +21,10 @@ const HomeScreen = ({ navigation }) => {
 
   const [searchTerm, setSearchTerm] = useState("");
   const [suggestedPlaces, setSuggestedPlaces] = useState([]);
+  // const [suggestedPlaces, setSuggestedPlaces] = useState([
+  //   { place_id: "1", name: "Sample Place 1", formatted_address: "Address 1" },
+  //   { place_id: "2", name: "Sample Place 2", formatted_address: "Address 2" },
+  // ]);
 
   // Function to fetch suggested places based on the search term
   const fetchSuggestedPlaces = async () => {
@@ -31,6 +35,8 @@ const HomeScreen = ({ navigation }) => {
         `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${searchTerm}&key=${GOOGLE_API_KEY}`
       );
       const data = await response.json();
+
+      console.log(data); // Log response data to check for any issues
 
       if (data.results) {
         setSuggestedPlaces(data.results);
@@ -81,21 +87,30 @@ const HomeScreen = ({ navigation }) => {
         style={styles.bannerImage}
       />
 
-      <View style={styles.sliderContainer}>
-        <Slider itemList={ImageSlider} />
-      </View>
-
-      <FlatList
-        data={suggestedPlaces}
-        renderItem={renderPlaceItem}
-        keyExtractor={(item) => item.place_id}
-        contentContainerStyle={styles.placesList}
-        ListEmptyComponent={
-          searchTerm.trim() && (
-            <Text style={styles.noResultsText}>No places found.</Text>
-          )
-        }
-      />
+      {/* Conditionally render slider or suggested places */}
+      {suggestedPlaces.length === 0 ? (
+        <View>
+          <Image
+            source={require("../assets/explore.png")}
+            style={styles.bannerImage}
+          />
+          <View style={styles.sliderContainer}>
+            <Slider itemList={ImageSlider} />
+          </View>
+        </View>
+      ) : (
+        <FlatList
+          data={suggestedPlaces}
+          renderItem={renderPlaceItem}
+          keyExtractor={(item) => item.place_id}
+          contentContainerStyle={styles.placesList}
+          ListEmptyComponent={
+            searchTerm.trim() && (
+              <Text style={styles.noResultsText}>No places found.</Text>
+            )
+          }
+        />
+      )}
     </View>
   );
 };
