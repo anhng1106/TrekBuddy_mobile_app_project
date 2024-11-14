@@ -13,18 +13,21 @@ import SettingScreen from "./screens/SettingScreen";
 import SavedScreen from "./screens/SavedScreen";
 import AboutPage from "./screens/About";
 import DataProtectionPolicyPage from "./screens/Data_Policy";
+import { enableScreens } from "react-native-screens";
 
 // Stack Navigator for screens outside bottom tabs
 const Stack = createStackNavigator();
 // Bottom Tab Navigator for HomeScreen tabs
 const Tab = createBottomTabNavigator();
 
+enableScreens();
+
 // Bottom Tab Navigator component
 function HomeTabs() {
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
-        tabBarIcon: ({ color, size }) => {
+        tabBarIcon: ({ color, size = 24 }) => {
           let iconName;
           if (route.name === "Explore") {
             iconName = "search";
