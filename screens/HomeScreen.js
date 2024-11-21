@@ -23,6 +23,7 @@ const HomeScreen = () => {
   const [famousCities, setFamousCities] = useState([]);
   const [touristDestinations, setTouristDestinations] = useState([]);
   const [selectedCity, setSelectedCity] = useState("");
+  const [isViewingDestinations, setIsViewingDestinations] = useState(false); // Track current view
 
   // Function to fetch famous cities based on the search term
   const fetchFamousCities = async () => {
@@ -33,7 +34,6 @@ const HomeScreen = () => {
         `https://maps.googleapis.com/maps/api/place/textsearch/json?query=cities+in+${searchTerm}&key=${GOOGLE_API_KEY}`
       );
       const data = await response.json();
-
       if (data.results) {
         // Map city results to extract necessary data
         const cities = data.results.map((place) => ({
@@ -46,6 +46,7 @@ const HomeScreen = () => {
         }));
         setFamousCities(cities);
         setTouristDestinations([]);
+        setIsViewingDestinations(false);
       } else {
         setFamousCities([]);
       }
@@ -72,6 +73,7 @@ const HomeScreen = () => {
         }));
         setTouristDestinations(destinations);
         setSelectedCity(cityName);
+        setIsViewingDestinations(true);
       } else {
         setTouristDestinations([]);
       }
@@ -87,6 +89,7 @@ const HomeScreen = () => {
     if (text.trim() === "") {
       setFamousCities([]);
       setTouristDestinations([]);
+      setIsViewingDestinations(false);
     }
   };
 
@@ -136,11 +139,14 @@ const HomeScreen = () => {
       />
 
       {/* Conditionally render slider, cities, or tourist destinations */}
-      {touristDestinations.length > 0 ? (
-        // <View style={styles.sliderContainer}>
-        //   <Slider itemList={ImageSlider} />
-        // </View>
+      {isViewingDestinations ? (
         <>
+          <TouchableOpacity
+            style={styles.backButton}
+            onPress={() => setIsViewingDestinations(false)}
+          >
+            <Text style={styles.backButtonText}>← Back to Cities</Text>
+          </TouchableOpacity>
           <Text style={styles.sectionTitle}>
             Famous Destinations in {selectedCity}
           </Text>
@@ -273,6 +279,16 @@ const lightTheme = StyleSheet.create({
     marginTop: 10,
     marginBottom: 5,
     color: "#333",
+  },
+  backButton: {
+    marginHorizontal: 16,
+    marginTop: 10,
+    marginBottom: 5,
+  },
+  backButtonText: {
+    fontSize: 18,
+    color: "#e8486a",
+    fontWeight: "bold",
   },
 });
 
