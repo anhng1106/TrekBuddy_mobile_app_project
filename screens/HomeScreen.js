@@ -111,9 +111,12 @@ const HomeScreen = () => {
   const handleSaveToCollection = (collectionId) => {
     const collection = collections.find((col) => col.id === collectionId);
     if (collection) {
-      saveItem({ ...collection, items: [...collection.items, itemToSave] }); // Add item to the selected collection
+      saveItem({ ...collection, items: [...collection.items, itemToSave] });
       setIsModalVisible(false); // Close the modal
-      Alert.alert("Success", `${itemToSave.name} has been saved!`);
+      Alert.alert(
+        "Success",
+        `${itemToSave.name} has been saved to your album!`
+      );
     }
   };
 

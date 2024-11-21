@@ -20,15 +20,14 @@ const SavedScreen = () => {
   const styles = theme === "light" ? lightTheme : darkTheme;
   const navigation = useNavigation();
 
-  const { savedItems } = useContext(SavedContext);
-
   const { collections, createCollection } = useContext(SavedContext);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [newCollectionName, setNewCollectionName] = useState("");
+  const [selectedCollection, setSelectedCollection] = useState(null);
 
   const handleCreateCollection = () => {
     if (newCollectionName.trim()) {
-      createCollection(newCollectionName); // Create the new collection
+      createCollection(newCollectionName);
       setNewCollectionName("");
       setIsModalVisible(false); // Close the modal
     } else {
@@ -37,23 +36,17 @@ const SavedScreen = () => {
   };
 
   const renderCollectionItem = ({ item }) => (
-    <TouchableOpacity style={styles.collectionItem}>
-      {item.isCreateNew ? (
-        <View style={styles.createNewContainer}>
-          <Icon name="add" size={24} color="#fff" />
-          <Text style={styles.createNewText}>{item.title}</Text>
-        </View>
-      ) : (
-        <>
-          <Text style={styles.collectionTitle}>{item.title}</Text>
-          <Icon
-            name="ellipsis-horizontal"
-            size={20}
-            color="#888"
-            style={styles.optionsIcon}
-          />
-        </>
-      )}
+    <TouchableOpacity
+      style={styles.collectionItem}
+      onPress={() => setSelectedCollection(item)} // Set the selected collection
+    >
+      <Text style={styles.collectionTitle}>{item.title}</Text>
+      <Icon
+        name="ellipsis-horizontal"
+        size={20}
+        color="#888"
+        style={styles.optionsIcon}
+      />
     </TouchableOpacity>
   );
 
@@ -70,48 +63,78 @@ const SavedScreen = () => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity
-          onPress={() => navigation.goBack()}
-          style={styles.backButton}
-        >
-          <Icon
-            name="arrow-back"
-            size={24}
-            color={theme === "light" ? "#000" : "#fff"}
-          />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>Saved Collection</Text>
+        {selectedCollection ? (
+          <TouchableOpacity
+            onPress={() => setSelectedCollection(null)} // Go back to collection list
+            style={styles.backButton}
+          >
+            <Icon
+              name="arrow-back"
+              size={24}
+              color={theme === "light" ? "#000" : "#fff"}
+            />
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity
+            onPress={() => navigation.goBack()}
+            style={styles.backButton}
+          >
+            <Icon
+              name="arrow-back"
+              size={24}
+              color={theme === "light" ? "#000" : "#fff"}
+            />
+          </TouchableOpacity>
+        )}
+        <Text style={styles.headerTitle}>
+          {selectedCollection ? selectedCollection.title : "Saved Collections"}
+        </Text>
       </View>
 
-      <FlatList
-        data={[
-          {
-            id: "create_new",
-            title: "Create New Collection",
-            isCreateNew: true,
-          },
-          ...collections,
-        ]}
-        renderItem={({ item }) =>
-          item.isCreateNew ? (
-            <TouchableOpacity
-              style={styles.collectionItem}
-              onPress={() => setIsModalVisible(true)} // Open modal to create collection
-            >
-              <View style={styles.createNewContainer}>
-                <Icon name="add" size={24} color="#fff" />
-                <Text style={styles.createNewText}>{item.title}</Text>
-              </View>
-            </TouchableOpacity>
-          ) : (
-            renderCollectionItem({ item })
-          )
-        }
-        keyExtractor={(item) => item.id}
-        numColumns={2}
-        contentContainerStyle={styles.collectionsList}
-        columnWrapperStyle={styles.columnWrapper}
-      />
+      {!selectedCollection ? (
+        <FlatList
+          key="collections" // Unique key for collections view
+          data={[
+            {
+              id: "create_new",
+              title: "Create New Collection",
+              isCreateNew: true,
+            },
+            ...collections,
+          ]}
+          renderItem={({ item }) =>
+            item.isCreateNew ? (
+              <TouchableOpacity
+                style={styles.collectionItem}
+                onPress={() => setIsModalVisible(true)} // Open modal to create collection
+              >
+                <View style={styles.createNewContainer}>
+                  <Icon name="add" size={24} color="#fff" />
+                  <Text style={styles.createNewText}>{item.title}</Text>
+                </View>
+              </TouchableOpacity>
+            ) : (
+              renderCollectionItem({ item })
+            )
+          }
+          keyExtractor={(item) => item.id}
+          numColumns={2} // Fixed numColumns for collections
+          contentContainerStyle={styles.collectionsList}
+          columnWrapperStyle={styles.columnWrapper}
+        />
+      ) : (
+        <FlatList
+          key={`saved-items-${selectedCollection.id}`}
+          data={selectedCollection.items} // Display items of the selected collection
+          renderItem={renderSavedItem}
+          keyExtractor={(item) => item.id}
+          ListEmptyComponent={
+            <Text style={styles.emptyText}>
+              No items saved in this collection.
+            </Text>
+          }
+        />
+      )}
 
       {/* Modal for Creating New Collection */}
       <Modal visible={isModalVisible} transparent animationType="slide">
@@ -332,7 +355,7 @@ const lightTheme = StyleSheet.create({
   createNewContainer: {
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#FF6C00",
+    backgroundColor: "#ff78ad",
     borderRadius: 10,
     paddingVertical: 25,
     width: "100%",
@@ -366,6 +389,12 @@ const lightTheme = StyleSheet.create({
   seeAllCollectionsText: {
     color: "#ff8a8a",
     fontWeight: "bold",
+  },
+  emptyText: {
+    textAlign: "center",
+    color: "#888",
+    marginTop: 20,
+    fontSize: 16,
   },
 });
 

@@ -3,23 +3,33 @@ import React, { createContext, useState } from "react";
 export const SavedContext = createContext();
 
 export const SavedProvider = ({ children }) => {
-  const [savedItems, setSavedItems] = useState([]);
-  const [collections, setCollections] = useState([]); // State for collections
-
-  const saveItem = (item) => {
-    setSavedItems((prevItems) => [...prevItems, item]);
-  };
+  const [collections, setCollections] = useState([]);
 
   const createCollection = (name) => {
-    setCollections((prevCollections) => [
-      ...prevCollections,
-      { id: Date.now().toString(), title: name, items: [] },
-    ]);
+    const newCollection = {
+      id: Date.now().toString(),
+      title: name,
+      items: [],
+    };
+    setCollections((prevCollections) => [...prevCollections, newCollection]);
+  };
+
+  const saveItemToCollection = (collectionId, item) => {
+    setCollections((prevCollections) =>
+      prevCollections.map((collection) =>
+        collection.id === collectionId
+          ? {
+              ...collection,
+              items: [...collection.items, item], // Add the item to the collection's items array
+            }
+          : collection
+      )
+    );
   };
 
   return (
     <SavedContext.Provider
-      value={{ savedItems, saveItem, collections, createCollection }}
+      value={{ collections, createCollection, saveItemToCollection }}
     >
       {children}
     </SavedContext.Provider>
