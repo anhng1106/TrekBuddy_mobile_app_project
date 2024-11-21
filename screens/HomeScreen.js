@@ -21,6 +21,8 @@ const HomeScreen = () => {
 
   const [searchTerm, setSearchTerm] = useState("");
   const [famousCities, setFamousCities] = useState([]);
+  const [touristDestinations, setTouristDestinations] = useState([]);
+  const [selectedCity, setSelectedCity] = useState("");
 
   // Function to fetch famous cities based on the search term
   const fetchFamousCities = async () => {
@@ -43,11 +45,38 @@ const HomeScreen = () => {
             : "https://via.placeholder.com/150",
         }));
         setFamousCities(cities);
+        setTouristDestinations([]);
       } else {
         setFamousCities([]);
       }
     } catch (error) {
       console.error("Error fetching famous cities:", error);
+    }
+  };
+
+  const fetchTouristDestinations = async (cityName) => {
+    try {
+      const response = await fetch(
+        `https://maps.googleapis.com/maps/api/place/textsearch/json?query=tourist+attractions+in+${cityName}&key=${GOOGLE_API_KEY}`
+      );
+      const data = await response.json();
+
+      if (data.results) {
+        const destinations = data.results.map((place) => ({
+          id: place.place_id,
+          name: place.name,
+          address: place.formatted_address,
+          photo: place.photos
+            ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${place.photos[0].photo_reference}&key=${GOOGLE_API_KEY}`
+            : "https://via.placeholder.com/150",
+        }));
+        setTouristDestinations(destinations);
+        setSelectedCity(cityName);
+      } else {
+        setTouristDestinations([]);
+      }
+    } catch (error) {
+      console.error("Error fetching tourist destinations:", error);
     }
   };
 
@@ -57,10 +86,24 @@ const HomeScreen = () => {
     // Clear city results when search bar is cleared
     if (text.trim() === "") {
       setFamousCities([]);
+      setTouristDestinations([]);
     }
   };
 
   const renderCityItem = ({ item }) => (
+    <TouchableOpacity
+      style={styles.placeItem}
+      onPress={() => fetchTouristDestinations(item.name)}
+    >
+      <Image source={{ uri: item.photo }} style={styles.placeImage} />
+      <View style={styles.placeInfo}>
+        <Text style={styles.placeName}>{item.name}</Text>
+        <Text style={styles.placeAddress}>{item.address}</Text>
+      </View>
+    </TouchableOpacity>
+  );
+
+  const renderDestinationItem = ({ item }) => (
     <TouchableOpacity style={styles.placeItem}>
       <Image source={{ uri: item.photo }} style={styles.placeImage} />
       <View style={styles.placeInfo}>
@@ -92,23 +135,36 @@ const HomeScreen = () => {
         style={styles.bannerImage}
       />
 
-      {/* Conditionally render the slider or city list */}
-      {famousCities.length === 0 ? (
+      {/* Conditionally render slider, cities, or tourist destinations */}
+      {touristDestinations.length > 0 ? (
+        // <View style={styles.sliderContainer}>
+        //   <Slider itemList={ImageSlider} />
+        // </View>
+        <>
+          <Text style={styles.sectionTitle}>
+            Famous Destinations in {selectedCity}
+          </Text>
+          <FlatList
+            data={touristDestinations}
+            renderItem={renderDestinationItem}
+            keyExtractor={(item) => item.id}
+            contentContainerStyle={styles.placesList}
+          />
+        </>
+      ) : famousCities.length > 0 ? (
+        <>
+          <Text style={styles.sectionTitle}>Famous Cities</Text>
+          <FlatList
+            data={famousCities}
+            renderItem={renderCityItem}
+            keyExtractor={(item) => item.id}
+            contentContainerStyle={styles.placesList}
+          />
+        </>
+      ) : (
         <View style={styles.sliderContainer}>
           <Slider itemList={ImageSlider} />
         </View>
-      ) : (
-        <FlatList
-          data={famousCities}
-          renderItem={renderCityItem}
-          keyExtractor={(item) => item.id}
-          contentContainerStyle={styles.placesList}
-          ListEmptyComponent={
-            searchTerm.trim() && (
-              <Text style={styles.noResultsText}>No cities found.</Text>
-            )
-          }
-        />
       )}
     </View>
   );
@@ -209,6 +265,14 @@ const lightTheme = StyleSheet.create({
     fontSize: 16,
     color: "#888",
     marginTop: 20,
+  },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginHorizontal: 16,
+    marginTop: 10,
+    marginBottom: 5,
+    color: "#333",
   },
 });
 
