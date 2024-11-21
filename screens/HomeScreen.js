@@ -9,6 +9,7 @@ import {
   FlatList,
   Dimensions,
 } from "react-native";
+import MapView, { Marker } from "react-native-maps";
 import Icon from "react-native-vector-icons/Ionicons";
 import { ThemeContext } from "../ThemeContext";
 import Slider from "./Slider";
@@ -24,6 +25,7 @@ const HomeScreen = () => {
   const [touristDestinations, setTouristDestinations] = useState([]);
   const [selectedCity, setSelectedCity] = useState("");
   const [isViewingDestinations, setIsViewingDestinations] = useState(false); // Track current view
+  const [isMapView, setIsMapView] = useState(false);
 
   // Function to fetch famous cities based on the search term
   const fetchFamousCities = async () => {
@@ -40,6 +42,7 @@ const HomeScreen = () => {
           id: place.place_id,
           name: place.name,
           address: place.formatted_address,
+          location: place.geometry?.location,
           photo: place.photos
             ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${place.photos[0].photo_reference}&key=${GOOGLE_API_KEY}`
             : "https://via.placeholder.com/150",
@@ -139,7 +142,39 @@ const HomeScreen = () => {
       />
 
       {/* Conditionally render slider, cities, or tourist destinations */}
-      {isViewingDestinations ? (
+      {isMapView ? (
+        <View style={styles.mapContainer}>
+          <TouchableOpacity
+            style={styles.backButton}
+            onPress={() => setIsMapView(false)}
+          >
+            <Text style={styles.backButtonText}>← Back to List</Text>
+          </TouchableOpacity>
+          <MapView
+            style={styles.map}
+            initialRegion={{
+              latitude: touristDestinations[0]?.location?.lat || 60.1699, // Default to Helsinki
+              longitude: touristDestinations[0]?.location?.lng || 24.9384,
+              latitudeDelta: 0.5,
+              longitudeDelta: 0.5,
+            }}
+          >
+            {touristDestinations.map((destination) =>
+              destination.location ? (
+                <Marker
+                  key={destination.id}
+                  coordinate={{
+                    latitude: destination.location.lat,
+                    longitude: destination.location.lng,
+                  }}
+                  title={destination.name}
+                  description={destination.address}
+                />
+              ) : null
+            )}
+          </MapView>
+        </View>
+      ) : isViewingDestinations ? (
         <>
           <TouchableOpacity
             style={styles.backButton}
@@ -156,6 +191,12 @@ const HomeScreen = () => {
             keyExtractor={(item) => item.id}
             contentContainerStyle={styles.placesList}
           />
+          <TouchableOpacity
+            style={styles.showMapButton}
+            onPress={() => setIsMapView(true)}
+          >
+            <Text style={styles.showMapButtonText}>Show on Map</Text>
+          </TouchableOpacity>
         </>
       ) : famousCities.length > 0 ? (
         <>
@@ -219,6 +260,14 @@ const lightTheme = StyleSheet.create({
     resizeMode: "cover",
     marginVertical: 25,
     marginHorizontal: "23%",
+  },
+  mapContainer: {
+    width: "100%", // Full width of the screen
+    height: 700, // Set the desired height in pixels
+    marginVertical: "-10%", // Optional: Add spacing around the map
+  },
+  map: {
+    flex: 1,
   },
   content: {
     alignItems: "center",
@@ -289,6 +338,18 @@ const lightTheme = StyleSheet.create({
     fontSize: 18,
     color: "#e8486a",
     fontWeight: "bold",
+  },
+  showMapButton: {
+    backgroundColor: "#fc8fa7",
+    padding: 12,
+    borderRadius: 25,
+    margin: 20,
+    alignItems: "center",
+  },
+  showMapButtonText: {
+    color: "#fff",
+    fontWeight: "bold",
+    fontSize: 16,
   },
 });
 
