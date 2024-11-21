@@ -26,6 +26,7 @@ const HomeScreen = () => {
   const [selectedCity, setSelectedCity] = useState("");
   const [isViewingDestinations, setIsViewingDestinations] = useState(false); // Track current view
   const [isMapView, setIsMapView] = useState(false);
+  const [focusedLocation, setFocusedLocation] = useState(null);
 
   // Function to fetch famous cities based on the search term
   const fetchFamousCities = async () => {
@@ -110,14 +111,62 @@ const HomeScreen = () => {
   );
 
   const renderDestinationItem = ({ item }) => (
-    <TouchableOpacity style={styles.placeItem}>
+    <View style={styles.placeItem}>
       <Image source={{ uri: item.photo }} style={styles.placeImage} />
       <View style={styles.placeInfo}>
         <Text style={styles.placeName}>{item.name}</Text>
         <Text style={styles.placeAddress}>{item.address}</Text>
+        <TouchableOpacity
+          style={styles.showMapButton}
+          onPress={() => {
+            setFocusedLocation(item.location); // Set location to focus on
+            setIsMapView(true);
+          }}
+        >
+          <Text style={styles.showMapButtonText}>Show on Map</Text>
+        </TouchableOpacity>
       </View>
-    </TouchableOpacity>
+    </View>
   );
+
+  const calculateRegion = () => {
+    if (focusedLocation) {
+      return {
+        latitude: focusedLocation.lat,
+        longitude: focusedLocation.lng,
+        latitudeDelta: 0.02,
+        longitudeDelta: 0.02,
+      };
+    }
+
+    if (touristDestinations.length === 0) {
+      return {
+        latitude: 60.1699,
+        longitude: 24.9384,
+        latitudeDelta: 0.5,
+        longitudeDelta: 0.5,
+      };
+    }
+
+    const latitudes = touristDestinations.map(
+      (dest) => dest.location?.lat || 0
+    );
+    const longitudes = touristDestinations.map(
+      (dest) => dest.location?.lng || 0
+    );
+
+    const minLatitude = Math.min(...latitudes);
+    const maxLatitude = Math.max(...latitudes);
+    const minLongitude = Math.min(...longitudes);
+    const maxLongitude = Math.max(...longitudes);
+
+    return {
+      latitude: (minLatitude + maxLatitude) / 2,
+      longitude: (minLongitude + maxLongitude) / 2,
+      latitudeDelta: (maxLatitude - minLatitude) * 1.5 || 0.1,
+      longitudeDelta: (maxLongitude - minLongitude) * 1.5 || 0.1,
+    };
+  };
 
   return (
     <View style={styles.container}>
@@ -146,21 +195,26 @@ const HomeScreen = () => {
         <View style={styles.mapContainer}>
           <TouchableOpacity
             style={styles.backButton}
-            onPress={() => setIsMapView(false)}
-          >
-            <Text style={styles.backButtonText}>← Back to List</Text>
-          </TouchableOpacity>
-          <MapView
-            style={styles.map}
-            initialRegion={{
-              latitude: touristDestinations[0]?.location?.lat || 60.1699, // Default to Helsinki
-              longitude: touristDestinations[0]?.location?.lng || 24.9384,
-              latitudeDelta: 0.5,
-              longitudeDelta: 0.5,
+            onPress={() => {
+              setIsMapView(false), setFocusedLocation(null);
             }}
           >
+            <Text style={styles.backButtonText}>
+              ← Back to Destionation List
+            </Text>
+          </TouchableOpacity>
+          <MapView style={styles.map} initialRegion={calculateRegion()}>
+            {focusedLocation && (
+              <Marker
+                coordinate={{
+                  latitude: focusedLocation.lat,
+                  longitude: focusedLocation.lng,
+                }}
+                title="Selected Destination"
+              />
+            )}
             {touristDestinations.map((destination) =>
-              destination.location ? (
+              destination.location?.lat && destination.location?.lng ? (
                 <Marker
                   key={destination.id}
                   coordinate={{
@@ -191,12 +245,6 @@ const HomeScreen = () => {
             keyExtractor={(item) => item.id}
             contentContainerStyle={styles.placesList}
           />
-          <TouchableOpacity
-            style={styles.showMapButton}
-            onPress={() => setIsMapView(true)}
-          >
-            <Text style={styles.showMapButtonText}>Show on Map</Text>
-          </TouchableOpacity>
         </>
       ) : famousCities.length > 0 ? (
         <>
@@ -341,9 +389,10 @@ const lightTheme = StyleSheet.create({
   },
   showMapButton: {
     backgroundColor: "#fc8fa7",
-    padding: 12,
-    borderRadius: 25,
-    margin: 20,
+    paddingVertical: 7,
+    paddingHorizontal: 5,
+    borderRadius: 30,
+    marginTop: 10,
     alignItems: "center",
   },
   showMapButtonText: {
