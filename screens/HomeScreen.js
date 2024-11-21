@@ -21,10 +21,6 @@ const HomeScreen = ({ navigation }) => {
 
   const [searchTerm, setSearchTerm] = useState("");
   const [suggestedPlaces, setSuggestedPlaces] = useState([]);
-  // const [suggestedPlaces, setSuggestedPlaces] = useState([
-  //   { place_id: "1", name: "Sample Place 1", formatted_address: "Address 1" },
-  //   { place_id: "2", name: "Sample Place 2", formatted_address: "Address 2" },
-  // ]);
 
   // Function to fetch suggested places based on the search term
   const fetchSuggestedPlaces = async () => {
@@ -45,6 +41,15 @@ const HomeScreen = ({ navigation }) => {
       }
     } catch (error) {
       console.error("Error fetching suggested places:", error);
+    }
+  };
+
+  const handleSearchTermChange = (text) => {
+    setSearchTerm(text);
+
+    // Clear suggested places when search bar is cleared
+    if (text.trim() === "") {
+      setSuggestedPlaces([]);
     }
   };
 
@@ -77,7 +82,7 @@ const HomeScreen = ({ navigation }) => {
           placeholder="Enter country or city..."
           placeholderTextColor="#888"
           value={searchTerm}
-          onChangeText={setSearchTerm}
+          onChangeText={handleSearchTermChange}
           onSubmitEditing={fetchSuggestedPlaces}
         />
       </View>
@@ -90,10 +95,6 @@ const HomeScreen = ({ navigation }) => {
       {/* Conditionally render slider or suggested places */}
       {suggestedPlaces.length === 0 ? (
         <View>
-          <Image
-            source={require("../assets/explore.png")}
-            style={styles.bannerImage}
-          />
           <View style={styles.sliderContainer}>
             <Slider itemList={ImageSlider} />
           </View>
