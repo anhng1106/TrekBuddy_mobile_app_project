@@ -7,7 +7,8 @@ import {
   Image,
   TouchableOpacity,
   FlatList,
-  Dimensions,
+  Modal,
+  Alert,
 } from "react-native";
 import MapView, { Marker } from "react-native-maps";
 import Icon from "react-native-vector-icons/Ionicons";
@@ -19,7 +20,7 @@ import { SavedContext } from "../data/SavedContext";
 
 const HomeScreen = () => {
   const { theme } = useContext(ThemeContext);
-  const { saveItem } = useContext(SavedContext); // Saved context
+  const { collections, saveItem } = useContext(SavedContext);
   const styles = theme === "light" ? lightTheme : darkTheme;
 
   const [searchTerm, setSearchTerm] = useState("");
@@ -29,6 +30,9 @@ const HomeScreen = () => {
   const [isViewingDestinations, setIsViewingDestinations] = useState(false); // Track current view
   const [isMapView, setIsMapView] = useState(false);
   const [focusedLocation, setFocusedLocation] = useState(null);
+
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [itemToSave, setItemToSave] = useState(null);
 
   // Function to fetch famous cities based on the search term
   const fetchFamousCities = async () => {
@@ -100,8 +104,17 @@ const HomeScreen = () => {
   };
 
   const saveToAlbum = (item) => {
-    saveItem(item);
-    alert(`${item.name} has been saved to your album!`);
+    setItemToSave(item); // Store the item to save
+    setIsModalVisible(true); // Open the modal
+  };
+
+  const handleSaveToCollection = (collectionId) => {
+    const collection = collections.find((col) => col.id === collectionId);
+    if (collection) {
+      saveItem({ ...collection, items: [...collection.items, itemToSave] }); // Add item to the selected collection
+      setIsModalVisible(false); // Close the modal
+      Alert.alert("Success", `${itemToSave.name} has been saved!`);
+    }
   };
 
   const renderCityItem = ({ item }) => (
@@ -274,6 +287,37 @@ const HomeScreen = () => {
           <Slider itemList={ImageSlider} />
         </View>
       )}
+
+      <Modal visible={isModalVisible} transparent animationType="slide">
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>Select a Collection</Text>
+            <FlatList
+              data={collections}
+              renderItem={({ item }) => (
+                <TouchableOpacity
+                  style={styles.collectionItem}
+                  onPress={() => handleSaveToCollection(item.id)}
+                >
+                  <Text style={styles.collectionTitle}>{item.title}</Text>
+                </TouchableOpacity>
+              )}
+              keyExtractor={(item) => item.id}
+              ListEmptyComponent={
+                <Text style={styles.emptyText}>
+                  No collections found. Create one first.
+                </Text>
+              }
+            />
+            <TouchableOpacity
+              style={styles.closeButton}
+              onPress={() => setIsModalVisible(false)}
+            >
+              <Text style={styles.closeButtonText}>Close</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };
@@ -425,6 +469,49 @@ const lightTheme = StyleSheet.create({
     color: "#fff",
     fontWeight: "bold",
     fontSize: 13,
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  modalContent: {
+    backgroundColor: "#fff",
+    padding: 20,
+    borderRadius: 10,
+    width: "80%",
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginBottom: 10,
+    textAlign: "center",
+  },
+  collectionItem: {
+    padding: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: "#ddd",
+  },
+  collectionTitle: {
+    fontSize: 16,
+    color: "#000",
+  },
+  closeButton: {
+    marginTop: 20,
+    padding: 10,
+    backgroundColor: "#fc8fa7",
+    borderRadius: 10,
+    alignItems: "center",
+  },
+  closeButtonText: {
+    color: "#fff",
+    fontWeight: "bold",
+  },
+  emptyText: {
+    textAlign: "center",
+    color: "#888",
+    fontSize: 14,
   },
 });
 
