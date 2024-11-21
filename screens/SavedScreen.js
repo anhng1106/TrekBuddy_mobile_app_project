@@ -1,7 +1,10 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import {
   View,
+  Modal,
   Text,
+  Button,
+  TextInput,
   StyleSheet,
   FlatList,
   TouchableOpacity,
@@ -19,11 +22,19 @@ const SavedScreen = () => {
 
   const { savedItems } = useContext(SavedContext);
 
-  const collections = [
-    { id: "1", title: "Create New Collection", isCreateNew: true },
-    { id: "2", title: "Helsinki", image: require("../assets/helsinki.jpg") },
-    { id: "3", title: "Bangkok", image: require("../assets/bangkok.jpg") },
-  ];
+  const { collections, createCollection } = useContext(SavedContext);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [newCollectionName, setNewCollectionName] = useState("");
+
+  const handleCreateCollection = () => {
+    if (newCollectionName.trim()) {
+      createCollection(newCollectionName); // Create the new collection
+      setNewCollectionName("");
+      setIsModalVisible(false); // Close the modal
+    } else {
+      alert("Please enter a valid collection name.");
+    }
+  };
 
   const renderCollectionItem = ({ item }) => (
     <TouchableOpacity style={styles.collectionItem}>
@@ -34,7 +45,6 @@ const SavedScreen = () => {
         </View>
       ) : (
         <>
-          <Image source={item.image} style={styles.collectionImage} />
           <Text style={styles.collectionTitle}>{item.title}</Text>
           <Icon
             name="ellipsis-horizontal"
@@ -73,60 +83,54 @@ const SavedScreen = () => {
         <Text style={styles.headerTitle}>Saved Collection</Text>
       </View>
 
-      {/* Saved Items Card */}
-      {/* <TouchableOpacity style={styles.savedItemsCard}>
-        <View style={styles.savedItemsTextContainer}>
-          <Text style={styles.savedItemsTitle}>See All Saved Items</Text>
-          <Text style={styles.savedItemsSubtitle}>Saved Items</Text>
+      <FlatList
+        data={[
+          {
+            id: "create_new",
+            title: "Create New Collection",
+            isCreateNew: true,
+          },
+          ...collections,
+        ]}
+        renderItem={({ item }) =>
+          item.isCreateNew ? (
+            <TouchableOpacity
+              style={styles.collectionItem}
+              onPress={() => setIsModalVisible(true)} // Open modal to create collection
+            >
+              <View style={styles.createNewContainer}>
+                <Icon name="add" size={24} color="#fff" />
+                <Text style={styles.createNewText}>{item.title}</Text>
+              </View>
+            </TouchableOpacity>
+          ) : (
+            renderCollectionItem({ item })
+          )
+        }
+        keyExtractor={(item) => item.id}
+        numColumns={2}
+        contentContainerStyle={styles.collectionsList}
+        columnWrapperStyle={styles.columnWrapper}
+      />
+
+      {/* Modal for Creating New Collection */}
+      <Modal visible={isModalVisible} transparent animationType="slide">
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>New Collection</Text>
+            <TextInput
+              style={styles.modalInput}
+              placeholder="Enter collection name"
+              value={newCollectionName}
+              onChangeText={setNewCollectionName}
+            />
+            <View style={styles.modalButtons}>
+              <Button title="Cancel" onPress={() => setIsModalVisible(false)} />
+              <Button title="Create" onPress={handleCreateCollection} />
+            </View>
+          </View>
         </View>
-        <View style={styles.savedItemsImages}>
-          <Image
-            source={require("../assets/image1.jpg")}
-            style={styles.savedImage}
-          />
-          <Image
-            source={require("../assets/image2.jpg")}
-            style={styles.savedImage}
-          />
-          <Image
-            source={require("../assets/image3.jpg")}
-            style={styles.savedImage}
-          />
-        </View>
-      </TouchableOpacity> */}
-      <View style={styles.container}>
-        <FlatList
-          data={savedItems}
-          renderItem={renderSavedItem}
-          keyExtractor={(item) => item.id}
-          ListEmptyComponent={
-            <Text style={styles.emptyText}>No saved items yet!</Text>
-          }
-        />
-      </View>
-
-      {/* Collections Section */}
-      <View style={styles.collectionsHeader}>
-        <Icon name="folder-outline" size={24} style={styles.folderIcon} />
-        <Text style={styles.collectionsTitle}>Collections</Text>
-      </View>
-
-      {/* Collections Card to unify collections */}
-      <View style={styles.collectionsContainer}>
-        <FlatList
-          data={collections}
-          renderItem={renderCollectionItem}
-          keyExtractor={(item) => item.id}
-          numColumns={2}
-          contentContainerStyle={styles.collectionsList}
-          columnWrapperStyle={styles.columnWrapper}
-        />
-      </View>
-
-      {/* See All Collections */}
-      <TouchableOpacity style={styles.seeAllCollectionsButton}>
-        <Text style={styles.seeAllCollectionsText}>See All Collections</Text>
-      </TouchableOpacity>
+      </Modal>
     </View>
   );
 };
@@ -156,6 +160,67 @@ const lightTheme = StyleSheet.create({
     fontWeight: "bold",
     color: "#000",
     textAlign: "center",
+  },
+  collectionItem: {
+    flex: 1,
+    backgroundColor: "#fff",
+    borderRadius: 10,
+    padding: 10,
+    margin: 5,
+    alignItems: "center",
+    elevation: 3,
+  },
+  createNewContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#FF6C00",
+    borderRadius: 10,
+    paddingVertical: 25,
+    width: "100%",
+  },
+  createNewText: {
+    fontSize: 16,
+    color: "#fff",
+    fontWeight: "bold",
+    marginTop: 8,
+  },
+  collectionTitle: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "#000",
+  },
+  optionsIcon: {
+    position: "absolute",
+    top: 10,
+    right: 10,
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  modalContent: {
+    backgroundColor: "#fff",
+    padding: 20,
+    borderRadius: 10,
+    width: "80%",
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginBottom: 10,
+  },
+  modalInput: {
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 8,
+    padding: 10,
+    marginBottom: 10,
+  },
+  modalButtons: {
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
   savedItemsCard: {
     backgroundColor: "#fff",
