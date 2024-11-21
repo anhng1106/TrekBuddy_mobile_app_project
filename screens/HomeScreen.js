@@ -15,57 +15,57 @@ import Slider from "./Slider";
 import { ImageSlider } from "../data/SliderData";
 import { GOOGLE_API_KEY } from "@env";
 
-const HomeScreen = ({ navigation }) => {
+const HomeScreen = () => {
   const { theme } = useContext(ThemeContext);
   const styles = theme === "light" ? lightTheme : darkTheme;
 
   const [searchTerm, setSearchTerm] = useState("");
-  const [suggestedPlaces, setSuggestedPlaces] = useState([]);
+  const [famousCities, setFamousCities] = useState([]);
 
-  // Function to fetch suggested places based on the search term
-  const fetchSuggestedPlaces = async () => {
+  // Function to fetch famous cities based on the search term
+  const fetchFamousCities = async () => {
     if (searchTerm.trim() === "") return;
 
     try {
       const response = await fetch(
-        `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${searchTerm}&key=${GOOGLE_API_KEY}`
+        `https://maps.googleapis.com/maps/api/place/textsearch/json?query=cities+in+${searchTerm}&key=${GOOGLE_API_KEY}`
       );
       const data = await response.json();
 
-      console.log(data); // Log response data to check for any issues
-
       if (data.results) {
-        setSuggestedPlaces(data.results);
+        // Map city results to extract necessary data
+        const cities = data.results.map((place) => ({
+          id: place.place_id,
+          name: place.name,
+          address: place.formatted_address,
+          photo: place.photos
+            ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${place.photos[0].photo_reference}&key=${GOOGLE_API_KEY}`
+            : "https://via.placeholder.com/150",
+        }));
+        setFamousCities(cities);
       } else {
-        setSuggestedPlaces([]);
+        setFamousCities([]);
       }
     } catch (error) {
-      console.error("Error fetching suggested places:", error);
+      console.error("Error fetching famous cities:", error);
     }
   };
 
   const handleSearchTermChange = (text) => {
     setSearchTerm(text);
 
-    // Clear suggested places when search bar is cleared
+    // Clear city results when search bar is cleared
     if (text.trim() === "") {
-      setSuggestedPlaces([]);
+      setFamousCities([]);
     }
   };
 
-  const renderPlaceItem = ({ item }) => (
+  const renderCityItem = ({ item }) => (
     <TouchableOpacity style={styles.placeItem}>
-      <Image
-        source={{
-          uri: item.photos
-            ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${item.photos[0].photo_reference}&key=${GOOGLE_API_KEY}`
-            : "https://via.placeholder.com/150",
-        }}
-        style={styles.placeImage}
-      />
+      <Image source={{ uri: item.photo }} style={styles.placeImage} />
       <View style={styles.placeInfo}>
         <Text style={styles.placeName}>{item.name}</Text>
-        <Text style={styles.placeAddress}>{item.formatted_address}</Text>
+        <Text style={styles.placeAddress}>{item.address}</Text>
       </View>
     </TouchableOpacity>
   );
@@ -83,7 +83,7 @@ const HomeScreen = ({ navigation }) => {
           placeholderTextColor="#888"
           value={searchTerm}
           onChangeText={handleSearchTermChange}
-          onSubmitEditing={fetchSuggestedPlaces}
+          onSubmitEditing={fetchFamousCities}
         />
       </View>
 
@@ -92,22 +92,20 @@ const HomeScreen = ({ navigation }) => {
         style={styles.bannerImage}
       />
 
-      {/* Conditionally render slider or suggested places */}
-      {suggestedPlaces.length === 0 ? (
-        <View>
-          <View style={styles.sliderContainer}>
-            <Slider itemList={ImageSlider} />
-          </View>
+      {/* Conditionally render the slider or city list */}
+      {famousCities.length === 0 ? (
+        <View style={styles.sliderContainer}>
+          <Slider itemList={ImageSlider} />
         </View>
       ) : (
         <FlatList
-          data={suggestedPlaces}
-          renderItem={renderPlaceItem}
-          keyExtractor={(item) => item.place_id}
+          data={famousCities}
+          renderItem={renderCityItem}
+          keyExtractor={(item) => item.id}
           contentContainerStyle={styles.placesList}
           ListEmptyComponent={
             searchTerm.trim() && (
-              <Text style={styles.noResultsText}>No places found.</Text>
+              <Text style={styles.noResultsText}>No cities found.</Text>
             )
           }
         />
