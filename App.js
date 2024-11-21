@@ -12,6 +12,7 @@ import ProfileScreen from "./screens/ProfileScreen";
 import SettingScreen from "./screens/SettingScreen";
 import SavedScreen from "./screens/SavedScreen";
 import AboutPage from "./screens/About";
+import { SavedProvider } from "./data/SavedContext";
 import DataProtectionPolicyPage from "./screens/Data_Policy";
 import { enableScreens } from "react-native-screens";
 
@@ -55,40 +56,42 @@ function HomeTabs() {
 export default function App() {
   return (
     <ThemeProvider>
-      <NavigationContainer>
-        <Stack.Navigator initialRouteName="LoginScreen">
-          <Stack.Screen
-            name="LoginScreen"
-            component={LoginScreen}
-            options={{ title: "TREKBUDDY - Sign In" }}
-          />
-          <Stack.Screen
-            name="SignupScreen"
-            component={SignupScreen}
-            options={{ title: "TREKBUDDY - Sign Up" }}
-          />
-          <Stack.Screen
-            name="HomeScreen"
-            component={HomeTabs} // Replace HomeScreen with HomeTabs
-            options={{ title: "TREKBUDDY - Home", headerShown: false }}
-          />
-          <Stack.Screen
-            name="ProfileScreen"
-            component={ProfileScreen} // Ensure ProfileScreen is here
-            options={{ title: "TREKBUDDY - Profile" }}
-          />
-          <Stack.Screen
-            name="AboutPage"
-            component={AboutPage}
-            options={{ title: "About" }}
-          />
-          <Stack.Screen
-            name="DataProtectionPolicyPage"
-            component={DataProtectionPolicyPage}
-            options={{ title: "Data Protection Policy" }}
-          />
-        </Stack.Navigator>
-      </NavigationContainer>
+      <SavedProvider>
+        <NavigationContainer>
+          <Stack.Navigator initialRouteName="LoginScreen">
+            <Stack.Screen
+              name="LoginScreen"
+              component={LoginScreen}
+              options={{ title: "TREKBUDDY - Sign In" }}
+            />
+            <Stack.Screen
+              name="SignupScreen"
+              component={SignupScreen}
+              options={{ title: "TREKBUDDY - Sign Up" }}
+            />
+            <Stack.Screen
+              name="HomeScreen"
+              component={HomeTabs} // Replace HomeScreen with HomeTabs
+              options={{ title: "TREKBUDDY - Home", headerShown: false }}
+            />
+            <Stack.Screen
+              name="ProfileScreen"
+              component={ProfileScreen} // Ensure ProfileScreen is here
+              options={{ title: "TREKBUDDY - Profile" }}
+            />
+            <Stack.Screen
+              name="AboutPage"
+              component={AboutPage}
+              options={{ title: "About" }}
+            />
+            <Stack.Screen
+              name="DataProtectionPolicyPage"
+              component={DataProtectionPolicyPage}
+              options={{ title: "Data Protection Policy" }}
+            />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </SavedProvider>
     </ThemeProvider>
   );
 }

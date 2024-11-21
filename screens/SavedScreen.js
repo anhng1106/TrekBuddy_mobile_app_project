@@ -10,11 +10,14 @@ import {
 import Icon from "react-native-vector-icons/Ionicons";
 import { ThemeContext } from "../ThemeContext";
 import { useNavigation } from "@react-navigation/native";
+import { SavedContext } from "../data/SavedContext";
 
 const SavedScreen = () => {
   const { theme } = useContext(ThemeContext);
   const styles = theme === "light" ? lightTheme : darkTheme;
   const navigation = useNavigation();
+
+  const { savedItems } = useContext(SavedContext);
 
   const collections = [
     { id: "1", title: "Create New Collection", isCreateNew: true },
@@ -44,6 +47,16 @@ const SavedScreen = () => {
     </TouchableOpacity>
   );
 
+  const renderSavedItem = ({ item }) => (
+    <View style={styles.savedItem}>
+      <Image source={{ uri: item.photo }} style={styles.savedItemImage} />
+      <View style={styles.savedItemInfo}>
+        <Text style={styles.savedItemName}>{item.name}</Text>
+        <Text style={styles.savedItemAddress}>{item.address}</Text>
+      </View>
+    </View>
+  );
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -61,7 +74,7 @@ const SavedScreen = () => {
       </View>
 
       {/* Saved Items Card */}
-      <TouchableOpacity style={styles.savedItemsCard}>
+      {/* <TouchableOpacity style={styles.savedItemsCard}>
         <View style={styles.savedItemsTextContainer}>
           <Text style={styles.savedItemsTitle}>See All Saved Items</Text>
           <Text style={styles.savedItemsSubtitle}>Saved Items</Text>
@@ -80,7 +93,17 @@ const SavedScreen = () => {
             style={styles.savedImage}
           />
         </View>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
+      <View style={styles.container}>
+        <FlatList
+          data={savedItems}
+          renderItem={renderSavedItem}
+          keyExtractor={(item) => item.id}
+          ListEmptyComponent={
+            <Text style={styles.emptyText}>No saved items yet!</Text>
+          }
+        />
+      </View>
 
       {/* Collections Section */}
       <View style={styles.collectionsHeader}>
@@ -166,6 +189,38 @@ const lightTheme = StyleSheet.create({
     height: 50,
     borderRadius: 5,
     marginLeft: 5,
+  },
+  savedItem: {
+    flexDirection: "row",
+    backgroundColor: "#fff",
+    borderRadius: 10,
+    padding: 10,
+    marginVertical: 8,
+  },
+  savedItemImage: {
+    width: 80,
+    height: 80,
+    borderRadius: 8,
+    marginRight: 10,
+  },
+  savedItemInfo: {
+    justifyContent: "center",
+  },
+  savedItemName: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "#333",
+  },
+  savedItemAddress: {
+    fontSize: 14,
+    color: "#888",
+    marginTop: 4,
+  },
+  emptyText: {
+    textAlign: "center",
+    color: "#888",
+    marginTop: 20,
+    fontSize: 16,
   },
   collectionsHeader: {
     flexDirection: "row",

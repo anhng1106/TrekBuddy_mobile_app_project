@@ -15,9 +15,11 @@ import { ThemeContext } from "../ThemeContext";
 import Slider from "./Slider";
 import { ImageSlider } from "../data/SliderData";
 import { GOOGLE_API_KEY } from "@env";
+import { SavedContext } from "../data/SavedContext";
 
 const HomeScreen = () => {
   const { theme } = useContext(ThemeContext);
+  const { saveItem } = useContext(SavedContext); // Saved context
   const styles = theme === "light" ? lightTheme : darkTheme;
 
   const [searchTerm, setSearchTerm] = useState("");
@@ -97,6 +99,11 @@ const HomeScreen = () => {
     }
   };
 
+  const saveToAlbum = (item) => {
+    saveItem(item);
+    alert(`${item.name} has been saved to your album!`);
+  };
+
   const renderCityItem = ({ item }) => (
     <TouchableOpacity
       style={styles.placeItem}
@@ -116,6 +123,12 @@ const HomeScreen = () => {
       <View style={styles.placeInfo}>
         <Text style={styles.placeName}>{item.name}</Text>
         <Text style={styles.placeAddress}>{item.address}</Text>
+        <TouchableOpacity
+          style={styles.saveToAlbumButton}
+          onPress={() => saveToAlbum(item)}
+        >
+          <Text style={styles.saveToAlbumButtonText}>Add to Favorite</Text>
+        </TouchableOpacity>
         <TouchableOpacity
           style={styles.showMapButton}
           onPress={() => {
@@ -234,7 +247,7 @@ const HomeScreen = () => {
             style={styles.backButton}
             onPress={() => setIsViewingDestinations(false)}
           >
-            <Text style={styles.backButtonText}>← Back to Cities</Text>
+            <Text style={styles.backButtonText}>← Back to Cities List</Text>
           </TouchableOpacity>
           <Text style={styles.sectionTitle}>
             Famous Destinations in {selectedCity}
@@ -388,6 +401,19 @@ const lightTheme = StyleSheet.create({
     fontWeight: "bold",
   },
   showMapButton: {
+    backgroundColor: "#8f8bd6",
+    paddingVertical: 7,
+    paddingHorizontal: 5,
+    borderRadius: 15,
+    marginTop: 10,
+    alignItems: "center",
+  },
+  showMapButtonText: {
+    color: "#fff",
+    fontWeight: "bold",
+    fontSize: 13,
+  },
+  saveToAlbumButton: {
     backgroundColor: "#fc8fa7",
     paddingVertical: 7,
     paddingHorizontal: 5,
@@ -395,10 +421,10 @@ const lightTheme = StyleSheet.create({
     marginTop: 10,
     alignItems: "center",
   },
-  showMapButtonText: {
+  saveToAlbumButtonText: {
     color: "#fff",
     fontWeight: "bold",
-    fontSize: 16,
+    fontSize: 13,
   },
 });
 
