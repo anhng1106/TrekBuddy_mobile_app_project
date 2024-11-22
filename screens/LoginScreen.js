@@ -24,14 +24,26 @@ const LoginScreen = ({ navigation }) => {
       Alert.alert("Missing Fields", "Please fill in both email and password.");
       return;
     }
+
     try {
       const userCredential = await signInWithEmailAndPassword(
         auth,
         email,
         password
       );
-      console.log("User logged in:", userCredential.user);
-      navigation.navigate("HomeScreen"); // Navigate to HomeScreen upon successful login
+      const user = userCredential.user;
+
+      if (!user.emailVerified) {
+        Alert.alert(
+          "Email Not Verified",
+          "Please verify your email before logging in."
+        );
+        await auth.signOut(); // Sign out the user if the email is not verified
+        return;
+      }
+
+      console.log("User logged in:", user);
+      navigation.navigate("HomeScreen");
     } catch (error) {
       switch (error.code) {
         case "auth/user-not-found":
@@ -56,7 +68,6 @@ const LoginScreen = ({ navigation }) => {
           );
           break;
         default:
-          // Fallback for other errors
           Alert.alert(
             "Login Failed",
             "An unexpected error occurred. Please check your email or password and try again."
