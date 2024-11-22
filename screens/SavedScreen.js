@@ -97,7 +97,7 @@ const SavedScreen = () => {
           style={styles.createNewContainer}
           onPress={() => setIsModalVisible(true)} // Opens the modal
         >
-          <Text style={styles.createNewText}>Create New Collection</Text>
+          <Text style={styles.createNewText}>Create a New Collection</Text>
         </TouchableOpacity>
       )}
 
@@ -183,18 +183,21 @@ const lightTheme = StyleSheet.create({
     elevation: 3,
   },
   createNewContainer: {
+    alignSelf: "center",
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#FF6C00",
-    borderRadius: 10,
-    paddingVertical: 25,
-    width: "100%",
+    backgroundColor: "#ab2264",
+    borderRadius: 30,
+    paddingVertical: 18,
+    paddingHorizontal: 30,
+    marginVertical: 10,
+    borderWidth: 3,
+    borderColor: "#fff",
   },
   createNewText: {
     fontSize: 16,
     color: "#fff",
     fontWeight: "bold",
-    marginTop: 8,
   },
   collectionTitle: {
     fontSize: 16,
@@ -341,20 +344,6 @@ const lightTheme = StyleSheet.create({
     alignItems: "center",
     elevation: 3,
   },
-  createNewContainer: {
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#ff78ad",
-    borderRadius: 10,
-    paddingVertical: 25,
-    width: "100%",
-  },
-  createNewText: {
-    fontSize: 16,
-    color: "#fff",
-    fontWeight: "bold",
-    marginTop: 8,
-  },
   collectionImage: {
     width: "100%",
     height: 80,
@@ -488,12 +477,16 @@ const darkTheme = StyleSheet.create({
     elevation: 3,
   },
   createNewContainer: {
+    alignSelf: "center",
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#FF6C00",
-    borderRadius: 10,
-    paddingVertical: 20,
-    width: "80%",
+    borderRadius: 20,
+    paddingVertical: 8,
+    paddingHorizontal: 20,
+    marginVertical: 10,
+    borderWidth: 2, // White border
+    borderColor: "#fff",
   },
   createNewText: {
     fontSize: 16,
