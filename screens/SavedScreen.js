@@ -42,6 +42,14 @@ const SavedScreen = () => {
       onPress={() => setSelectedCollection(item)} // Set the selected collection
     >
       <Text style={styles.collectionTitle}>{item.title}</Text>
+      {item.items && item.items.length > 0 ? (
+        <Image
+          source={{ uri: item.items[0].photo }} // Show the first item's image
+          style={styles.collectionImage}
+        />
+      ) : (
+        <Icon name="images-outline" size={50} color="#ccc" />
+      )}
       <Icon
         name="ellipsis-horizontal"
         size={20}
@@ -156,7 +164,6 @@ const lightTheme = StyleSheet.create({
   header: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#fdeae2",
     paddingVertical: 16,
     paddingHorizontal: 20,
     borderBottomWidth: 1,
@@ -164,7 +171,7 @@ const lightTheme = StyleSheet.create({
   },
   backButton: {
     position: "absolute",
-    left: 5,
+    left: 10,
   },
   headerTitle: {
     flex: 1,
@@ -180,18 +187,35 @@ const lightTheme = StyleSheet.create({
     padding: 10,
     margin: 5,
     alignItems: "center",
-    elevation: 3,
+    elevation: 2,
+  },
+  collectionTitle: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "#000",
+    marginVertical: 5,
+  },
+  collectionImage: {
+    width: "100%",
+    height: 80,
+    borderRadius: 8,
+    marginBottom: 5,
+  },
+  optionsIcon: {
+    position: "absolute",
+    top: 5,
+    right: 5,
   },
   createNewContainer: {
     alignSelf: "center",
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#ab2264",
-    borderRadius: 30,
-    paddingVertical: 18,
-    paddingHorizontal: 30,
+    borderRadius: 20,
+    paddingVertical: 8,
+    paddingHorizontal: 20,
     marginVertical: 10,
-    borderWidth: 3,
+    borderWidth: 2,
     borderColor: "#fff",
   },
   createNewText: {
@@ -199,15 +223,31 @@ const lightTheme = StyleSheet.create({
     color: "#fff",
     fontWeight: "bold",
   },
-  collectionTitle: {
+  savedItem: {
+    flexDirection: "row",
+    backgroundColor: "#fff",
+    borderRadius: 10,
+    padding: 10,
+    marginVertical: 8,
+  },
+  savedItemImage: {
+    width: 80,
+    height: 80,
+    borderRadius: 8,
+    marginRight: 10,
+  },
+  savedItemInfo: {
+    justifyContent: "center",
+  },
+  savedItemName: {
     fontSize: 16,
     fontWeight: "bold",
-    color: "#000",
+    color: "#333",
   },
-  optionsIcon: {
-    position: "absolute",
-    top: 10,
-    right: 10,
+  savedItemAddress: {
+    fontSize: 14,
+    color: "#888",
+    marginTop: 4,
   },
   modalContainer: {
     flex: 1,
@@ -237,42 +277,90 @@ const lightTheme = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
   },
-  savedItemsCard: {
-    backgroundColor: "#fff",
-    borderRadius: 10,
-    padding: 10,
-    marginHorizontal: 10,
-    marginBottom: 30,
-    marginTop: 15,
-    elevation: 3,
-    flexDirection: "row",
-    alignItems: "center",
+  emptyText: {
+    textAlign: "center",
+    color: "#888",
+    marginTop: 20,
+    fontSize: 16,
+  },
+  collectionsList: {
+    paddingHorizontal: 10,
+  },
+  columnWrapper: {
     justifyContent: "space-between",
   },
-  savedItemsTextContainer: {
+});
+
+const darkTheme = StyleSheet.create({
+  container: {
     flex: 1,
+    backgroundColor: "#545454",
   },
-  savedItemsTitle: {
-    fontSize: 16,
-    fontWeight: "bold",
-    color: "#007AFF",
-  },
-  savedItemsSubtitle: {
-    color: "#888",
-  },
-  savedItemsImages: {
+  header: {
     flexDirection: "row",
     alignItems: "center",
+    paddingVertical: 16,
+    paddingHorizontal: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: "#444",
   },
-  savedImage: {
-    width: 50,
-    height: 50,
-    borderRadius: 5,
-    marginLeft: 5,
+  backButton: {
+    position: "absolute",
+    left: 10,
+  },
+  headerTitle: {
+    flex: 1,
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "#fff",
+    textAlign: "center",
+  },
+  collectionItem: {
+    flex: 1,
+    backgroundColor: "#666",
+    borderRadius: 10,
+    padding: 10,
+    margin: 5,
+    alignItems: "center",
+    elevation: 2,
+  },
+  collectionTitle: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "#fff",
+    marginVertical: 5,
+  },
+  collectionImage: {
+    width: "100%",
+    height: 80,
+    borderRadius: 8,
+    marginBottom: 5,
+  },
+  optionsIcon: {
+    position: "absolute",
+    top: 5,
+    right: 5,
+  },
+  createNewContainer: {
+    alignSelf: "center",
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#ab2264",
+    borderRadius: 20,
+    paddingVertical: 8,
+    paddingHorizontal: 20,
+    marginVertical: 10,
+    borderWidth: 2,
+    borderColor: "#fff",
+  },
+  createNewText: {
+    fontSize: 16,
+    color: "#fff",
+    fontWeight: "bold",
   },
   savedItem: {
     flexDirection: "row",
-    backgroundColor: "#fff",
+    backgroundColor: "#666",
     borderRadius: 10,
     padding: 10,
     marginVertical: 8,
@@ -289,234 +377,55 @@ const lightTheme = StyleSheet.create({
   savedItemName: {
     fontSize: 16,
     fontWeight: "bold",
-    color: "#333",
+    color: "#fff",
   },
   savedItemAddress: {
     fontSize: 14,
-    color: "#888",
+    color: "#ccc",
     marginTop: 4,
   },
-  emptyText: {
-    textAlign: "center",
-    color: "#888",
-    marginTop: 20,
-    fontSize: 16,
-  },
-  collectionsHeader: {
-    flexDirection: "row",
-    alignItems: "center",
-    paddingHorizontal: 15,
-    paddingBottom: 8,
-  },
-  collectionsTitle: {
-    fontSize: 18,
-    fontWeight: "bold",
-    marginLeft: 5,
-    color: "#000",
-  },
-  collectionsContainer: {
-    backgroundColor: "#fff",
-    borderRadius: 15,
-    padding: 15,
-    marginHorizontal: 10,
-    marginVertical: 10,
-    elevation: 5,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 5,
-  },
-  folderIcon: {
-    color: "#000",
-  },
-  collectionsList: {
-    paddingHorizontal: 10,
-  },
-  columnWrapper: {
-    justifyContent: "space-between",
-  },
-  collectionItem: {
+  modalContainer: {
     flex: 1,
-    backgroundColor: "#fff",
-    borderRadius: 10,
-    padding: 10,
-    margin: 5,
-    alignItems: "center",
-    elevation: 3,
-  },
-  collectionImage: {
-    width: "100%",
-    height: 80,
-    borderRadius: 8,
-  },
-  collectionTitle: {
-    fontSize: 16,
-    fontWeight: "bold",
-    marginTop: 8,
-    color: "#000",
-  },
-  optionsIcon: {
-    position: "absolute",
-    top: 10,
-    right: 10,
-  },
-  seeAllCollectionsButton: {
-    alignSelf: "center",
-    marginVertical: 10,
-  },
-  seeAllCollectionsText: {
-    color: "#ff8a8a",
-    fontWeight: "bold",
-  },
-  emptyText: {
-    textAlign: "center",
-    color: "#888",
-    marginTop: 20,
-    fontSize: 16,
-  },
-});
-
-const darkTheme = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#545454",
-  },
-  header: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: "#545454",
-    paddingVertical: 16,
-    paddingHorizontal: 20,
-    borderBottomWidth: 1,
-    borderBottomColor: "#ddd",
-  },
-  backButton: {
-    position: "absolute",
-    left: 5, // Align to the left
-  },
-  headerTitle: {
-    flex: 1,
-    fontSize: 20,
-    fontWeight: "bold",
-    color: "#fff",
-    textAlign: "center",
-  },
-  savedItemsCard: {
-    backgroundColor: "#fff",
-    borderRadius: 10,
-    padding: 10,
-    marginHorizontal: 10,
-    marginBottom: 15,
-    marginTop: 15,
-    elevation: 3,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-  },
-  savedItemsTextContainer: {
-    flex: 1,
-  },
-  savedItemsTitle: {
-    fontSize: 16,
-    fontWeight: "bold",
-    color: "#007AFF",
-  },
-  savedItemsSubtitle: {
-    color: "#888",
-  },
-  savedItemsImages: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  savedImage: {
-    width: 50,
-    height: 50,
-    borderRadius: 5,
-    marginLeft: 5,
-  },
-  collectionsHeader: {
-    flexDirection: "row",
-    alignItems: "center",
-    paddingHorizontal: 15,
-    paddingBottom: 8,
-  },
-  collectionsTitle: {
-    fontSize: 18,
-    fontWeight: "bold",
-    marginLeft: 5,
-    color: "#fff",
-  },
-  collectionsContainer: {
-    backgroundColor: "#fff",
-    borderRadius: 15,
-    padding: 15,
-    marginHorizontal: 10,
-    marginVertical: 10,
-    elevation: 5,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 5,
-  },
-  folderIcon: {
-    color: "#fff",
-  },
-  collectionsList: {
-    paddingHorizontal: 10,
-  },
-  columnWrapper: {
-    justifyContent: "space-between",
-  },
-  collectionItem: {
-    flex: 1,
-    backgroundColor: "#fff",
-    borderRadius: 10,
-    padding: 10,
-    margin: 5,
-    alignItems: "center",
-    elevation: 3,
-  },
-  createNewContainer: {
-    alignSelf: "center",
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#FF6C00",
-    borderRadius: 20,
-    paddingVertical: 8,
-    paddingHorizontal: 20,
-    marginVertical: 10,
-    borderWidth: 2, // White border
-    borderColor: "#fff",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
-  createNewText: {
-    fontSize: 16,
+  modalContent: {
+    backgroundColor: "#666",
+    padding: 20,
+    borderRadius: 10,
+    width: "80%",
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
     color: "#fff",
-    fontWeight: "bold",
-    marginTop: 8,
+    marginBottom: 10,
   },
-  collectionImage: {
-    width: "100%",
-    height: 80,
+  modalInput: {
+    borderWidth: 1,
+    borderColor: "#ccc",
     borderRadius: 8,
+    padding: 10,
+    marginBottom: 10,
+    backgroundColor: "#555",
+    color: "#fff",
   },
-  collectionTitle: {
+  modalButtons: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  emptyText: {
+    textAlign: "center",
+    color: "#ccc",
+    marginTop: 20,
     fontSize: 16,
-    fontWeight: "bold",
-    marginTop: 8,
-    color: "#000",
   },
-  optionsIcon: {
-    position: "absolute",
-    top: 10,
-    right: 10,
+  collectionsList: {
+    paddingHorizontal: 10,
   },
-  seeAllCollectionsButton: {
-    alignSelf: "center",
-    marginVertical: 10,
-  },
-  seeAllCollectionsText: {
-    color: "#ff8a8a",
-    fontWeight: "bold",
+  columnWrapper: {
+    justifyContent: "space-between",
   },
 });
 

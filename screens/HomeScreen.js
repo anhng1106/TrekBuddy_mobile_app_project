@@ -20,7 +20,7 @@ import { SavedContext } from "../data/SavedContext";
 
 const HomeScreen = () => {
   const { theme } = useContext(ThemeContext);
-  const { collections, saveItem } = useContext(SavedContext);
+  const { collections, saveItemToCollection } = useContext(SavedContext);
   const styles = theme === "light" ? lightTheme : darkTheme;
 
   const [searchTerm, setSearchTerm] = useState("");
