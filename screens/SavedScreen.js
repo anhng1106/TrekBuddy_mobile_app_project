@@ -9,6 +9,7 @@ import {
   FlatList,
   TouchableOpacity,
   Image,
+  Alert,
 } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
 import { ThemeContext } from "../ThemeContext";
@@ -28,7 +29,10 @@ const SavedScreen = () => {
   const handleCreateCollection = () => {
     if (newCollectionName.trim()) {
       createCollection(newCollectionName);
-      alert(`Collection "${newCollectionName}" created successfully!`);
+      Alert.alert(
+        "Success",
+        `Collection "${newCollectionName}" created successfully!`
+      );
       setNewCollectionName("");
       setIsModalVisible(false); // Close the modal
     } else {

@@ -114,18 +114,6 @@ const HomeScreen = () => {
     Alert.alert("Success", `${itemToSave.name} has been saved to your album!`);
   };
 
-  // const handleSaveToCollection = (collectionId) => {
-  //   const collection = collections.find((col) => col.id === collectionId);
-  //   if (collection) {
-  //     saveItem({ ...collection, items: [...collection.items, itemToSave] });
-  //     setIsModalVisible(false); // Close the modal
-  //     Alert.alert(
-  //       "Success",
-  //       `${itemToSave.name} has been saved to your album!`
-  //     );
-  //   }
-  // };
-
   const renderCityItem = ({ item }) => (
     <TouchableOpacity
       style={styles.placeItem}
@@ -568,6 +556,14 @@ const darkTheme = StyleSheet.create({
     marginVertical: 25,
     marginHorizontal: "23%",
   },
+  mapContainer: {
+    width: "100%", // Full width of the screen
+    height: 700, // Set the desired height in pixels
+    marginVertical: "-10%", // Optional: Add spacing around the map
+  },
+  map: {
+    flex: 1,
+  },
   content: {
     alignItems: "center",
     marginTop: 20,
@@ -581,6 +577,18 @@ const darkTheme = StyleSheet.create({
   sliderContainer: {
     justifyContent: "center",
     marginBottom: "43%",
+  },
+  placesList: {
+    paddingBottom: 20,
+  },
+  placeItem: {
+    flexDirection: "row",
+    backgroundColor: "#fff",
+    borderRadius: 8,
+    padding: 10,
+    marginHorizontal: 16,
+    marginVertical: 8,
+    elevation: 2,
   },
   placeImage: {
     width: 80,
@@ -607,6 +615,93 @@ const darkTheme = StyleSheet.create({
     fontSize: 16,
     color: "#888",
     marginTop: 20,
+  },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginHorizontal: 16,
+    marginTop: 10,
+    marginBottom: 5,
+    color: "#fff",
+  },
+  backButton: {
+    marginHorizontal: 16,
+    marginTop: 10,
+    marginBottom: 5,
+  },
+  backButtonText: {
+    fontSize: 18,
+    color: "#e8486a",
+    fontWeight: "bold",
+  },
+  showMapButton: {
+    backgroundColor: "#8f8bd6",
+    paddingVertical: 7,
+    paddingHorizontal: 5,
+    borderRadius: 15,
+    marginTop: 10,
+    alignItems: "center",
+  },
+  showMapButtonText: {
+    color: "#fff",
+    fontWeight: "bold",
+    fontSize: 13,
+  },
+  saveToAlbumButton: {
+    backgroundColor: "#fc8fa7",
+    paddingVertical: 7,
+    paddingHorizontal: 5,
+    borderRadius: 30,
+    marginTop: 10,
+    alignItems: "center",
+  },
+  saveToAlbumButtonText: {
+    color: "#fff",
+    fontWeight: "bold",
+    fontSize: 13,
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  modalContent: {
+    backgroundColor: "#fff",
+    padding: 20,
+    borderRadius: 10,
+    width: "80%",
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginBottom: 10,
+    textAlign: "center",
+  },
+  collectionItem: {
+    padding: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: "#ddd",
+  },
+  collectionTitle: {
+    fontSize: 16,
+    color: "#000",
+  },
+  closeButton: {
+    marginTop: 20,
+    padding: 10,
+    backgroundColor: "#fc8fa7",
+    borderRadius: 10,
+    alignItems: "center",
+  },
+  closeButtonText: {
+    color: "#fff",
+    fontWeight: "bold",
+  },
+  emptyText: {
+    textAlign: "center",
+    color: "#888",
+    fontSize: 14,
   },
 });
 
