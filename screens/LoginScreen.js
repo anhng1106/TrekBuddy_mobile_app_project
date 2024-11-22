@@ -33,13 +33,34 @@ const LoginScreen = ({ navigation }) => {
       console.log("User logged in:", userCredential.user);
       navigation.navigate("HomeScreen"); // Navigate to HomeScreen upon successful login
     } catch (error) {
-      // Handle authentication errors
-      if (error.code === "auth/user-not-found") {
-        Alert.alert("Error", "User not found. Please sign up.");
-      } else if (error.code === "auth/wrong-password") {
-        Alert.alert("Error", "Incorrect password. Please try again.");
-      } else {
-        Alert.alert("Error", error.message);
+      switch (error.code) {
+        case "auth/user-not-found":
+          Alert.alert(
+            "Login Failed",
+            "No user found with this email. Please sign up."
+          );
+          break;
+        case "auth/wrong-password":
+          Alert.alert("Login Failed", "Incorrect password. Please try again.");
+          break;
+        case "auth/invalid-email":
+          Alert.alert(
+            "Login Failed",
+            "Invalid email format. Please enter a valid email."
+          );
+          break;
+        case "auth/too-many-requests":
+          Alert.alert(
+            "Account Locked",
+            "Too many login attempts. Please try again later."
+          );
+          break;
+        default:
+          // Fallback for other errors
+          Alert.alert(
+            "Login Failed",
+            "An unexpected error occurred. Please check your email or password and try again."
+          );
       }
     }
   };

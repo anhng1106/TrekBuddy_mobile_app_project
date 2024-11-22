@@ -9,7 +9,10 @@ import {
   Image,
 } from "react-native";
 import { ThemeContext } from "../ThemeContext";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  sendEmailVerification,
+} from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore"; // Import Firestore methods
 import { auth, db } from "../firebaseConfig"; // Import Firestore instance
 
@@ -38,6 +41,7 @@ const SignupScreen = ({ navigation }) => {
       );
       return;
     }
+
     try {
       // Create user with Firebase Authentication
       const userCredential = await createUserWithEmailAndPassword(
@@ -55,16 +59,22 @@ const SignupScreen = ({ navigation }) => {
         email: email,
       });
 
+      // Send a verification email
+      await sendEmailVerification(user);
+
       Alert.alert(
-        "Account Created",
-        "Your account has been created successfully",
+        "Verify Your Email",
+        "A verification email has been sent to your email address. Please verify your email before logging in.",
         [
           {
             text: "OK",
-            onPress: () => navigation.navigate("LoginScreen"), // Navigate to HomeScreen after pressing OK
+            onPress: () => navigation.navigate("LoginScreen"), // Navigate to LoginScreen after pressing OK
           },
         ]
       );
+
+      // Sign out the user after sending the email verification
+      await auth.signOut();
     } catch (error) {
       if (error.code === "auth/email-already-in-use") {
         Alert.alert(

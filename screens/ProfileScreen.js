@@ -16,10 +16,19 @@ import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { launchImageLibrary } from "react-native-image-picker";
 import Icon from "react-native-vector-icons/Ionicons";
 import { ThemeContext } from "../ThemeContext";
+import {
+  reauthenticateWithCredential,
+  EmailAuthProvider,
+  updateEmail,
+  sendEmailVerification,
+} from "firebase/auth";
 
 const ProfileScreen = ({ navigation }) => {
   const [email, setEmail] = useState(auth.currentUser.email || "");
+  const [newEmail, setNewEmail] = useState("");
   const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [isEmailModalVisible, setEmailModalVisible] = useState(false);
   const [photoURL, setPhotoURL] = useState(auth.currentUser.photoURL || "");
   const [errorMessage, setErrorMessage] = useState("");
   const [usernameInput, setUsernameInput] = useState("");
@@ -94,12 +103,60 @@ const ProfileScreen = ({ navigation }) => {
     }
   };
 
-  const updateEmail = async () => {
+  const openEmailModal = () => {
+    setEmailModalVisible(true);
+  };
+
+  const closeEmailModal = () => {
+    setEmailModalVisible(false);
+    setPassword(""); // Clear password input
+  };
+
+  const handleUpdateEmail = async () => {
+    const user = auth.currentUser;
+
+    if (!user) {
+      Alert.alert("Error", "No user is currently logged in.");
+      return;
+    }
+
+    if (!newEmail.trim()) {
+      Alert.alert("Error", "Please enter a new email address.");
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(newEmail)) {
+      Alert.alert("Error", "Please enter a valid email address.");
+      return;
+    }
+
     try {
-      await auth.currentUser.updateEmail(email);
-      Alert.alert("Success", "Email updated successfully!");
+      // Update the email
+      await updateEmail(user, newEmail.trim());
+
+      // Send a verification email to the new email
+      await sendEmailVerification(user);
+
+      Alert.alert(
+        "Email Verification Sent",
+        "A verification email has been sent to your new email address. Please verify it before logging in again."
+      );
+
+      // Optionally sign the user out to ensure verification
+      await auth.signOut();
+      navigation.replace("LoginScreen");
     } catch (error) {
-      setErrorMessage("Failed to update email: " + error.message);
+      console.error("Error updating email:", error.message);
+
+      if (error.code === "auth/requires-recent-login") {
+        Alert.alert(
+          "Reauthentication Required",
+          "You need to log in again to perform this operation."
+        );
+      } else {
+        Alert.alert("Error", error.message || "Failed to update email.");
+      }
     }
   };
 
@@ -127,6 +184,7 @@ const ProfileScreen = ({ navigation }) => {
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Profile</Text>
       </View>
+
       <View style={styles.profilePictureContainer}>
         <Image
           source={
@@ -164,6 +222,7 @@ const ProfileScreen = ({ navigation }) => {
             <TextInput
               style={styles.input}
               placeholder="Enter new username"
+              placeholderTextColor="#999997"
               value={usernameInput}
               onChangeText={setUsernameInput}
             />
@@ -183,15 +242,57 @@ const ProfileScreen = ({ navigation }) => {
       </Modal>
 
       <Text style={styles.label}>Email</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Enter new email"
-        value={email}
-        onChangeText={setEmail}
-      />
-      <TouchableOpacity style={styles.button} onPress={updateEmail}>
+      <Text style={styles.emailText}>{email}</Text>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => setEmailModalVisible(true)}
+      >
         <Text style={styles.buttonText}>Update Email</Text>
       </TouchableOpacity>
+
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={isEmailModalVisible}
+        onRequestClose={closeEmailModal}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContainer}>
+            <Text style={styles.modalTitle}>Update Email</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Enter new email"
+              placeholderTextColor="#999997"
+              value={newEmail}
+              onChangeText={setNewEmail}
+              autoCapitalize="none"
+              keyboardType="email-address"
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Enter current password"
+              placeholderTextColor="#999997"
+              value={password}
+              onChangeText={setPassword}
+              secureTextEntry
+            />
+            <View style={styles.modalButtons}>
+              <TouchableOpacity
+                style={styles.button}
+                onPress={handleUpdateEmail}
+              >
+                <Text style={styles.buttonText}>Save</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.button, styles.cancelButton]}
+                onPress={closeEmailModal}
+              >
+                <Text style={styles.buttonText}>Cancel</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
 
       <TouchableOpacity style={styles.button} onPress={signOut}>
         <Text style={styles.buttonText}>Sign Out</Text>
@@ -222,7 +323,7 @@ const lightTheme = StyleSheet.create({
   },
   backButton: {
     position: "absolute",
-    left: 5, // Align to the left
+    left: 5,
   },
   headerTitle: {
     flex: 1,
@@ -279,6 +380,8 @@ const lightTheme = StyleSheet.create({
     padding: 10,
     marginBottom: 20,
     fontSize: 16,
+    backgroundColor: "#fff",
+    color: "#000",
   },
   button: {
     backgroundColor: "#fc8fa7",
@@ -296,6 +399,20 @@ const lightTheme = StyleSheet.create({
     color: "red",
     textAlign: "center",
     marginTop: 20,
+  },
+  emailRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+  emailText: {
+    fontSize: 16,
+    color: "#000",
+  },
+  emailText: {
+    fontSize: 16,
+    marginBottom: 20,
+    color: "#000",
   },
   modalOverlay: {
     flex: 1,
@@ -395,16 +512,16 @@ const darkTheme = StyleSheet.create({
   },
   input: {
     borderWidth: 1,
-    borderColor: "#444",
+    borderColor: "#ccc",
     borderRadius: 8,
     padding: 10,
     marginBottom: 20,
     fontSize: 16,
-    backgroundColor: "#333", // Dark background for input
-    color: "#fff", // White text in input
+    backgroundColor: "#fff",
+    color: "#000",
   },
   button: {
-    backgroundColor: "#fc8fa7", // Updated button color
+    backgroundColor: "#fc8fa7",
     padding: 15,
     borderRadius: 8,
     alignItems: "center",
