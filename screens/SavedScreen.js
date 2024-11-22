@@ -28,6 +28,7 @@ const SavedScreen = () => {
   const handleCreateCollection = () => {
     if (newCollectionName.trim()) {
       createCollection(newCollectionName);
+      alert(`Collection "${newCollectionName}" created successfully!`);
       setNewCollectionName("");
       setIsModalVisible(false); // Close the modal
     } else {
@@ -65,7 +66,7 @@ const SavedScreen = () => {
       <View style={styles.header}>
         {selectedCollection ? (
           <TouchableOpacity
-            onPress={() => setSelectedCollection(null)} // Go back to collection list
+            onPress={() => setSelectedCollection(null)}
             style={styles.backButton}
           >
             <Icon
@@ -91,41 +92,29 @@ const SavedScreen = () => {
         </Text>
       </View>
 
+      {!selectedCollection && (
+        <TouchableOpacity
+          style={styles.createNewContainer}
+          onPress={() => setIsModalVisible(true)} // Opens the modal
+        >
+          <Text style={styles.createNewText}>Create New Collection</Text>
+        </TouchableOpacity>
+      )}
+
       {!selectedCollection ? (
         <FlatList
-          key="collections" // Unique key for collections view
-          data={[
-            {
-              id: "create_new",
-              title: "Create New Collection",
-              isCreateNew: true,
-            },
-            ...collections,
-          ]}
-          renderItem={({ item }) =>
-            item.isCreateNew ? (
-              <TouchableOpacity
-                style={styles.collectionItem}
-                onPress={() => setIsModalVisible(true)} // Open modal to create collection
-              >
-                <View style={styles.createNewContainer}>
-                  <Icon name="add" size={24} color="#fff" />
-                  <Text style={styles.createNewText}>{item.title}</Text>
-                </View>
-              </TouchableOpacity>
-            ) : (
-              renderCollectionItem({ item })
-            )
-          }
+          key="collections"
+          data={collections}
+          renderItem={({ item }) => renderCollectionItem({ item })}
           keyExtractor={(item) => item.id}
-          numColumns={2} // Fixed numColumns for collections
+          numColumns={2}
           contentContainerStyle={styles.collectionsList}
           columnWrapperStyle={styles.columnWrapper}
         />
       ) : (
         <FlatList
           key={`saved-items-${selectedCollection.id}`}
-          data={selectedCollection.items} // Display items of the selected collection
+          data={selectedCollection.items}
           renderItem={renderSavedItem}
           keyExtractor={(item) => item.id}
           ListEmptyComponent={
@@ -503,8 +492,8 @@ const darkTheme = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "#FF6C00",
     borderRadius: 10,
-    paddingVertical: 25,
-    width: "100%",
+    paddingVertical: 20,
+    width: "80%",
   },
   createNewText: {
     fontSize: 16,
