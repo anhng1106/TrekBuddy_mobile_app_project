@@ -114,8 +114,11 @@ const HomeScreen = () => {
     Alert.alert("Success", `${itemToSave.name} has been saved to your album!`);
   };
 
-  const renderCityItem = ({ item, onPress }) => (
-    <TouchableOpacity style={styles.placeItem} onPress={onPress}>
+  const renderCityItem = ({ item }) => (
+    <TouchableOpacity
+      style={styles.placeItem}
+      onPress={() => fetchTouristDestinations(item.name)}
+    >
       <Image source={{ uri: item.photo }} style={styles.placeImage} />
       <View style={styles.placeInfo}>
         <Text style={styles.placeName}>{item.name}</Text>
@@ -124,28 +127,26 @@ const HomeScreen = () => {
     </TouchableOpacity>
   );
 
-  const renderDestinationItem = React.memo(
-    ({ item, saveToAlbum, setFocusedLocation }) => (
-      <View style={styles.placeItem}>
-        <Image source={{ uri: item.photo }} style={styles.placeImage} />
-        <View style={styles.placeInfo}>
-          <Text style={styles.placeName}>{item.name}</Text>
-          <Text style={styles.placeAddress}>{item.address}</Text>
-          <TouchableOpacity
-            style={styles.saveToAlbumButton}
-            onPress={() => saveToAlbum(item)}
-          >
-            <Text style={styles.saveToAlbumButtonText}>Add to Favorite</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.showMapButton}
-            onPress={() => setFocusedLocation(item.location)}
-          >
-            <Text style={styles.showMapButtonText}>Show on Map</Text>
-          </TouchableOpacity>
-        </View>
+  const renderDestinationItem = ({ item }) => (
+    <View style={styles.placeItem}>
+      <Image source={{ uri: item.photo }} style={styles.placeImage} />
+      <View style={styles.placeInfo}>
+        <Text style={styles.placeName}>{item.name}</Text>
+        <Text style={styles.placeAddress}>{item.address}</Text>
+        <TouchableOpacity
+          style={styles.saveToAlbumButton}
+          onPress={() => saveToAlbum(item)}
+        >
+          <Text style={styles.saveToAlbumButtonText}>Add to Favorite</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.showMapButton}
+          onPress={() => setFocusedLocation(item.location)}
+        >
+          <Text style={styles.showMapButtonText}>Show on Map</Text>
+        </TouchableOpacity>
       </View>
-    )
+    </View>
   );
 
   const calculateRegion = () => {
@@ -219,7 +220,7 @@ const HomeScreen = () => {
             }}
           >
             <Text style={styles.backButtonText}>
-              ← Back to Destionation List
+              ← Back to Destination List
             </Text>
           </TouchableOpacity>
           <MapView style={styles.map} initialRegion={calculateRegion()}>

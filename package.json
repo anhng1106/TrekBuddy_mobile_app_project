@@ -18,7 +18,9 @@
     "@react-navigation/native": "^6.1.18",
     "@react-navigation/stack": "^6.4.1",
     "axios": "^1.7.7",
-    "expo": "^52.0.6",
+    "expo": "^52.0.11",
+    "expo-file-system": "~18.0.4",
+    "expo-image-picker": "~16.0.3",
     "expo-status-bar": "~1.12.1",
     "firebase": "^11.0.1",
     "react": "18.2.0",
@@ -35,9 +37,7 @@
     "react-native-screens": "^4.1.0",
     "react-native-share": "^11.0.4",
     "react-native-snap-carousel": "^3.9.1",
-    "react-native-vector-icons": "^10.2.0",
-    "expo-image-picker": "~16.0.3",
-    "expo-file-system": "~18.0.4"
+    "react-native-vector-icons": "^10.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"

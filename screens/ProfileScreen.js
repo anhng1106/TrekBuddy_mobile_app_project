@@ -17,6 +17,7 @@ import * as ImagePicker from "expo-image-picker";
 import * as FileSystem from "expo-file-system";
 import Icon from "react-native-vector-icons/Ionicons";
 import { ThemeContext } from "../ThemeContext";
+import { uploadToFirebase } from "../firebaseConfig";
 // import {
 //   reauthenticateWithCredential,
 //   EmailAuthProvider,
@@ -81,67 +82,52 @@ const ProfileScreen = ({ navigation }) => {
     }
   };
 
-  // const updateProfilePicture = async () => {
-  //   try {
-  //     // Open the image picker to select an image from the gallery
-  //     const result = await ImagePicker.launchImageLibraryAsync({
-  //       mediaTypes: "images",
-  //       allowsEditing: true,
-  //       aspect: [4, 3],
-  //       quality: 1,
-  //     });
+  const updateProfilePicture = async () => {
+    try {
+      // Open the image picker to select an image from the gallery
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: "images",
+        allowsEditing: true,
+        aspect: [4, 3],
+        quality: 1,
+      });
 
-  //     if (result.canceled) {
-  //       return;
-  //     }
+      if (!result.canceled) {
+        const uri = result.assets[0].uri;
 
-  //     const imageUri = result.assets[0].uri;
+        // Extract filename from the URI (if not directly provided by the picker)
+        const fileName = uri.split("/").pop();
 
-  //     const base64String = await FileSystem.readAsStringAsync(imageUri, {
-  //       encoding: FileSystem.EncodingType.Base64,
-  //     });
-  //     console.log("File read successfully as Base64");
+        // Log the selected URI
+        console.log("Selected Image URI:", uri);
 
-  // // Convert the image URI to a blob for Firebase Storage
-  // const binaryData = atob(base64String); // Decode Base64 to binary string
-  // const arrayBuffer = new Uint8Array(binaryData.length).map((_, i) =>
-  //   binaryData.charCodeAt(i)
-  // );
-  // const imageBlob = new Blob([arrayBuffer], { type: "image/jpeg" });
-  // console.log("Image Blob:", imageBlob);
-  // console.log("Image Blob created successfully");
+        // Upload image to Firebase
+        const uploadResp = await uploadToFirebase(uri, fileName, (progress) => {
+          console.log(`Upload Progress: ${progress}%`);
+        });
 
-  // Define the storage reference in Firebase Storage
-  //     const storageRef = ref(
-  //       storage,
-  //       `profile_pictures/${auth.currentUser.uid}.jpg`
-  //     );
-  //     console.log("Storage Reference Path:", storageRef.fullPath);
+        console.log("Upload Response:", uploadResp);
 
-  //     // Upload the image to Firebase Storage
-  //     await uploadString(storageRef, base64String, "base64");
-  //     console.log("Image uploaded successfully to Firebase Storage");
+        const userDocRef = doc(db, "Users", auth.currentUser.uid);
+        await updateDoc(userDocRef, {
+          photoURL: uploadResp.downloadUrl,
+        });
 
-  //     // Retrieve the image's download URL from Firebase Storage
-  //     const photoURL = await getDownloadURL(storageRef);
-  //     console.log("Download URL:", photoURL);
+        // Optionally update local state to immediately show the new profile picture
+        setPhotoURL(uploadResp.downloadUrl);
 
-  //     // Update the user's profile in Firebase Authentication
-  //     await auth.currentUser.updateProfile({ photoURL });
-  //     console.log("Profile updated successfully in Firebase Authentication");
-
-  //     // Update the user's Firestore document with the new photo URL
-  //     await updateDoc(doc(db, "Users", auth.currentUser.uid), { photoURL });
-
-  //     Alert.alert("Success", "Profile picture updated successfully!");
-  //   } catch (error) {
-  //     console.error("Failed to update profile picture:", error);
-  //     Alert.alert(
-  //       "Error",
-  //       `Failed to update profile picture: ${error.message}`
-  //     );
-  //   }
-  // };
+        Alert.alert("Success", "Profile picture updated successfully!");
+      } else {
+        console.log("Image selection was canceled.");
+      }
+    } catch (error) {
+      console.error("Failed to update profile picture:", error);
+      Alert.alert(
+        "Error",
+        `Failed to update profile picture: ${error.message}`
+      );
+    }
+  };
 
   // // const openEmailModal = () => {
   // //   setEmailModalVisible(true);
@@ -210,12 +196,12 @@ const ProfileScreen = ({ navigation }) => {
           }
           style={styles.profilePicture}
         />
-        {/* <TouchableOpacity
+        <TouchableOpacity
           onPress={updateProfilePicture}
           style={styles.cameraIcon}
         >
           <Icon name="camera" size={24} color="#fc8fa7" />
-        </TouchableOpacity> */}
+        </TouchableOpacity>
       </View>
 
       <View style={styles.usernameContainer}>
