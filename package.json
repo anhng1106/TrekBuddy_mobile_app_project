@@ -35,7 +35,9 @@
     "react-native-screens": "^4.1.0",
     "react-native-share": "^11.0.4",
     "react-native-snap-carousel": "^3.9.1",
-    "react-native-vector-icons": "^10.2.0"
+    "react-native-vector-icons": "^10.2.0",
+    "expo-image-picker": "~16.0.3",
+    "expo-file-system": "~18.0.4"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"

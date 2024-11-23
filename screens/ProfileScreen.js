@@ -13,15 +13,16 @@ import {
 import { auth, db, storage } from "../firebaseConfig";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import { launchImageLibrary } from "react-native-image-picker";
+import * as ImagePicker from "expo-image-picker";
+import * as FileSystem from "expo-file-system";
 import Icon from "react-native-vector-icons/Ionicons";
 import { ThemeContext } from "../ThemeContext";
-import {
-  reauthenticateWithCredential,
-  EmailAuthProvider,
-  updateEmail,
-  sendEmailVerification,
-} from "firebase/auth";
+// import {
+//   reauthenticateWithCredential,
+//   EmailAuthProvider,
+//   updateEmail,
+//   sendEmailVerification,
+// } from "firebase/auth";
 
 const ProfileScreen = ({ navigation }) => {
   const [email, setEmail] = useState(auth.currentUser.email || "");
@@ -29,7 +30,7 @@ const ProfileScreen = ({ navigation }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [isEmailModalVisible, setEmailModalVisible] = useState(false);
-  const [photoURL, setPhotoURL] = useState(auth.currentUser.photoURL || "");
+  const [photoURL, setPhotoURL] = useState(null);
   const [errorMessage, setErrorMessage] = useState("");
   const [usernameInput, setUsernameInput] = useState("");
   const [isModalVisible, setModalVisible] = useState(false);
@@ -38,17 +39,27 @@ const ProfileScreen = ({ navigation }) => {
   const styles = theme === "light" ? lightTheme : darkTheme;
 
   useEffect(() => {
-    const fetchUsername = async () => {
+    const fetchUserData = async () => {
       try {
-        const userDoc = await getDoc(doc(db, "Users", auth.currentUser.uid));
+        const userDocRef = doc(db, "Users", auth.currentUser.uid);
+
+        const userDoc = await getDoc(userDocRef);
         if (userDoc.exists()) {
-          setUsername(userDoc.data().username || "Unknown");
+          const userData = userDoc.data();
+          setUsername(userData.username || "Unknown");
+          setPhotoURL(userData.photoURL || null);
+        } else {
+          // Initialize user data in Firestore with default profile picture
+          await setDoc(userDocRef, {
+            username: "Unknown",
+            photoURL: null,
+          });
         }
       } catch (error) {
-        setErrorMessage("Failed to fetch username: " + error.message);
+        setErrorMessage("Failed to fetch user data: " + error.message);
       }
     };
-    fetchUsername();
+    fetchUserData();
   }, []);
 
   const updateUsername = async () => {
@@ -70,95 +81,100 @@ const ProfileScreen = ({ navigation }) => {
     }
   };
 
-  const updateProfilePicture = async () => {
-    const result = await launchImageLibrary();
-    if (result.didCancel || !result.assets || result.assets.length === 0) {
-      return;
-    }
+  // const updateProfilePicture = async () => {
+  //   try {
+  //     // Open the image picker to select an image from the gallery
+  //     const result = await ImagePicker.launchImageLibraryAsync({
+  //       mediaTypes: "images",
+  //       allowsEditing: true,
+  //       aspect: [4, 3],
+  //       quality: 1,
+  //     });
 
-    const imageUri = result.assets[0].uri;
+  //     if (result.canceled) {
+  //       return;
+  //     }
 
-    try {
-      const response = await fetch(imageUri);
-      const blob = await response.blob();
+  //     const imageUri = result.assets[0].uri;
 
-      const storageRef = ref(
-        storage,
-        `profile_pictures/${auth.currentUser.uid}.jpg`
-      );
-      await uploadBytes(storageRef, blob);
+  //     const base64String = await FileSystem.readAsStringAsync(imageUri, {
+  //       encoding: FileSystem.EncodingType.Base64,
+  //     });
+  //     console.log("File read successfully as Base64");
 
-      const photoURL = await getDownloadURL(storageRef);
+  // // Convert the image URI to a blob for Firebase Storage
+  // const binaryData = atob(base64String); // Decode Base64 to binary string
+  // const arrayBuffer = new Uint8Array(binaryData.length).map((_, i) =>
+  //   binaryData.charCodeAt(i)
+  // );
+  // const imageBlob = new Blob([arrayBuffer], { type: "image/jpeg" });
+  // console.log("Image Blob:", imageBlob);
+  // console.log("Image Blob created successfully");
 
-      await auth.currentUser.updateProfile({ photoURL });
+  // Define the storage reference in Firebase Storage
+  //     const storageRef = ref(
+  //       storage,
+  //       `profile_pictures/${auth.currentUser.uid}.jpg`
+  //     );
+  //     console.log("Storage Reference Path:", storageRef.fullPath);
 
-      await updateDoc(doc(db, "Users", auth.currentUser.uid), {
-        photoURL,
-      });
+  //     // Upload the image to Firebase Storage
+  //     await uploadString(storageRef, base64String, "base64");
+  //     console.log("Image uploaded successfully to Firebase Storage");
 
-      setPhotoURL(photoURL);
-      Alert.alert("Success", "Profile picture updated successfully!");
-    } catch (error) {
-      setErrorMessage("Failed to update profile picture: " + error.message);
-    }
-  };
+  //     // Retrieve the image's download URL from Firebase Storage
+  //     const photoURL = await getDownloadURL(storageRef);
+  //     console.log("Download URL:", photoURL);
 
-  const openEmailModal = () => {
-    setEmailModalVisible(true);
-  };
+  //     // Update the user's profile in Firebase Authentication
+  //     await auth.currentUser.updateProfile({ photoURL });
+  //     console.log("Profile updated successfully in Firebase Authentication");
 
-  const closeEmailModal = () => {
-    setEmailModalVisible(false);
-    setPassword(""); // Clear password input
-  };
+  //     // Update the user's Firestore document with the new photo URL
+  //     await updateDoc(doc(db, "Users", auth.currentUser.uid), { photoURL });
 
-  const handleUpdateEmail = async () => {
-    const user = auth.currentUser;
+  //     Alert.alert("Success", "Profile picture updated successfully!");
+  //   } catch (error) {
+  //     console.error("Failed to update profile picture:", error);
+  //     Alert.alert(
+  //       "Error",
+  //       `Failed to update profile picture: ${error.message}`
+  //     );
+  //   }
+  // };
 
-    if (!user) {
-      Alert.alert("Error", "No user is currently logged in.");
-      return;
-    }
+  // // const openEmailModal = () => {
+  // //   setEmailModalVisible(true);
+  // // };
 
-    if (!newEmail.trim()) {
-      Alert.alert("Error", "Please enter a new email address.");
-      return;
-    }
+  // // const closeEmailModal = () => {
+  // //   setEmailModalVisible(false);
+  // //   setPassword(""); // Clear password input
+  // // };
 
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(newEmail)) {
-      Alert.alert("Error", "Please enter a valid email address.");
-      return;
-    }
+  // // const handleUpdateEmail = async () => {
+  // //   if (!newEmail) {
+  // //     Alert.alert("Error", "Please enter a new email address.");
+  // //     return;
+  // //   }
 
-    try {
-      // Update the email
-      await updateEmail(user, newEmail.trim());
-
-      // Send a verification email to the new email
-      await sendEmailVerification(user);
-
-      Alert.alert(
-        "Email Verification Sent",
-        "A verification email has been sent to your new email address. Please verify it before logging in again."
-      );
-
-      // Optionally sign the user out to ensure verification
-      await auth.signOut();
-      navigation.replace("LoginScreen");
-    } catch (error) {
-      console.error("Error updating email:", error.message);
-
-      if (error.code === "auth/requires-recent-login") {
-        Alert.alert(
-          "Reauthentication Required",
-          "You need to log in again to perform this operation."
-        );
-      } else {
-        Alert.alert("Error", error.message || "Failed to update email.");
-      }
-    }
-  };
+  // //   try {
+  // //     await updateEmail(auth.currentUser, newEmail.trim());
+  // //     setEmail(newEmail.trim());
+  // //     setNewEmail("");
+  // //     closeEmailModal();
+  // //     Alert.alert("Success", "Email updated successfully!");
+  // //   } catch (error) {
+  // //     if (error.code === "auth/requires-recent-login") {
+  // //       Alert.alert(
+  // //         "Reauthentication Required",
+  // //         "You need to log in again to perform this operation."
+  // //       );
+  // //     } else {
+  // //       Alert.alert("Error", `Failed to update email: ${error.message}`);
+  // //     }
+  // //   }
+  // // };
 
   const signOut = async () => {
     try {
@@ -194,12 +210,12 @@ const ProfileScreen = ({ navigation }) => {
           }
           style={styles.profilePicture}
         />
-        <TouchableOpacity
+        {/* <TouchableOpacity
           onPress={updateProfilePicture}
           style={styles.cameraIcon}
         >
           <Icon name="camera" size={24} color="#fc8fa7" />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
 
       <View style={styles.usernameContainer}>
@@ -243,7 +259,7 @@ const ProfileScreen = ({ navigation }) => {
 
       <Text style={styles.label}>Email</Text>
       <Text style={styles.emailText}>{email}</Text>
-      <TouchableOpacity
+      {/* <TouchableOpacity
         style={styles.button}
         onPress={() => setEmailModalVisible(true)}
       >
@@ -292,7 +308,7 @@ const ProfileScreen = ({ navigation }) => {
             </View>
           </View>
         </View>
-      </Modal>
+      </Modal> */}
 
       <TouchableOpacity style={styles.button} onPress={signOut}>
         <Text style={styles.buttonText}>Sign Out</Text>
