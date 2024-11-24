@@ -1,6 +1,15 @@
 import React, { createContext, useState, useEffect } from "react";
 import { db, auth } from "../firebaseConfig";
-import { collection, addDoc, getDocs, doc } from "firebase/firestore";
+import {
+  collection,
+  addDoc,
+  query,
+  where,
+  getDocs,
+  doc,
+  updateDoc,
+  arrayUnion,
+} from "firebase/firestore";
 
 export const SavedContext = createContext();
 
@@ -15,10 +24,6 @@ export const SavedProvider = ({ children }) => {
     }
 
     const userId = auth.currentUser.uid; // Get the current user's uid
-    console.log("auth object:", auth);
-    console.log("auth.currentUser:", auth.currentUser);
-    console.log("User ID:", userId);
-
     try {
       // Get the user's sub-collection (userCollections) from Firestore
       const userCollectionsRef = collection(
@@ -101,7 +106,7 @@ export const SavedProvider = ({ children }) => {
     }
   };
 
-  // Function to save an item to a collection
+  // Function to save an item to a collection and update Firestore
   const saveItemToCollection = async (collectionId, item) => {
     if (!auth.currentUser) {
       console.error("No user is signed in. Cannot save item.");
@@ -111,27 +116,31 @@ export const SavedProvider = ({ children }) => {
     const userId = auth.currentUser.uid;
 
     try {
-      const userCollectionsRef = doc(
+      // Update the collection in Firestore
+      const collectionRef = doc(
         db,
         "Users",
         userId,
         "userCollections",
         collectionId
       );
+      await updateDoc(collectionRef, {
+        items: arrayUnion(item), // Use arrayUnion to add the item to the "items" array
+      });
 
-      // Update the collection's items field (you can use an update function here if needed)
+      // Update the local state
       setCollections((prevCollections) =>
         prevCollections.map((collection) =>
           collection.id === collectionId
             ? {
                 ...collection,
-                items: [...collection.items, item], // Add the item to the collection's items array
+                items: [...collection.items, item], // Add the item to the collection's items array in local state
               }
             : collection
         )
       );
 
-      console.log("Item saved to collection:", collectionId);
+      console.log("Item saved to collection in Firestore:", collectionId);
     } catch (error) {
       console.error("Error saving item to collection:", error);
       throw error;
