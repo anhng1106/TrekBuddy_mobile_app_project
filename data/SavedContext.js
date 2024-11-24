@@ -151,6 +151,7 @@ export const SavedProvider = ({ children }) => {
     <SavedContext.Provider
       value={{
         collections,
+        setCollections,
         createCollection,
         saveItemToCollection,
       }}

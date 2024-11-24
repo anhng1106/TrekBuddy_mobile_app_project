@@ -16,14 +16,22 @@ import { ThemeContext } from "../ThemeContext";
 import { useNavigation } from "@react-navigation/native";
 import { SavedContext } from "../data/SavedContext";
 import { db, auth } from "../firebaseConfig";
-import { doc, deleteDoc, updateDoc, arrayRemove } from "firebase/firestore";
+import {
+  doc,
+  collection,
+  deleteDoc,
+  updateDoc,
+  getDocs,
+  arrayRemove,
+} from "firebase/firestore";
 
 const SavedScreen = () => {
   const { theme } = useContext(ThemeContext);
   const styles = theme === "light" ? lightTheme : darkTheme;
   const navigation = useNavigation();
 
-  const { collections, createCollection } = useContext(SavedContext);
+  const { collections, setCollections, createCollection } =
+    useContext(SavedContext);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [newCollectionName, setNewCollectionName] = useState("");
   const [selectedCollection, setSelectedCollection] = useState(null);
@@ -49,7 +57,6 @@ const SavedScreen = () => {
       }
 
       try {
-        setIsLoading(true); // Set loading state
         await createCollection(newCollectionName); // Call the helper function
         Alert.alert(
           "Success",
@@ -71,7 +78,34 @@ const SavedScreen = () => {
     setIsDeleteModalVisible(true);
   };
 
+  const fetchUserCollections = async () => {
+    try {
+      const userCollectionsRef = collection(
+        db,
+        "Users",
+        auth.currentUser.uid,
+        "userCollections"
+      );
+      const querySnapshot = await getDocs(userCollectionsRef);
+
+      const collections = [];
+      querySnapshot.forEach((doc) => {
+        collections.push({ id: doc.id, ...doc.data() });
+      });
+
+      return collections;
+    } catch (error) {
+      console.error("Error fetching collections:", error);
+      return [];
+    }
+  };
+
   const deleteCollection = async () => {
+    if (!auth.currentUser) {
+      Alert.alert("Error", "No user is signed in. Cannot delete collection.");
+      return;
+    }
+
     try {
       const collectionRef = doc(
         db,
@@ -82,11 +116,15 @@ const SavedScreen = () => {
       );
       await deleteDoc(collectionRef);
 
-      // Update local state
+      // Fetch updated collections from Firestore
+      const updatedCollections = await fetchUserCollections();
+      setCollections(updatedCollections); // Update the state with the latest collections
+
       Alert.alert(
         "Success",
         `Collection "${selectedCollectionForOptions.title}" deleted successfully.`
       );
+
       setIsDeleteModalVisible(false);
       setSelectedCollectionForOptions(null);
     } catch (error) {
@@ -241,8 +279,16 @@ const SavedScreen = () => {
               onChangeText={setNewCollectionName}
             />
             <View style={styles.modalButtons}>
-              <Button title="Cancel" onPress={() => setIsModalVisible(false)} />
-              <Button title="Create" onPress={handleCreateCollection} />
+              <Button
+                style={styles.noButton}
+                title="Cancel"
+                onPress={() => setIsModalVisible(false)}
+              />
+              <Button
+                style={styles.noButton}
+                title="Create"
+                onPress={handleCreateCollection}
+              />
             </View>
           </View>
         </View>
@@ -438,13 +484,13 @@ const lightTheme = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
-  modalContent: {
-    backgroundColor: "#fff",
-    padding: 20,
-    borderRadius: 10,
-    width: "80%",
-    alignItems: "center",
-  },
+  // modalContent: {
+  //   backgroundColor: "#fff",
+  //   padding: 20,
+  //   borderRadius: 10,
+  //   width: "80%",
+  //   alignItems: "center",
+  // },
   yesButton: {
     backgroundColor: "#d9534f",
     flex: 1,
