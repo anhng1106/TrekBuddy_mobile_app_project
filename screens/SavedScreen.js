@@ -15,6 +15,8 @@ import Icon from "react-native-vector-icons/Ionicons";
 import { ThemeContext } from "../ThemeContext";
 import { useNavigation } from "@react-navigation/native";
 import { SavedContext } from "../data/SavedContext";
+import { db, auth } from "../firebaseConfig";
+import { doc, deleteDoc, updateDoc, arrayRemove } from "firebase/firestore";
 
 const SavedScreen = () => {
   const { theme } = useContext(ThemeContext);
@@ -25,7 +27,9 @@ const SavedScreen = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [newCollectionName, setNewCollectionName] = useState("");
   const [selectedCollection, setSelectedCollection] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [selectedCollectionForOptions, setSelectedCollectionForOptions] =
+    useState(null);
+  const [isOptionsModalVisible, setIsOptionsModalVisible] = useState(false);
 
   const handleCreateCollection = async () => {
     if (newCollectionName.trim()) {
@@ -53,11 +57,57 @@ const SavedScreen = () => {
       } catch (error) {
         console.error("Error creating collection:", error);
         Alert.alert("Error", `Failed to create collection: ${error.message}`);
-      } finally {
-        setIsLoading(false); // Reset loading state
       }
     } else {
       Alert.alert("Error", "Please enter a valid collection name.");
+    }
+  };
+
+  const deleteCollection = async (collectionId) => {
+    try {
+      const collectionRef = doc(
+        db,
+        "Users",
+        auth.currentUser.uid,
+        "userCollections",
+        collectionId
+      );
+      await deleteDoc(collectionRef);
+
+      // Update local state
+      setSelectedCollection(null); // Deselect the collection if it's open
+      Alert.alert("Success", "Collection deleted successfully.");
+    } catch (error) {
+      console.error("Error deleting collection:", error);
+      Alert.alert("Error", `Failed to delete collection: ${error.message}`);
+    }
+  };
+
+  const deleteItemFromCollection = async (collectionId, item) => {
+    try {
+      const collectionRef = doc(
+        db,
+        "Users",
+        auth.currentUser.uid,
+        "userCollections",
+        collectionId
+      );
+
+      // Remove the item from Firestore using arrayRemove
+      await updateDoc(collectionRef, {
+        items: arrayRemove(item),
+      });
+
+      // Update local state
+      setSelectedCollection((prevCollection) => ({
+        ...prevCollection,
+        items: prevCollection.items.filter((i) => i.id !== item.id),
+      }));
+
+      Alert.alert("Success", "Item deleted successfully.");
+    } catch (error) {
+      console.error("Error deleting item:", error);
+      Alert.alert("Error", `Failed to delete item: ${error.message}`);
     }
   };
 
@@ -75,12 +125,15 @@ const SavedScreen = () => {
       ) : (
         <Icon name="images-outline" size={50} color="#ccc" />
       )}
-      <Icon
-        name="ellipsis-horizontal"
-        size={20}
-        color="#888"
+      <TouchableOpacity
         style={styles.optionsIcon}
-      />
+        onPress={() => {
+          setSelectedCollectionForOptions(item);
+          setIsOptionsModalVisible(true);
+        }}
+      >
+        <Icon name="ellipsis-horizontal" size={20} color="#888" />
+      </TouchableOpacity>
     </TouchableOpacity>
   );
 
@@ -91,6 +144,11 @@ const SavedScreen = () => {
         <Text style={styles.savedItemName}>{item.name}</Text>
         <Text style={styles.savedItemAddress}>{item.address}</Text>
       </View>
+      <TouchableOpacity
+        onPress={() => deleteItemFromCollection(selectedCollection.id, item)}
+      >
+        <Icon name="trash-outline" size={20} color="#f00" />
+      </TouchableOpacity>
     </View>
   );
 
@@ -128,7 +186,7 @@ const SavedScreen = () => {
       {!selectedCollection && (
         <TouchableOpacity
           style={styles.createNewContainer}
-          onPress={() => setIsModalVisible(true)} // Opens the modal
+          onPress={() => setIsModalVisible(true)}
         >
           <Text style={styles.createNewText}>Create a New Collection</Text>
         </TouchableOpacity>
@@ -138,7 +196,7 @@ const SavedScreen = () => {
         <FlatList
           key="collections"
           data={collections}
-          renderItem={({ item }) => renderCollectionItem({ item })}
+          renderItem={renderCollectionItem}
           keyExtractor={(item) => item.id}
           numColumns={2}
           contentContainerStyle={styles.collectionsList}
@@ -174,6 +232,26 @@ const SavedScreen = () => {
               <Button title="Cancel" onPress={() => setIsModalVisible(false)} />
               <Button title="Create" onPress={handleCreateCollection} />
             </View>
+          </View>
+        </View>
+      </Modal>
+
+      <Modal visible={isOptionsModalVisible} transparent animationType="slide">
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>Options</Text>
+            <TouchableOpacity
+              onPress={() => {
+                deleteCollection(selectedCollectionForOptions.id);
+                setIsOptionsModalVisible(false);
+              }}
+            >
+              <Text style={styles.modalOption}>Delete Collection</Text>
+            </TouchableOpacity>
+            <Button
+              title="Cancel"
+              onPress={() => setIsOptionsModalVisible(false)}
+            />
           </View>
         </View>
       </Modal>
