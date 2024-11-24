@@ -25,18 +25,39 @@ const SavedScreen = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [newCollectionName, setNewCollectionName] = useState("");
   const [selectedCollection, setSelectedCollection] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleCreateCollection = () => {
+  const handleCreateCollection = async () => {
     if (newCollectionName.trim()) {
-      createCollection(newCollectionName);
-      Alert.alert(
-        "Success",
-        `Collection "${newCollectionName}" created successfully!`
+      // Check for duplicate collection names
+      const isDuplicate = collections.some(
+        (collection) =>
+          collection.title.toLowerCase() ===
+          newCollectionName.trim().toLowerCase()
       );
-      setNewCollectionName("");
-      setIsModalVisible(false); // Close the modal
+
+      if (isDuplicate) {
+        Alert.alert("Error", "A collection with this name already exists.");
+        return;
+      }
+
+      try {
+        setIsLoading(true); // Set loading state
+        await createCollection(newCollectionName); // Call the helper function
+        Alert.alert(
+          "Success",
+          `Collection "${newCollectionName}" created successfully!`
+        );
+        setNewCollectionName(""); // Clear input
+        setIsModalVisible(false); // Close the modal
+      } catch (error) {
+        console.error("Error creating collection:", error);
+        Alert.alert("Error", `Failed to create collection: ${error.message}`);
+      } finally {
+        setIsLoading(false); // Reset loading state
+      }
     } else {
-      alert("Please enter a valid collection name.");
+      Alert.alert("Error", "Please enter a valid collection name.");
     }
   };
 
@@ -145,6 +166,7 @@ const SavedScreen = () => {
             <TextInput
               style={styles.modalInput}
               placeholder="Enter collection name"
+              placeholderTextColor="#999997"
               value={newCollectionName}
               onChangeText={setNewCollectionName}
             />

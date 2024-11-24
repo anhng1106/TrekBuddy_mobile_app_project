@@ -12,9 +12,7 @@ import {
 } from "react-native";
 import { auth, db, storage } from "../firebaseConfig";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
-import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import * as ImagePicker from "expo-image-picker";
-import * as FileSystem from "expo-file-system";
 import Icon from "react-native-vector-icons/Ionicons";
 import { ThemeContext } from "../ThemeContext";
 import { uploadToFirebase } from "../firebaseConfig";
