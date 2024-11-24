@@ -196,8 +196,11 @@ const SavedScreen = () => {
         <Text style={styles.savedItemName}>{item.name}</Text>
         <Text style={styles.savedItemAddress}>{item.address}</Text>
       </View>
-      <TouchableOpacity onPress={() => openDeleteItemModal(item)}>
-        <Icon name="trash-outline" size={20} color="#f00" />
+      <TouchableOpacity
+        style={styles.trashIconContainer}
+        onPress={() => openDeleteItemModal(item)}
+      >
+        <Icon name="trash-outline" size={24} color="#f00" />
       </TouchableOpacity>
     </View>
   );
@@ -268,7 +271,7 @@ const SavedScreen = () => {
 
       {/* Modal for Creating New Collection */}
       <Modal visible={isModalVisible} transparent animationType="slide">
-        <View style={styles.modalContainer}>
+        <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
             <Text style={styles.modalTitle}>New Collection</Text>
             <TextInput
@@ -279,16 +282,20 @@ const SavedScreen = () => {
               onChangeText={setNewCollectionName}
             />
             <View style={styles.modalButtons}>
-              <Button
-                style={styles.noButton}
+              <TouchableOpacity
+                style={styles.yesButton}
                 title="Cancel"
                 onPress={() => setIsModalVisible(false)}
-              />
-              <Button
+              >
+                <Text style={styles.buttonText}>Cancel</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
                 style={styles.noButton}
                 title="Create"
                 onPress={handleCreateCollection}
-              />
+              >
+                <Text style={styles.buttonText}>Create</Text>
+              </TouchableOpacity>
             </View>
           </View>
         </View>
@@ -425,10 +432,12 @@ const lightTheme = StyleSheet.create({
   },
   savedItem: {
     flexDirection: "row",
+    alignItems: "center",
     backgroundColor: "#fff",
     borderRadius: 10,
     padding: 10,
     marginVertical: 8,
+    elevation: 2,
   },
   savedItemImage: {
     width: 80,
@@ -437,7 +446,7 @@ const lightTheme = StyleSheet.create({
     marginRight: 10,
   },
   savedItemInfo: {
-    justifyContent: "center",
+    flex: 1,
   },
   savedItemName: {
     fontSize: 16,
@@ -526,6 +535,11 @@ const lightTheme = StyleSheet.create({
   },
   columnWrapper: {
     justifyContent: "space-between",
+  },
+  trashIconContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+    paddingHorizontal: 10,
   },
 });
 
