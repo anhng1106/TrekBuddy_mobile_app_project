@@ -29,7 +29,10 @@ const SavedScreen = () => {
   const [selectedCollection, setSelectedCollection] = useState(null);
   const [selectedCollectionForOptions, setSelectedCollectionForOptions] =
     useState(null);
-  const [isOptionsModalVisible, setIsOptionsModalVisible] = useState(false);
+  const [isItemDeleteModalVisible, setIsItemDeleteModalVisible] =
+    useState(false);
+  const [itemToDelete, setItemToDelete] = useState(null);
+  const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
 
   const handleCreateCollection = async () => {
     if (newCollectionName.trim()) {
@@ -63,48 +66,62 @@ const SavedScreen = () => {
     }
   };
 
-  const deleteCollection = async (collectionId) => {
+  const openDeleteCollectionModal = (collection) => {
+    setSelectedCollectionForOptions(collection);
+    setIsDeleteModalVisible(true);
+  };
+
+  const deleteCollection = async () => {
     try {
       const collectionRef = doc(
         db,
         "Users",
         auth.currentUser.uid,
         "userCollections",
-        collectionId
+        selectedCollectionForOptions.id
       );
       await deleteDoc(collectionRef);
 
       // Update local state
-      setSelectedCollection(null); // Deselect the collection if it's open
-      Alert.alert("Success", "Collection deleted successfully.");
+      Alert.alert(
+        "Success",
+        `Collection "${selectedCollectionForOptions.title}" deleted successfully.`
+      );
+      setIsDeleteModalVisible(false);
+      setSelectedCollectionForOptions(null);
     } catch (error) {
       console.error("Error deleting collection:", error);
       Alert.alert("Error", `Failed to delete collection: ${error.message}`);
     }
   };
 
-  const deleteItemFromCollection = async (collectionId, item) => {
+  const openDeleteItemModal = (item) => {
+    setItemToDelete(item);
+    setIsItemDeleteModalVisible(true);
+  };
+
+  const deleteItemFromCollection = async () => {
     try {
       const collectionRef = doc(
         db,
         "Users",
         auth.currentUser.uid,
         "userCollections",
-        collectionId
+        selectedCollection.id
       );
 
-      // Remove the item from Firestore using arrayRemove
       await updateDoc(collectionRef, {
-        items: arrayRemove(item),
+        items: arrayRemove(itemToDelete),
       });
 
-      // Update local state
       setSelectedCollection((prevCollection) => ({
         ...prevCollection,
-        items: prevCollection.items.filter((i) => i.id !== item.id),
+        items: prevCollection.items.filter((i) => i.id !== itemToDelete.id),
       }));
 
       Alert.alert("Success", "Item deleted successfully.");
+      setIsItemDeleteModalVisible(false);
+      setItemToDelete(null);
     } catch (error) {
       console.error("Error deleting item:", error);
       Alert.alert("Error", `Failed to delete item: ${error.message}`);
@@ -114,12 +131,12 @@ const SavedScreen = () => {
   const renderCollectionItem = ({ item }) => (
     <TouchableOpacity
       style={styles.collectionItem}
-      onPress={() => setSelectedCollection(item)} // Set the selected collection
+      onPress={() => setSelectedCollection(item)}
     >
       <Text style={styles.collectionTitle}>{item.title}</Text>
       {item.items && item.items.length > 0 ? (
         <Image
-          source={{ uri: item.items[0].photo }} // Show the first item's image
+          source={{ uri: item.items[0].photo }}
           style={styles.collectionImage}
         />
       ) : (
@@ -127,10 +144,7 @@ const SavedScreen = () => {
       )}
       <TouchableOpacity
         style={styles.optionsIcon}
-        onPress={() => {
-          setSelectedCollectionForOptions(item);
-          setIsOptionsModalVisible(true);
-        }}
+        onPress={() => openDeleteCollectionModal(item)}
       >
         <Icon name="ellipsis-horizontal" size={20} color="#888" />
       </TouchableOpacity>
@@ -144,9 +158,7 @@ const SavedScreen = () => {
         <Text style={styles.savedItemName}>{item.name}</Text>
         <Text style={styles.savedItemAddress}>{item.address}</Text>
       </View>
-      <TouchableOpacity
-        onPress={() => deleteItemFromCollection(selectedCollection.id, item)}
-      >
+      <TouchableOpacity onPress={() => openDeleteItemModal(item)}>
         <Icon name="trash-outline" size={20} color="#f00" />
       </TouchableOpacity>
     </View>
@@ -236,22 +248,60 @@ const SavedScreen = () => {
         </View>
       </Modal>
 
-      <Modal visible={isOptionsModalVisible} transparent animationType="slide">
-        <View style={styles.modalContainer}>
+      {/* Delete Collection Modal */}
+      <Modal visible={isDeleteModalVisible} transparent animationType="fade">
+        <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>Options</Text>
-            <TouchableOpacity
-              onPress={() => {
-                deleteCollection(selectedCollectionForOptions.id);
-                setIsOptionsModalVisible(false);
-              }}
-            >
-              <Text style={styles.modalOption}>Delete Collection</Text>
-            </TouchableOpacity>
-            <Button
-              title="Cancel"
-              onPress={() => setIsOptionsModalVisible(false)}
-            />
+            <Text style={styles.modalTitle}>
+              Are you sure you want to delete{" "}
+              <Text style={styles.collectionName}>
+                {selectedCollectionForOptions?.title}
+              </Text>
+              ?
+            </Text>
+            <View style={styles.modalButtons}>
+              <TouchableOpacity
+                style={styles.noButton}
+                onPress={() => setIsDeleteModalVisible(false)}
+              >
+                <Text style={styles.buttonText}>No</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.yesButton}
+                onPress={deleteCollection}
+              >
+                <Text style={styles.buttonText}>Yes</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
+
+      {/* Delete Item Modal */}
+      <Modal
+        visible={isItemDeleteModalVisible}
+        transparent
+        animationType="fade"
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>
+              Are you sure you want to delete this item?
+            </Text>
+            <View style={styles.modalButtons}>
+              <TouchableOpacity
+                style={styles.noButton}
+                onPress={() => setIsItemDeleteModalVisible(false)}
+              >
+                <Text style={styles.buttonText}>No</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.yesButton}
+                onPress={deleteItemFromCollection}
+              >
+                <Text style={styles.buttonText}>Yes</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
       </Modal>
@@ -380,6 +430,44 @@ const lightTheme = StyleSheet.create({
   modalButtons: {
     flexDirection: "row",
     justifyContent: "space-between",
+    width: "100%",
+  },
+  modalOverlay: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  modalContent: {
+    backgroundColor: "#fff",
+    padding: 20,
+    borderRadius: 10,
+    width: "80%",
+    alignItems: "center",
+  },
+  yesButton: {
+    backgroundColor: "#d9534f",
+    flex: 1,
+    margin: 5,
+    paddingVertical: 10,
+    borderRadius: 8,
+  },
+  buttonText: {
+    color: "#fff",
+    fontSize: 16,
+    fontWeight: "bold",
+    textAlign: "center",
+  },
+  noButton: {
+    backgroundColor: "#5cb85c",
+    flex: 1,
+    margin: 5,
+    paddingVertical: 10,
+    borderRadius: 8,
+  },
+  collectionName: {
+    fontWeight: "bold",
+    color: "#ab2264",
   },
   emptyText: {
     textAlign: "center",
