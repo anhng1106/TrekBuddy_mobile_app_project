@@ -11,7 +11,6 @@ import {
   Alert,
 } from "react-native";
 import MapView, { Marker } from "react-native-maps";
-import Icon from "react-native-vector-icons/Ionicons";
 import { ThemeContext } from "../ThemeContext";
 import Slider from "./Slider";
 import { ImageSlider } from "../data/SliderData";
@@ -77,6 +76,7 @@ const HomeScreen = () => {
           id: place.place_id,
           name: place.name,
           address: place.formatted_address,
+          location: place.geometry?.location,
           photo: place.photos
             ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${place.photos[0].photo_reference}&key=${GOOGLE_API_KEY}`
             : "https://via.placeholder.com/150",
@@ -114,6 +114,18 @@ const HomeScreen = () => {
     Alert.alert("Success", `${itemToSave.name} has been saved to your album!`);
   };
 
+  const handleShowOnMap = (location) => {
+    if (!location || !location.lat || !location.lng) {
+      Alert.alert(
+        "Location not found",
+        "This item does not have a valid location. Please try another."
+      );
+      return;
+    }
+    setFocusedLocation(location);
+    setIsMapView(true);
+  };
+
   const renderCityItem = ({ item }) => (
     <TouchableOpacity
       style={styles.placeItem}
@@ -141,7 +153,7 @@ const HomeScreen = () => {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.showMapButton}
-          onPress={() => setFocusedLocation(item.location)}
+          onPress={() => handleShowOnMap(item.location)}
         >
           <Text style={styles.showMapButtonText}>Show on Map</Text>
         </TouchableOpacity>
@@ -149,44 +161,44 @@ const HomeScreen = () => {
     </View>
   );
 
-  const calculateRegion = () => {
-    if (focusedLocation) {
-      return {
-        latitude: focusedLocation.lat,
-        longitude: focusedLocation.lng,
-        latitudeDelta: 0.02,
-        longitudeDelta: 0.02,
-      };
-    }
+  // const calculateRegion = () => {
+  //   if (focusedLocation) {
+  //     return {
+  //       latitude: focusedLocation.lat,
+  //       longitude: focusedLocation.lng,
+  //       latitudeDelta: 0.02,
+  //       longitudeDelta: 0.02,
+  //     };
+  //   }
 
-    if (touristDestinations.length === 0) {
-      return {
-        latitude: 60.1699,
-        longitude: 24.9384,
-        latitudeDelta: 0.5,
-        longitudeDelta: 0.5,
-      };
-    }
+  //   if (touristDestinations.length === 0) {
+  //     return {
+  //       latitude: 60.1699,
+  //       longitude: 24.9384,
+  //       latitudeDelta: 0.5,
+  //       longitudeDelta: 0.5,
+  //     };
+  //   }
 
-    const latitudes = touristDestinations.map(
-      (dest) => dest.location?.lat || 0
-    );
-    const longitudes = touristDestinations.map(
-      (dest) => dest.location?.lng || 0
-    );
+  //   const latitudes = touristDestinations.map(
+  //     (dest) => dest.location?.lat || 0
+  //   );
+  //   const longitudes = touristDestinations.map(
+  //     (dest) => dest.location?.lng || 0
+  //   );
 
-    const minLatitude = Math.min(...latitudes);
-    const maxLatitude = Math.max(...latitudes);
-    const minLongitude = Math.min(...longitudes);
-    const maxLongitude = Math.max(...longitudes);
+  //   const minLatitude = Math.min(...latitudes);
+  //   const maxLatitude = Math.max(...latitudes);
+  //   const minLongitude = Math.min(...longitudes);
+  //   const maxLongitude = Math.max(...longitudes);
 
-    return {
-      latitude: (minLatitude + maxLatitude) / 2,
-      longitude: (minLongitude + maxLongitude) / 2,
-      latitudeDelta: (maxLatitude - minLatitude) * 1.5 || 0.1,
-      longitudeDelta: (maxLongitude - minLongitude) * 1.5 || 0.1,
-    };
-  };
+  //   return {
+  //     latitude: (minLatitude + maxLatitude) / 2,
+  //     longitude: (minLongitude + maxLongitude) / 2,
+  //     latitudeDelta: (maxLatitude - minLatitude) * 1.5 || 0.1,
+  //     longitudeDelta: (maxLongitude - minLongitude) * 1.5 || 0.1,
+  //   };
+  // };
 
   return (
     <View style={styles.container}>
@@ -223,28 +235,23 @@ const HomeScreen = () => {
               ← Back to Destination List
             </Text>
           </TouchableOpacity>
-          <MapView style={styles.map} initialRegion={calculateRegion()}>
+          <MapView
+            style={styles.map}
+            initialRegion={{
+              latitude: focusedLocation?.lat || 60.200692,
+              longitude: focusedLocation?.lng || 24.934302,
+              latitudeDelta: 0.0322,
+              longitudeDelta: 0.0221,
+            }}
+          >
             {focusedLocation && (
               <Marker
                 coordinate={{
                   latitude: focusedLocation.lat,
                   longitude: focusedLocation.lng,
                 }}
-                title="Selected Destination"
+                title="Selected Location"
               />
-            )}
-            {touristDestinations.map((destination) =>
-              destination.location?.lat && destination.location?.lng ? (
-                <Marker
-                  key={destination.id}
-                  coordinate={{
-                    latitude: destination.location.lat,
-                    longitude: destination.location.lng,
-                  }}
-                  title={destination.name}
-                  description={destination.address}
-                />
-              ) : null
             )}
           </MapView>
         </View>
