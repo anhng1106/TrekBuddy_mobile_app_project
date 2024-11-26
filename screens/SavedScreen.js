@@ -569,7 +569,7 @@ const darkTheme = StyleSheet.create({
   },
   collectionItem: {
     flex: 1,
-    backgroundColor: "#666",
+    backgroundColor: "#fff",
     borderRadius: 10,
     padding: 10,
     margin: 5,
@@ -579,7 +579,7 @@ const darkTheme = StyleSheet.create({
   collectionTitle: {
     fontSize: 16,
     fontWeight: "bold",
-    color: "#fff",
+    color: "#000",
     marginVertical: 5,
   },
   collectionImage: {
@@ -612,10 +612,12 @@ const darkTheme = StyleSheet.create({
   },
   savedItem: {
     flexDirection: "row",
-    backgroundColor: "#666",
+    alignItems: "center",
+    backgroundColor: "#fff",
     borderRadius: 10,
     padding: 10,
     marginVertical: 8,
+    elevation: 2,
   },
   savedItemImage: {
     width: 80,
@@ -624,16 +626,16 @@ const darkTheme = StyleSheet.create({
     marginRight: 10,
   },
   savedItemInfo: {
-    justifyContent: "center",
+    flex: 1,
   },
   savedItemName: {
     fontSize: 16,
     fontWeight: "bold",
-    color: "#fff",
+    color: "#000",
   },
   savedItemAddress: {
     fontSize: 14,
-    color: "#ccc",
+    color: "#000",
     marginTop: 4,
   },
   modalContainer: {
@@ -643,7 +645,7 @@ const darkTheme = StyleSheet.create({
     backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
   modalContent: {
-    backgroundColor: "#666",
+    backgroundColor: "#fff",
     padding: 20,
     borderRadius: 10,
     width: "80%",
@@ -651,7 +653,7 @@ const darkTheme = StyleSheet.create({
   modalTitle: {
     fontSize: 18,
     fontWeight: "bold",
-    color: "#fff",
+    color: "#00000",
     marginBottom: 10,
   },
   modalInput: {
@@ -660,12 +662,41 @@ const darkTheme = StyleSheet.create({
     borderRadius: 8,
     padding: 10,
     marginBottom: 10,
-    backgroundColor: "#555",
-    color: "#fff",
   },
   modalButtons: {
     flexDirection: "row",
     justifyContent: "space-between",
+    width: "100%",
+  },
+  modalOverlay: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  yesButton: {
+    backgroundColor: "#d9534f",
+    flex: 1,
+    margin: 5,
+    paddingVertical: 10,
+    borderRadius: 8,
+  },
+  buttonText: {
+    color: "#fff",
+    fontSize: 16,
+    fontWeight: "bold",
+    textAlign: "center",
+  },
+  noButton: {
+    backgroundColor: "#5cb85c",
+    flex: 1,
+    margin: 5,
+    paddingVertical: 10,
+    borderRadius: 8,
+  },
+  collectionName: {
+    fontWeight: "bold",
+    color: "#ab2264",
   },
   emptyText: {
     textAlign: "center",
@@ -678,6 +709,11 @@ const darkTheme = StyleSheet.create({
   },
   columnWrapper: {
     justifyContent: "space-between",
+  },
+  trashIconContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+    paddingHorizontal: 10,
   },
 });
 

@@ -161,45 +161,6 @@ const HomeScreen = () => {
     </View>
   );
 
-  // const calculateRegion = () => {
-  //   if (focusedLocation) {
-  //     return {
-  //       latitude: focusedLocation.lat,
-  //       longitude: focusedLocation.lng,
-  //       latitudeDelta: 0.02,
-  //       longitudeDelta: 0.02,
-  //     };
-  //   }
-
-  //   if (touristDestinations.length === 0) {
-  //     return {
-  //       latitude: 60.1699,
-  //       longitude: 24.9384,
-  //       latitudeDelta: 0.5,
-  //       longitudeDelta: 0.5,
-  //     };
-  //   }
-
-  //   const latitudes = touristDestinations.map(
-  //     (dest) => dest.location?.lat || 0
-  //   );
-  //   const longitudes = touristDestinations.map(
-  //     (dest) => dest.location?.lng || 0
-  //   );
-
-  //   const minLatitude = Math.min(...latitudes);
-  //   const maxLatitude = Math.max(...latitudes);
-  //   const minLongitude = Math.min(...longitudes);
-  //   const maxLongitude = Math.max(...longitudes);
-
-  //   return {
-  //     latitude: (minLatitude + maxLatitude) / 2,
-  //     longitude: (minLongitude + maxLongitude) / 2,
-  //     latitudeDelta: (maxLatitude - minLatitude) * 1.5 || 0.1,
-  //     longitudeDelta: (maxLongitude - minLongitude) * 1.5 || 0.1,
-  //   };
-  // };
-
   return (
     <View style={styles.container}>
       <View style={styles.topBar}>
@@ -368,9 +329,9 @@ const lightTheme = StyleSheet.create({
     marginHorizontal: "23%",
   },
   mapContainer: {
-    width: "100%", // Full width of the screen
-    height: 700, // Set the desired height in pixels
-    marginVertical: "-10%", // Optional: Add spacing around the map
+    width: "100%",
+    height: 700,
+    marginVertical: "-10%",
   },
   map: {
     flex: 1,
@@ -561,9 +522,9 @@ const darkTheme = StyleSheet.create({
     marginHorizontal: "23%",
   },
   mapContainer: {
-    width: "100%", // Full width of the screen
-    height: 700, // Set the desired height in pixels
-    marginVertical: "-10%", // Optional: Add spacing around the map
+    width: "100%",
+    height: 700,
+    marginVertical: "-10%",
   },
   map: {
     flex: 1,

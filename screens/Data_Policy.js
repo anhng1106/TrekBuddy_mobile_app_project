@@ -147,6 +147,7 @@ const lightTheme = StyleSheet.create({
   sectionTitle: {
     fontSize: 20,
     fontWeight: "bold",
+    color: "#000",
   },
   paragraphContainer: {
     marginBottom: 12,
@@ -192,13 +193,19 @@ const darkTheme = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 20,
   },
+  appLogo: {
+    width: 330,
+    height: 150,
+    alignSelf: "center",
+    marginBottom: "5%",
+  },
   sectionTitleContainer: {
     marginVertical: 12,
   },
   sectionTitle: {
     fontSize: 20,
     fontWeight: "bold",
-    color: "#ddd",
+    color: "#fff",
   },
   paragraphContainer: {
     marginBottom: 12,

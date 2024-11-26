@@ -16,12 +16,6 @@ import * as ImagePicker from "expo-image-picker";
 import Icon from "react-native-vector-icons/Ionicons";
 import { ThemeContext } from "../ThemeContext";
 import { uploadToFirebase } from "../firebaseConfig";
-// import {
-//   reauthenticateWithCredential,
-//   EmailAuthProvider,
-//   updateEmail,
-//   sendEmailVerification,
-// } from "firebase/auth";
 
 const ProfileScreen = ({ navigation }) => {
   const [email, setEmail] = useState(auth.currentUser.email || "");
@@ -394,6 +388,7 @@ const lightTheme = StyleSheet.create({
     color: "#fff",
     fontSize: 16,
     fontWeight: "bold",
+    alignContent: "center",
   },
   errorText: {
     color: "red",
@@ -404,10 +399,6 @@ const lightTheme = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-  },
-  emailText: {
-    fontSize: 16,
-    color: "#000",
   },
   emailText: {
     fontSize: 16,
@@ -458,7 +449,7 @@ const darkTheme = StyleSheet.create({
   },
   backButton: {
     position: "absolute",
-    left: 5, // Align to the left
+    left: 5,
   },
   headerTitle: {
     flex: 1,
@@ -497,18 +488,18 @@ const darkTheme = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
     textAlign: "center",
-    color: "#fff", // White text for dark theme
+    color: "#fff",
   },
   editIcon: {
     fontSize: 18,
     marginLeft: 8,
-    color: "#fc8fa7", // Icon color
+    color: "#fc8fa7",
   },
   label: {
     fontSize: 16,
     fontWeight: "bold",
     marginVertical: 10,
-    color: "#fff", // White label text
+    color: "#fff",
   },
   input: {
     borderWidth: 1,
@@ -528,14 +519,25 @@ const darkTheme = StyleSheet.create({
     marginBottom: 10,
   },
   buttonText: {
-    color: "#fff", // White text for buttons
+    color: "#fff",
     fontSize: 16,
     fontWeight: "bold",
+    alignItems: "center",
   },
   errorText: {
     color: "red",
     textAlign: "center",
     marginTop: 20,
+  },
+  emailRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+  emailText: {
+    fontSize: 16,
+    marginBottom: 20,
+    color: "#ddd",
   },
   modalOverlay: {
     flex: 1,
@@ -543,7 +545,7 @@ const darkTheme = StyleSheet.create({
     backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
   modalContainer: {
-    backgroundColor: "#333", // Dark background for modal
+    backgroundColor: "#333",
     padding: 20,
     marginHorizontal: 20,
     borderRadius: 8,
