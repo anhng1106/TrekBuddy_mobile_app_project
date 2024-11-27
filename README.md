@@ -118,8 +118,10 @@ To get a local copy up and running follow these simple example steps.
 
 1. **Login/Signup**: Users can sign up with their email or log in if they already have an account.
    [![Login][signin-screenshot]](./images/signin.jpg)
-   [![Signup][signup-screenshot]](./images/signup.jpg)]
+   [![Signup][signup-screenshot]](./images/signup.jpg)
 2. **Search for Places**: Use the search bar to find countries, cities, or attractions.
+   [![Searchplaces][searchplace-screenshot]] [![Searchcity][searchcity-screenshot]]
+   [![Searchplaces][searchplace-screenshot]]
 3. **Create Albums**: Save your favorite destinations by creating albums to organize your travels.
 4. **Add Places to Albums**: Once you find a place, add it to one of your albums for future reference.
 5. **Settings app's features**: Users can change theme mode.
@@ -186,6 +188,8 @@ List of resources:
 [product-screenshot]: assets/app_name.png
 [signin-screenshot]: images/signin.JPG
 [signup-screenshot]: images/signup.JPG
+[searchplace-screenshot]: images/searchplaces.JPG
+[searchcity-screenshot]: images/searchcity.JPG
 [Javascript.icon]: https://img.shields.io/badge/JavaScript-F7DF1E?logo=javascript&logoColor=black
 [Javascript-url]: https://www.w3schools.com/js/
 [React.js]: https://img.shields.io/badge/React-20232A?logo=react&logoColor=61DAFB
