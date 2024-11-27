@@ -2,7 +2,6 @@
 
 <a id="readme-top"></a>
 
-[![Contributor][contributors-shield]][contributors-url]
 [![MIT License][license-shield]][license-url]
 [![LinkedIn][linkedin-shield]][linkedin-url]
 
@@ -77,6 +76,7 @@ Happy travels with TrekBuddy! 🌍✈️
 
 This section below list major frameworks/libraries used to bootstrap my project.
 
+- [![Javascript][Javascript.icon]][Javascript-url]]
 - [![React][React.js]][React-url]
 - [![Expo][Expo.dev]][Expo-url]
 - [![Firebase][Firebase.google.com]][Firebase-url]
@@ -181,16 +181,15 @@ List of resources:
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- MARKDOWN LINKS & IMAGES -->
-<!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
 
-[contributors-shield]: https://img.shields.io/github/contributors/othneildrew/Best-README-Template.svg?style=for-the-badge
-[contributors-url]: https://github.com/anhng1106
 [license-shield]: https://img.shields.io/github/license/othneildrew/Best-README-Template.svg?style=for-the-badge
 [license-url]: https://github.com/anhng1106/TrekBuddy_mobile_app_project?tab=MIT-1-ov-file#readme
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/othneildrew
-[product-screenshot]: images/screenshot.png
-[React.js]: https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB
+[product-screenshot]: assets/app_name.png
+[Javascript.icon]: https://img.shields.io/badge/React-20232A?logo=react&logoColor=61DAFB
+[Javascript-url]: https://www.w3schools.com/js/
+[React.js]: https://img.shields.io/badge/React-20232A?logo=react&logoColor=61DAFB
 [React-url]: https://reactjs.org/
 [Expo.dev]: https://img.shields.io/badge/Expo-000000?logo=expo&logoColor=white
 [Expo-url]: https://expo.dev/
