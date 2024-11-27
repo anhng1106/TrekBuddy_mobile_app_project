@@ -38,6 +38,8 @@
 
 **TrekBuddy** is a simple and user-friendly mobile application designed to help travelers search for places or countries, create albums to save destinations, and manage their travel plans. With features like user login and registration, place searching, and profile management, TrekBuddy is the perfect app for social travel enthusiasts.
 
+[![App Screens Screenshot][screens-screenshot]](./images/screens.jpg)
+
 ## Features
 
 - **User Authentication**: Users can sign up and log in to access their personalized travel profiles.
@@ -120,12 +122,16 @@ To get a local copy up and running follow these simple example steps.
    [![Login][signin-screenshot]](./images/signin.jpg)
    [![Signup][signup-screenshot]](./images/signup.jpg)
 2. **Search for Places**: Use the search bar to find countries, cities, or attractions.
-   [![Searchplaces][searchplace-screenshot]] [![Searchcity][searchcity-screenshot]]
-   [![Searchplaces][searchplace-screenshot]]
+   [![Searchplaces][searchplace-screenshot]](./images/seachplaces.jpg)
+   [![Searchcity][searchcity-screenshot]](./images/seachcity.jpg)
 3. **Create Albums**: Save your favorite destinations by creating albums to organize your travels.
+   [![Createdalbum][createalbum-screenshot]](./images/createalbum.jpg)
 4. **Add Places to Albums**: Once you find a place, add it to one of your albums for future reference.
+   [![Addplaces][addplaces-screenshot]](./images/addplaces.jpg)
 5. **Settings app's features**: Users can change theme mode.
+   [![Settingapp][setting-screenshot]](./images/settingscreen.jpg)
 6. **Manage user profile**: Users can manage their profile with update profile picture and username.
+   [![Userprofile][userprofile-screenshot]](./images/userprofile.jpg)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -186,10 +192,15 @@ List of resources:
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/othneildrew
 [product-screenshot]: assets/app_name.png
+[screens-screenshot]: images/screens.JPG
 [signin-screenshot]: images/signin.JPG
 [signup-screenshot]: images/signup.JPG
 [searchplace-screenshot]: images/searchplaces.JPG
 [searchcity-screenshot]: images/searchcity.JPG
+[createalbum-screenshot]: images/createalbum.JPG
+[addplaces-screenshot]: images/addplaces.JPG
+[setting-screenshot]: images/settingscreen.JPG
+[userprofile-screenshot]: images/userprofile.JPG
 [Javascript.icon]: https://img.shields.io/badge/JavaScript-F7DF1E?logo=javascript&logoColor=black
 [Javascript-url]: https://www.w3schools.com/js/
 [React.js]: https://img.shields.io/badge/React-20232A?logo=react&logoColor=61DAFB
