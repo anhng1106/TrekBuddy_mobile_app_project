@@ -117,8 +117,8 @@ To get a local copy up and running follow these simple example steps.
 ## Usage
 
 1. **Login/Signup**: Users can sign up with their email or log in if they already have an account.
-   [![Login](./images/signin.png)]
-   [![Signup](./images/signup.png)]
+   [![Login][signin-screenshot]](./images/signin.jpg)
+   [![Signup][signup-screenshot]](./images/signup.jpg)]
 2. **Search for Places**: Use the search bar to find countries, cities, or attractions.
 3. **Create Albums**: Save your favorite destinations by creating albums to organize your travels.
 4. **Add Places to Albums**: Once you find a place, add it to one of your albums for future reference.
@@ -184,6 +184,8 @@ List of resources:
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/othneildrew
 [product-screenshot]: assets/app_name.png
+[signin-screenshot]: images/signin.JPG
+[signup-screenshot]: images/signup.JPG
 [Javascript.icon]: https://img.shields.io/badge/JavaScript-F7DF1E?logo=javascript&logoColor=black
 [Javascript-url]: https://www.w3schools.com/js/
 [React.js]: https://img.shields.io/badge/React-20232A?logo=react&logoColor=61DAFB
