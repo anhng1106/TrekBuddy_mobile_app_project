@@ -190,7 +190,7 @@ List of resources:
 [license-shield]: https://img.shields.io/github/license/othneildrew/Best-README-Template.svg?style=for-the-badge
 [license-url]: https://github.com/anhng1106/TrekBuddy_mobile_app_project?tab=MIT-1-ov-file#readme
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
-[linkedin-url]: https://linkedin.com/in/othneildrew
+[linkedin-url]: https://linkedin.com/in/anhng1106
 [product-screenshot]: assets/app_name.png
 [screens-screenshot]: images/screens.JPG
 [signin-screenshot]: images/signin.JPG
