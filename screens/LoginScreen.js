@@ -70,7 +70,7 @@ const LoginScreen = ({ navigation }) => {
         default:
           Alert.alert(
             "Login Failed",
-            "An unexpected error occurred. Please check your email or password and try again."
+            "Please check your email or password and try again."
           );
       }
     }
