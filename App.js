@@ -71,12 +71,12 @@ export default function App() {
             />
             <Stack.Screen
               name="HomeScreen"
-              component={HomeTabs} // Replace HomeScreen with HomeTabs
+              component={HomeTabs}
               options={{ title: "TREKBUDDY - Home", headerShown: false }}
             />
             <Stack.Screen
               name="ProfileScreen"
-              component={ProfileScreen} // Ensure ProfileScreen is here
+              component={ProfileScreen}
               options={{ title: "TREKBUDDY - Profile" }}
             />
             <Stack.Screen

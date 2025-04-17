@@ -104,13 +104,13 @@ const HomeScreen = () => {
   };
 
   const saveToAlbum = (item) => {
-    setItemToSave(item); // Store the item to save
-    setIsModalVisible(true); // Open the modal
+    setItemToSave(item);
+    setIsModalVisible(true);
   };
 
   const handleSaveToCollection = (collectionId) => {
-    saveItemToCollection(collectionId, itemToSave); // Save the item to the selected collection
-    setIsModalVisible(false); // Close the modal
+    saveItemToCollection(collectionId, itemToSave);
+    setIsModalVisible(false);
     Alert.alert("Success", `${itemToSave.name} has been saved to your album!`);
   };
 

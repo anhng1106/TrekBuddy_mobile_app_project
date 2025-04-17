@@ -4,7 +4,6 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  StyleSheet,
   Alert,
   Image,
 } from "react-native";
@@ -13,8 +12,8 @@ import {
   createUserWithEmailAndPassword,
   sendEmailVerification,
 } from "firebase/auth";
-import { doc, setDoc } from "firebase/firestore"; // Import Firestore methods
-import { auth, db } from "../firebaseConfig"; // Import Firestore instance
+import { doc, setDoc } from "firebase/firestore";
+import { auth, db } from "../firebaseConfig";
 
 const SignupScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
@@ -24,7 +23,6 @@ const SignupScreen = ({ navigation }) => {
 
   const { theme, toggleTheme } = useContext(ThemeContext);
 
-  // Handle the sign-up button press
   const handleSignUp = async () => {
     if (!email || !username || !password || !confirmPassword) {
       Alert.alert(
@@ -43,7 +41,6 @@ const SignupScreen = ({ navigation }) => {
     }
 
     try {
-      // Create user with Firebase Authentication
       const userCredential = await createUserWithEmailAndPassword(
         auth,
         email,
@@ -53,13 +50,11 @@ const SignupScreen = ({ navigation }) => {
 
       console.log("User account created:", user);
 
-      // Store the username and email in Firestore
       await setDoc(doc(db, "Users", user.uid), {
         username: username,
         email: email,
       });
 
-      // Send a verification email
       await sendEmailVerification(user);
 
       Alert.alert(
@@ -68,12 +63,11 @@ const SignupScreen = ({ navigation }) => {
         [
           {
             text: "OK",
-            onPress: () => navigation.navigate("LoginScreen"), // Navigate to LoginScreen after pressing OK
+            onPress: () => navigation.navigate("LoginScreen"),
           },
         ]
       );
 
-      // Sign out the user after sending the email verification
       await auth.signOut();
     } catch (error) {
       if (error.code === "auth/email-already-in-use") {
@@ -92,7 +86,7 @@ const SignupScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <Image
-        source={require("../assets/create_account.png")} // Adjust the path based on your directory structure
+        source={require("../assets/create_account.png")}
         style={styles.logo}
       />
       <TextInput

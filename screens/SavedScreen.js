@@ -57,13 +57,13 @@ const SavedScreen = () => {
       }
 
       try {
-        await createCollection(newCollectionName); // Call the helper function
+        await createCollection(newCollectionName);
         Alert.alert(
           "Success",
           `Collection "${newCollectionName}" created successfully!`
         );
-        setNewCollectionName(""); // Clear input
-        setIsModalVisible(false); // Close the modal
+        setNewCollectionName("");
+        setIsModalVisible(false);
       } catch (error) {
         console.error("Error creating collection:", error);
         Alert.alert("Error", `Failed to create collection: ${error.message}`);
@@ -116,10 +116,8 @@ const SavedScreen = () => {
       );
       await deleteDoc(collectionRef);
 
-      // Fetch updated collections from Firestore
       const updatedCollections = await fetchUserCollections();
-      setCollections(updatedCollections); // Update the state with the latest collections
-
+      setCollections(updatedCollections);
       Alert.alert(
         "Success",
         `Collection "${selectedCollectionForOptions.title}" deleted successfully.`

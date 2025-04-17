@@ -42,7 +42,6 @@ const ProfileScreen = ({ navigation }) => {
           setUsername(userData.username || "Unknown");
           setPhotoURL(userData.photoURL || null);
         } else {
-          // Initialize user data in Firestore with default profile picture
           await setDoc(userDocRef, {
             username: "Unknown",
             photoURL: null,
@@ -76,7 +75,6 @@ const ProfileScreen = ({ navigation }) => {
 
   const updateProfilePicture = async () => {
     try {
-      // Open the image picker to select an image from the gallery
       const result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: "images",
         allowsEditing: true,
@@ -87,13 +85,10 @@ const ProfileScreen = ({ navigation }) => {
       if (!result.canceled) {
         const uri = result.assets[0].uri;
 
-        // Extract filename from the URI (if not directly provided by the picker)
         const fileName = uri.split("/").pop();
 
-        // Log the selected URI
         console.log("Selected Image URI:", uri);
 
-        // Upload image to Firebase
         const uploadResp = await uploadToFirebase(uri, fileName, (progress) => {
           console.log(`Upload Progress: ${progress}%`);
         });
@@ -105,7 +100,6 @@ const ProfileScreen = ({ navigation }) => {
           photoURL: uploadResp.downloadUrl,
         });
 
-        // Optionally update local state to immediately show the new profile picture
         setPhotoURL(uploadResp.downloadUrl);
 
         Alert.alert("Success", "Profile picture updated successfully!");

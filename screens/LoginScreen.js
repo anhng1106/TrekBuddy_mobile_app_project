@@ -3,14 +3,13 @@ import {
   View,
   Text,
   TextInput,
-  StyleSheet,
   Image,
   TouchableOpacity,
   Alert,
 } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
 import { ThemeContext } from "../ThemeContext";
-import { signInWithEmailAndPassword } from "firebase/auth"; // Import Firebase Auth
+import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebaseConfig";
 
 const LoginScreen = ({ navigation }) => {
@@ -38,7 +37,7 @@ const LoginScreen = ({ navigation }) => {
           "Email Not Verified",
           "Please verify your email before logging in."
         );
-        await auth.signOut(); // Sign out the user if the email is not verified
+        await auth.signOut();
         return;
       }
 
@@ -92,10 +91,7 @@ const LoginScreen = ({ navigation }) => {
           color={theme === "light" ? "#000" : "#fff"}
         />
       </TouchableOpacity>
-      <Image
-        source={require("../assets/app_name.png")} // Adjust the path based on your directory structure
-        style={styles.logo}
-      />
+      <Image source={require("../assets/app_name.png")} style={styles.logo} />
       <TextInput
         style={styles.input}
         placeholder="Email"
