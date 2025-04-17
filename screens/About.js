@@ -11,6 +11,7 @@ import {
 } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
 import { ThemeContext } from "../ThemeContext";
+import i18n from "../utils/i18n";
 
 // AboutPage component displays information about the app
 const AboutPage = ({ navigation }) => {
@@ -70,28 +71,22 @@ const AboutPage = ({ navigation }) => {
             color={theme === "light" ? "#000" : "#fff"}
           />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>About</Text>
+        <Text style={styles.headerTitle}>{i18n.t("about")}</Text>
       </View>
       <ScrollView contentContainerStyle={styles.contentContainer}>
         <Image
           source={require("../assets/7.png")} // Replace with your image path
           style={styles.appLogo}
         />
-        {/* {renderSectionTitle("About TrekBuddy")} */}
-        {renderParagraph(
-          "TrekBuddy is your ultimate travel companion, designed to help you discover amazing places to visit. Our goal is to create a platform where users can explore new destinations and share their experiences with friends."
-        )}
-        {renderSectionTitle("Features")}
-        {renderBulletPoint("Explore a wide range of travel destinations")}
-        {renderBulletPoint("User-friendly interface for easy navigation")}
-        {renderBulletPoint("Connect with friends and share your journeys")}
-        {renderBulletPoint(
-          "Regular updates with new travel spots and features"
-        )}
-        {renderSectionTitle("Contact Us")}
-        {renderParagraph(
-          "If you have any questions or feedback, please contact us at:"
-        )}
+
+        {renderParagraph(i18n.t("aboutDescription"))}
+        {renderSectionTitle(i18n.t("features"))}
+        {renderBulletPoint(i18n.t("feature1"))}
+        {renderBulletPoint(i18n.t("feature2"))}
+        {renderBulletPoint(i18n.t("feature3"))}
+        {renderBulletPoint(i18n.t("feature4"))}
+        {renderSectionTitle(i18n.t("contactUs"))}
+        {renderParagraph(i18n.t("contactDescription"))}
         {renderContactInfo("support@trekbuddy.com")}
       </ScrollView>
     </View>
