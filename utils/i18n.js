@@ -1,4 +1,3 @@
-// i18n.js
 import { I18n } from "i18n-js";
 
 const i18n = new I18n({
@@ -8,6 +7,33 @@ const i18n = new I18n({
     settings: "Settings",
     profile: "Profile",
     dataPolicy: "Data Protection Policy",
+    dp1: "1. Introduction",
+    dp1Text:
+      "We are committed to protecting your personal data and ensuring its privacy, security, and confidentiality.",
+
+    dp2: "2. Data Collection",
+    dp2Text:
+      "We collect personal data that you provide to us directly, such as when you create an account, use our services, or contact us for support.",
+
+    dp3: "3. Data Use",
+    dp3Text:
+      "We use your personal data to provide and improve our services, communicate with you, and ensure the security of our platform.",
+
+    dp4: "4. Data Sharing",
+    dp4Text:
+      "We do not share your personal data with third parties except as necessary to provide our services, comply with legal obligations, or protect our rights.",
+
+    dp5: "5. Data Security",
+    dp5Text:
+      "We implement appropriate technical and organizational measures to protect your personal data against unauthorized access, loss, or misuse.",
+
+    dp6: "6. Your Rights",
+    dp6Text:
+      "You have the right to access, correct, or delete your personal data, as well as the right to object to or restrict certain processing of your data.",
+
+    dp7: "7. Contact Us",
+    dp7Text:
+      "If you have any questions or concerns about our data protection practices, please contact us at:",
     about: "About TrekBuddy",
     aboutDescription:
       "TrekBuddy is your ultimate travel companion, designed to help you discover amazing places to visit. Our goal is to create a platform where users can explore new destinations and share their experiences with friends.",
@@ -29,6 +55,34 @@ const i18n = new I18n({
     settings: "Cài đặt",
     profile: "Cá nhân",
     dataPolicy: "Chính sách bảo mật dữ liệu",
+    dp1: "1. Giới thiệu",
+    dp1Text:
+      "Chúng tôi cam kết bảo vệ dữ liệu cá nhân của bạn và đảm bảo quyền riêng tư, an toàn và bảo mật thông tin.",
+
+    dp2: "2. Thu thập dữ liệu",
+    dp2Text:
+      "Chúng tôi thu thập dữ liệu cá nhân mà bạn cung cấp trực tiếp, chẳng hạn như khi bạn tạo tài khoản, sử dụng dịch vụ hoặc liên hệ hỗ trợ.",
+
+    dp3: "3. Sử dụng dữ liệu",
+    dp3Text:
+      "Chúng tôi sử dụng dữ liệu cá nhân của bạn để cung cấp và cải tiến dịch vụ, giao tiếp với bạn, và đảm bảo an toàn cho nền tảng.",
+
+    dp4: "4. Chia sẻ dữ liệu",
+    dp4Text:
+      "Chúng tôi không chia sẻ dữ liệu cá nhân với bên thứ ba trừ khi cần thiết để cung cấp dịch vụ, tuân thủ pháp luật hoặc bảo vệ quyền lợi của chúng tôi.",
+
+    dp5: "5. Bảo mật dữ liệu",
+    dp5Text:
+      "Chúng tôi áp dụng các biện pháp kỹ thuật và tổ chức phù hợp để bảo vệ dữ liệu cá nhân khỏi truy cập trái phép, mất mát hoặc lạm dụng.",
+
+    dp6: "6. Quyền của bạn",
+    dp6Text:
+      "Bạn có quyền truy cập, chỉnh sửa hoặc xóa dữ liệu cá nhân, cũng như quyền phản đối hoặc giới hạn việc xử lý dữ liệu của mình.",
+
+    dp7: "7. Liên hệ",
+    dp7Text:
+      "Nếu bạn có bất kỳ câu hỏi hoặc mối quan tâm nào về chính sách bảo mật của chúng tôi, vui lòng liên hệ qua:",
+
     about: "Giới thiệu TrekBuddy",
     aboutDescription:
       "TrekBuddy là người bạn đồng hành tuyệt vời giúp bạn khám phá những địa điểm du lịch hấp dẫn. Mục tiêu của chúng tôi là xây dựng một nền tảng nơi người dùng có thể tìm kiếm điểm đến mới và chia sẻ trải nghiệm của mình.",
