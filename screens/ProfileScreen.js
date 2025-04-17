@@ -16,6 +16,7 @@ import * as ImagePicker from "expo-image-picker";
 import Icon from "react-native-vector-icons/Ionicons";
 import { ThemeContext } from "../ThemeContext";
 import { uploadToFirebase } from "../firebaseConfig";
+import i18n from "../utils/i18n";
 
 const ProfileScreen = ({ navigation }) => {
   const [email, setEmail] = useState(auth.currentUser.email || "");
@@ -49,7 +50,7 @@ const ProfileScreen = ({ navigation }) => {
           });
         }
       } catch (error) {
-        setErrorMessage("Failed to fetch user data: " + error.message);
+        setErrorMessage(i18n.t("fetchUserFail") + error.message);
       }
     };
     fetchUserData();
@@ -57,7 +58,7 @@ const ProfileScreen = ({ navigation }) => {
 
   const updateUsername = async () => {
     if (usernameInput.trim() === "") {
-      setErrorMessage("Username cannot be empty.");
+      setErrorMessage(i18n.t("usernameEmptyError"));
       return;
     }
 
@@ -68,9 +69,9 @@ const ProfileScreen = ({ navigation }) => {
       setUsername(usernameInput.trim());
       setErrorMessage("");
       setModalVisible(false); // Close the modal
-      Alert.alert("Success", "Username updated successfully!");
+      Alert.alert(i18n.t("success"), i18n.t("usernameUpdated"));
     } catch (error) {
-      setErrorMessage("Failed to update username: " + error.message);
+      setErrorMessage(i18n.t("usernameUpdateFail") + error.message);
     }
   };
 
@@ -108,16 +109,13 @@ const ProfileScreen = ({ navigation }) => {
         // Optionally update local state to immediately show the new profile picture
         setPhotoURL(uploadResp.downloadUrl);
 
-        Alert.alert("Success", "Profile picture updated successfully!");
+        Alert.alert(i18n.t("success"), i18n.t("profilePicUpdated"));
       } else {
         console.log("Image selection was canceled.");
       }
     } catch (error) {
-      console.error("Failed to update profile picture:", error);
-      Alert.alert(
-        "Error",
-        `Failed to update profile picture: ${error.message}`
-      );
+      console.error(i18n.t("profilePicFailed"), error);
+      Alert.alert(i18n.t("error"), i18n.t("profilePicFailed") + error.message);
     }
   };
 
@@ -176,7 +174,7 @@ const ProfileScreen = ({ navigation }) => {
             color={theme === "light" ? "#000" : "#fff"}
           />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Profile</Text>
+        <Text style={styles.headerTitle}>{i18n.t("profile")}</Text>
       </View>
 
       <View style={styles.profilePictureContainer}>
@@ -212,30 +210,30 @@ const ProfileScreen = ({ navigation }) => {
       >
         <View style={styles.modalOverlay}>
           <View style={styles.modalContainer}>
-            <Text style={styles.modalTitle}>Edit Username</Text>
+            <Text style={styles.modalTitle}>{i18n.t("editUsername")}</Text>
             <TextInput
               style={styles.input}
-              placeholder="Enter new username"
+              placeholder={i18n.t("enterNewUsername")}
               placeholderTextColor="#999997"
               value={usernameInput}
               onChangeText={setUsernameInput}
             />
             <View style={styles.modalButtons}>
               <TouchableOpacity style={styles.button} onPress={updateUsername}>
-                <Text style={styles.buttonText}>Save</Text>
+                <Text style={styles.buttonText}>{i18n.t("save")}</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={[styles.button, styles.cancelButton]}
                 onPress={() => setModalVisible(false)}
               >
-                <Text style={styles.buttonText}>Cancel</Text>
+                <Text style={styles.buttonText}>{i18n.t("cancel")}</Text>
               </TouchableOpacity>
             </View>
           </View>
         </View>
       </Modal>
 
-      <Text style={styles.label}>Email</Text>
+      <Text style={styles.label}>{i18n.t("email")}</Text>
       <Text style={styles.emailText}>{email}</Text>
       {/* <TouchableOpacity
         style={styles.button}
@@ -289,7 +287,7 @@ const ProfileScreen = ({ navigation }) => {
       </Modal> */}
 
       <TouchableOpacity style={styles.button} onPress={signOut}>
-        <Text style={styles.buttonText}>Sign Out</Text>
+        <Text style={styles.buttonText}>{i18n.t("signOut")}</Text>
       </TouchableOpacity>
 
       {errorMessage ? (
