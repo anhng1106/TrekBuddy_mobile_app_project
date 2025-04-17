@@ -11,7 +11,8 @@ import { useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 import { ThemeContext } from "../ThemeContext";
 import Icon from "react-native-vector-icons/Ionicons";
-import i18n from "../utils/i18n"; // Adjust the import path as necessary
+import i18n from "../utils/i18n";
+import { LanguageContext } from "../LanguageContext";
 
 const SettingScreen = () => {
   const { theme, toggleTheme } = useContext(ThemeContext);
@@ -19,14 +20,11 @@ const SettingScreen = () => {
 
   const navigation = useNavigation();
 
-  const [language, setLanguage] = useState(
-    i18n.locale.startsWith("vi") ? "vi" : "en"
-  );
+  const { language, changeLanguage } = useContext(LanguageContext);
 
   const toggleLanguage = () => {
     const newLang = language === "en" ? "vi" : "en";
-    i18n.locale = newLang;
-    setLanguage(newLang);
+    changeLanguage(newLang); // triggers full reactivity via context
   };
 
   const settingsData = [
