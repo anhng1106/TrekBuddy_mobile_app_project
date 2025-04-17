@@ -24,6 +24,7 @@ import {
   getDocs,
   arrayRemove,
 } from "firebase/firestore";
+import i18n from "../utils/i18n";
 
 const SavedScreen = () => {
   const { theme } = useContext(ThemeContext);
@@ -52,24 +53,27 @@ const SavedScreen = () => {
       );
 
       if (isDuplicate) {
-        Alert.alert("Error", "A collection with this name already exists.");
+        Alert.alert(i18n.t("error"), i18n.t("duplicateCollection"));
         return;
       }
 
       try {
         await createCollection(newCollectionName); // Call the helper function
         Alert.alert(
-          "Success",
-          `Collection "${newCollectionName}" created successfully!`
+          i18n.t("success"),
+          i18n.t("collectionCreatedSuccess", { name: newCollectionName })
         );
         setNewCollectionName(""); // Clear input
         setIsModalVisible(false); // Close the modal
       } catch (error) {
         console.error("Error creating collection:", error);
-        Alert.alert("Error", `Failed to create collection: ${error.message}`);
+        Alert.alert(
+          i18n.t("error"),
+          i18n.t("createCollectionFail") + error.message
+        );
       }
     } else {
-      Alert.alert("Error", "Please enter a valid collection name.");
+      Alert.alert(i18n.t("error"), i18n.t("invalidCollectionName"));
     }
   };
 
@@ -102,7 +106,7 @@ const SavedScreen = () => {
 
   const deleteCollection = async () => {
     if (!auth.currentUser) {
-      Alert.alert("Error", "No user is signed in. Cannot delete collection.");
+      Alert.alert(i18n.t("error"), i18n.t("noUserDeleteCollection"));
       return;
     }
 
@@ -118,18 +122,20 @@ const SavedScreen = () => {
 
       // Fetch updated collections from Firestore
       const updatedCollections = await fetchUserCollections();
-      setCollections(updatedCollections); // Update the state with the latest collections
+      setCollections(updatedCollections);
 
       Alert.alert(
-        "Success",
-        `Collection "${selectedCollectionForOptions.title}" deleted successfully.`
+        i18n.t("success"),
+        i18n.t("collectionDeletedSuccess", {
+          name: selectedCollectionForOptions.title,
+        })
       );
 
       setIsDeleteModalVisible(false);
       setSelectedCollectionForOptions(null);
     } catch (error) {
       console.error("Error deleting collection:", error);
-      Alert.alert("Error", `Failed to delete collection: ${error.message}`);
+      Alert.alert(i18n.t("error"), i18n.t("deleteCollectionFail"));
     }
   };
 
@@ -157,12 +163,15 @@ const SavedScreen = () => {
         items: prevCollection.items.filter((i) => i.id !== itemToDelete.id),
       }));
 
-      Alert.alert("Success", "Item deleted successfully.");
+      Alert.alert(
+        i18n.t("success"),
+        i18n.t("itemDeletedSuccess", { name: itemToDelete.name })
+      );
       setIsItemDeleteModalVisible(false);
       setItemToDelete(null);
     } catch (error) {
       console.error("Error deleting item:", error);
-      Alert.alert("Error", `Failed to delete item: ${error.message}`);
+      Alert.alert(i18n.t("error"), i18n.t("itemDeleteFail"));
     }
   };
 
@@ -241,7 +250,9 @@ const SavedScreen = () => {
           style={styles.createNewContainer}
           onPress={() => setIsModalVisible(true)}
         >
-          <Text style={styles.createNewText}>Create a New Collection</Text>
+          <Text style={styles.createNewText}>
+            {i18n.t("createNewCollection")}
+          </Text>
         </TouchableOpacity>
       )}
 
@@ -262,9 +273,7 @@ const SavedScreen = () => {
           renderItem={renderSavedItem}
           keyExtractor={(item) => item.id}
           ListEmptyComponent={
-            <Text style={styles.emptyText}>
-              No items saved in this collection.
-            </Text>
+            <Text style={styles.emptyText}>{i18n.t("noItems")}</Text>
           }
         />
       )}
@@ -273,10 +282,10 @@ const SavedScreen = () => {
       <Modal visible={isModalVisible} transparent animationType="slide">
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>New Collection</Text>
+            <Text style={styles.modalTitle}>{i18n.t("newCollection")}</Text>
             <TextInput
               style={styles.modalInput}
-              placeholder="Enter collection name"
+              placeholder={i18n.t("enterCollectionName")}
               placeholderTextColor="#999997"
               value={newCollectionName}
               onChangeText={setNewCollectionName}
@@ -284,17 +293,17 @@ const SavedScreen = () => {
             <View style={styles.modalButtons}>
               <TouchableOpacity
                 style={styles.yesButton}
-                title="Cancel"
+                title={i18n.t("cancel")}
                 onPress={() => setIsModalVisible(false)}
               >
-                <Text style={styles.buttonText}>Cancel</Text>
+                <Text style={styles.buttonText}>{i18n.t("cancel")}</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={styles.noButton}
-                title="Create"
+                title={i18n.t("create")}
                 onPress={handleCreateCollection}
               >
-                <Text style={styles.buttonText}>Create</Text>
+                <Text style={styles.buttonText}>{i18n.t("create")}</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -306,7 +315,7 @@ const SavedScreen = () => {
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
             <Text style={styles.modalTitle}>
-              Are you sure you want to delete{" "}
+              {i18n.t("deleteCollectionConfirm") + " "}
               <Text style={styles.collectionName}>
                 {selectedCollectionForOptions?.title}
               </Text>
@@ -317,13 +326,13 @@ const SavedScreen = () => {
                 style={styles.noButton}
                 onPress={() => setIsDeleteModalVisible(false)}
               >
-                <Text style={styles.buttonText}>No</Text>
+                <Text style={styles.buttonText}>{i18n.t("no")}</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={styles.yesButton}
                 onPress={deleteCollection}
               >
-                <Text style={styles.buttonText}>Yes</Text>
+                <Text style={styles.buttonText}>{i18n.t("yes")}</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -338,21 +347,19 @@ const SavedScreen = () => {
       >
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>
-              Are you sure you want to delete this item?
-            </Text>
+            <Text style={styles.modalTitle}>{i18n.t("deleteItemConfirm")}</Text>
             <View style={styles.modalButtons}>
               <TouchableOpacity
                 style={styles.noButton}
                 onPress={() => setIsItemDeleteModalVisible(false)}
               >
-                <Text style={styles.buttonText}>No</Text>
+                <Text style={styles.buttonText}>{i18n.t("no")}</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={styles.yesButton}
                 onPress={deleteItemFromCollection}
               >
-                <Text style={styles.buttonText}>Yes</Text>
+                <Text style={styles.buttonText}>{i18n.t("yes")}</Text>
               </TouchableOpacity>
             </View>
           </View>

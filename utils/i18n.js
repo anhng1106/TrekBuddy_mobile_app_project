@@ -3,8 +3,28 @@ import { I18n } from "i18n-js";
 const i18n = new I18n({
   en: {
     explore: "Explore",
+
     saved: "Saved",
-    settings: "Settings",
+    savedCollections: "Saved Collections",
+    createNewCollection: "Create a New Collection",
+    noItems: "No items saved in this collection.",
+    newCollection: "New Collection",
+    enterCollectionName: "Enter collection name",
+    cancel: "Cancel",
+    create: "Create",
+    deleteCollectionConfirm: "Are you sure you want to delete",
+    yes: "Yes",
+    no: "No",
+    deleteItemConfirm: 'Are you sure you want to delete "{{name}}"?',
+    itemDeletedSuccess: `Item "{{name}}" deleted successfully.`,
+    collectionCreatedSuccess: 'Collection "{{name}}" created successfully!',
+    invalidCollectionName: "Please enter a valid collection name.",
+    duplicateCollection: "A collection with this name already exists.",
+    createCollectionFail: "Failed to create collection:",
+    noUserDeleteCollection: "No user is signed in. Cannot delete collection.",
+    collectionDeletedSuccess: 'Collection "{{name}}" deleted successfully.',
+    itemDeleteFail: "Failed to delete item:",
+
     profile: "Profile",
     editUsername: "Edit Username",
     enterNewUsername: "Enter new username",
@@ -21,6 +41,7 @@ const i18n = new I18n({
     fetchUserFail: "Failed to fetch user data: ",
     success: "Success",
     error: "Error",
+
     dataPolicy: "Data Protection Policy",
     dp1: "1. Introduction",
     dp1Text:
@@ -41,7 +62,6 @@ const i18n = new I18n({
     dp5: "5. Data Security",
     dp5Text:
       "We implement appropriate technical and organizational measures to protect your personal data against unauthorized access, loss, or misuse.",
-
     dp6: "6. Your Rights",
     dp6Text:
       "You have the right to access, correct, or delete your personal data, as well as the right to object to or restrict certain processing of your data.",
@@ -49,6 +69,7 @@ const i18n = new I18n({
     dp7: "7. Contact Us",
     dp7Text:
       "If you have any questions or concerns about our data protection practices, please contact us at:",
+
     about: "About TrekBuddy",
     aboutDescription:
       "TrekBuddy is your ultimate travel companion, designed to help you discover amazing places to visit. Our goal is to create a platform where users can explore new destinations and share their experiences with friends.",
@@ -60,14 +81,38 @@ const i18n = new I18n({
     contactUs: "Contact Us",
     contactDescription:
       "If you have any questions or feedback, please contact us at:",
+
+    settings: "Settings",
     darkMode: "Dark Mode",
     language: "Language",
     switchToVietnamese: "Switch to Vietnamese",
   },
   vi: {
     explore: "Khám phá",
+
     saved: "Đã lưu",
-    settings: "Cài đặt",
+    savedCollections: "Bộ sưu tập đã lưu",
+    createNewCollection: "Tạo bộ sưu tập mới",
+    noItems: "Không có mục nào trong bộ sưu tập này.",
+    newCollection: "Bộ sưu tập mới",
+    enterCollectionName: "Nhập tên bộ sưu tập",
+    cancel: "Hủy",
+    create: "Tạo",
+    deleteCollectionConfirm: "Bạn có chắc muốn xóa",
+    yes: "Có",
+    no: "Không",
+    deleteItemConfirm: 'Bạn có chắc muốn xóa địa điểm "{{name}}"?',
+    error: "Lỗi",
+    success: "Thành công",
+    itemDeletedSuccess: 'Xóa địa điểm "{{name}}" thành công.',
+    collectionCreatedSuccess: 'Tạo bộ sưu tập "{{name}}" thành công!',
+    invalidCollectionName: "Vui lòng nhập tên bộ sưu tập hợp lệ.",
+    duplicateCollection: "Bộ sưu tập này đã tồn tại.",
+    createCollectionFail: "Không thể tạo bộ sưu tập:",
+    noUserDeleteCollection: "Không có người dùng nào đang đăng nhập.",
+    collectionDeletedSuccess: 'Xóa bộ sưu tập "{{name}}" thành công.',
+    itemDeleteFail: "Xóa địa điểm thất bại:",
+
     profile: "Cá nhân",
     editUsername: "Đổi tên người dùng",
     enterNewUsername: "Nhập tên người dùng mới",
@@ -124,6 +169,8 @@ const i18n = new I18n({
     contactUs: "Liên hệ",
     contactDescription:
       "Nếu bạn có câu hỏi hoặc góp ý, vui lòng liên hệ với chúng tôi tại:",
+
+    settings: "Cài đặt",
     darkMode: "Chế độ tối",
     language: "Ngôn ngữ",
     switchToVietnamese: "Chuyển sang tiếng Anh",
