@@ -18,6 +18,7 @@ import { enableScreens } from "react-native-screens";
 import i18n from "./utils/i18n";
 import { LanguageProvider } from "./LanguageContext";
 import { LanguageContext } from "./LanguageContext";
+import QuizScreen from "./screens/QuizScreen";
 
 const Stack = createStackNavigator();
 
@@ -110,6 +111,11 @@ export default function App() {
                 name="DataProtectionPolicyPage"
                 component={DataProtectionPolicyPage}
                 options={{ title: "Data Protection Policy" }}
+              />
+              <Stack.Screen
+                name="QuizScreen"
+                component={QuizScreen}
+                options={{ title: "Quiz Game" }}
               />
             </Stack.Navigator>
           </NavigationContainer>

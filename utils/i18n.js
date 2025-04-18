@@ -99,6 +99,9 @@ const i18n = new I18n({
     fetchUserFail: "Failed to fetch user data: ",
     success: "Success",
     error: "Error",
+    credit: "Credit",
+    points: "Points",
+    takeQuiz: "🎯 Test your travel smarts – earn points now!",
 
     dataPolicy: "Data Protection Policy",
     dp1: "1. Introduction",
@@ -144,6 +147,15 @@ const i18n = new I18n({
     darkMode: "Dark Mode",
     language: "Language",
     switchToVietnamese: "Switch to Vietnamese",
+
+    quizGame: "Quiz Game",
+    correct: "Correct!",
+    wrong: "Wrong Answer",
+    youEarnedPoint: "You earned 1 point!",
+    noPointsAwarded: "No points this time.",
+    next: "Next",
+    quizCompleted: "Quiz Completed",
+    yourScore: "Your score",
   },
   vi: {
     username: "Tên người dùng",
@@ -244,6 +256,10 @@ const i18n = new I18n({
     fetchUserFail: "Không thể tải dữ liệu người dùng: ",
     success: "Thành công",
     error: "Lỗi",
+    credit: "Số dư",
+    points: "Điểm thưởng",
+    takeQuiz: "🎯 Thử tài du lịch – nhận điểm thưởng ngay!",
+
     dataPolicy: "Chính sách bảo mật dữ liệu",
     dp1: "1. Giới thiệu",
     dp1Text:
@@ -289,6 +305,15 @@ const i18n = new I18n({
     darkMode: "Chế độ tối",
     language: "Ngôn ngữ",
     switchToVietnamese: "Chuyển sang tiếng Anh",
+
+    quizGame: "Trò chơi đố vui",
+    correct: "Chính xác!",
+    wrong: "Sai rồi",
+    youEarnedPoint: "Bạn đã nhận được 1 điểm!",
+    noPointsAwarded: "Không có điểm lần này.",
+    next: "Tiếp theo",
+    quizCompleted: "Hoàn thành đố vui",
+    yourScore: "Điểm số của bạn",
   },
 });
 

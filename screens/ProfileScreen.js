@@ -29,6 +29,9 @@ const ProfileScreen = ({ navigation }) => {
   const [usernameInput, setUsernameInput] = useState("");
   const [isModalVisible, setModalVisible] = useState(false);
 
+  const [credit, setCredit] = useState(0);
+  const [points, setPoints] = useState(0);
+
   const { theme } = useContext(ThemeContext);
   const styles = theme === "light" ? lightTheme : darkTheme;
 
@@ -42,6 +45,8 @@ const ProfileScreen = ({ navigation }) => {
           const userData = userDoc.data();
           setUsername(userData.username || "Unknown");
           setPhotoURL(userData.photoURL || null);
+          setCredit(userData.credit || 0);
+          setPoints(userData.points || 0);
         } else {
           // Initialize user data in Firestore with default profile picture
           await setDoc(userDocRef, {
@@ -233,6 +238,25 @@ const ProfileScreen = ({ navigation }) => {
         </View>
       </Modal>
 
+      <View style={styles.statsRow}>
+        <View style={styles.statBox}>
+          <Text style={styles.statLabel}>{i18n.t("credit")}</Text>
+          <Text style={styles.statValue}>{credit}</Text>
+        </View>
+        <View style={styles.statBox}>
+          <Text style={styles.statLabel}>{i18n.t("points")}</Text>
+          <Text style={styles.statValue}>{points}</Text>
+        </View>
+      </View>
+
+      {/* Quiz Button */}
+      <TouchableOpacity
+        style={styles.quizButton}
+        onPress={() => navigation.navigate("QuizScreen")}
+      >
+        <Text style={styles.quizButtonText}>{i18n.t("takeQuiz")}</Text>
+      </TouchableOpacity>
+
       <Text style={styles.label}>{i18n.t("email")}</Text>
       <Text style={styles.emailText}>{email}</Text>
       {/* <TouchableOpacity
@@ -360,10 +384,50 @@ const lightTheme = StyleSheet.create({
     marginLeft: 8,
     color: "#007AFF",
   },
+  statsRow: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    marginVertical: 20,
+  },
+
+  statBox: {
+    flex: 1,
+    marginHorizontal: 10,
+    padding: 15,
+    borderRadius: 10,
+    backgroundColor: "#fff",
+    alignItems: "center",
+    elevation: 2,
+  },
+
+  statLabel: {
+    fontSize: 14,
+    color: "#888",
+    marginBottom: 5,
+  },
+
+  statValue: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#333",
+  },
+
   label: {
     fontSize: 16,
     fontWeight: "bold",
     marginVertical: 10,
+  },
+  quizButton: {
+    backgroundColor: "#8f8bd6",
+    padding: 15,
+    borderRadius: 8,
+    alignItems: "center",
+    marginBottom: 20,
+  },
+  quizButtonText: {
+    color: "#fff",
+    fontSize: 16,
+    fontWeight: "bold",
   },
   input: {
     borderWidth: 1,
@@ -493,11 +557,51 @@ const darkTheme = StyleSheet.create({
     marginLeft: 8,
     color: "#fc8fa7",
   },
+  statsRow: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    marginVertical: 20,
+  },
+
+  statBox: {
+    flex: 1,
+    marginHorizontal: 10,
+    padding: 15,
+    borderRadius: 10,
+    backgroundColor: "#fff",
+    alignItems: "center",
+    elevation: 2,
+  },
+
+  statLabel: {
+    fontSize: 14,
+    color: "#888",
+    marginBottom: 5,
+  },
+
+  statValue: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#333",
+  },
+
   label: {
     fontSize: 16,
     fontWeight: "bold",
     marginVertical: 10,
     color: "#fff",
+  },
+  quizButton: {
+    backgroundColor: "#8f8bd6",
+    padding: 15,
+    borderRadius: 8,
+    alignItems: "center",
+    marginBottom: 20,
+  },
+  quizButtonText: {
+    color: "#fff",
+    fontSize: 16,
+    fontWeight: "bold",
   },
   input: {
     borderWidth: 1,
