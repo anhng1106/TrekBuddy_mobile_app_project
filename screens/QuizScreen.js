@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   View,
   Text,
@@ -10,8 +10,8 @@ import {
 import { auth, db } from "../firebaseConfig";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import i18n from "../utils/i18n";
-import Icon from "react-native-vector-icons/Ionicons";
 import { ThemeContext } from "../ThemeContext";
+import Icon from "react-native-vector-icons/Ionicons";
 
 const questions = [
   {
@@ -84,7 +84,6 @@ const questions = [
 
 const QuizScreen = ({ navigation }) => {
   const { theme } = useContext(ThemeContext);
-  const styles = theme === "light" ? lightTheme : darkTheme;
 
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [score, setScore] = useState(0);
@@ -98,21 +97,22 @@ const QuizScreen = ({ navigation }) => {
 
     const isCorrect = option === questions[currentQuestion].correctAnswer;
     if (isCorrect) {
-      setScore(score + 1);
-      await awardPoint();
+      setScore((prev) => prev + 1);
+      await awardCredit();
       Alert.alert(i18n.t("correct"), i18n.t("youEarnedPoint"));
     } else {
       Alert.alert(i18n.t("wrong"), i18n.t("noPointsAwarded"));
     }
   };
 
-  const awardPoint = async () => {
-    const userRef = doc(db, "Users", auth.currentUser.uid);
-    const snap = await getDoc(userRef);
-    if (snap.exists()) {
-      const data = snap.data();
-      await updateDoc(userRef, {
-        points: (data.points || 0) + 1,
+  const awardCredit = async () => {
+    const userDocRef = doc(db, "Users", auth.currentUser.uid);
+    const userSnap = await getDoc(userDocRef);
+    if (userSnap.exists()) {
+      const userData = userSnap.data();
+      const currentPoints = userData.points || 0;
+      await updateDoc(userDocRef, {
+        points: currentPoints + 1,
       });
     }
   };
@@ -123,9 +123,21 @@ const QuizScreen = ({ navigation }) => {
       setSelectedOption(null);
       setHasAnswered(false);
     } else {
-      Alert.alert(i18n.t("quizCompleted"), `${i18n.t("yourScore")}: ${score}`);
+      Alert.alert(i18n.t("quizCompleted"), `${i18n.t("yourScore")}: ${score}`, [
+        {
+          text: "OK",
+          onPress: () => {
+            navigation.reset({
+              index: 0,
+              routes: [{ name: "ProfileScreen", params: { refresh: true } }],
+            });
+          },
+        },
+      ]);
     }
   };
+
+  const styles = theme === "light" ? lightTheme : darkTheme;
 
   return (
     <View style={styles.container}>

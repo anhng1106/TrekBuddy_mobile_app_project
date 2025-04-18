@@ -418,7 +418,7 @@ const lightTheme = StyleSheet.create({
     marginVertical: 10,
   },
   quizButton: {
-    backgroundColor: "#8f8bd6",
+    backgroundColor: "#6aa84f",
     padding: 15,
     borderRadius: 8,
     alignItems: "center",
