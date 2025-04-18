@@ -1,8 +1,36 @@
+import * as Localization from "expo-localization";
 import { I18n } from "i18n-js";
 
 const i18n = new I18n({
   en: {
+    email: "Email",
+    password: "Password",
+    signIn: "Sign In",
+    signUp: "Sign Up",
+    noAccountYet: "Do not have an account yet?",
+    missingFields: "Missing Fields",
+    fillEmailPassword: "Please fill in both email and password.",
+    emailNotVerified: "Email Not Verified",
+    verifyEmailBeforeLogin: "Please verify your email before logging in.",
+    loginFailed: "Login Failed",
+    userNotFound: "No user found with this email. Please sign up.",
+    wrongPassword: "Incorrect password. Please try again.",
+    invalidEmail: "Invalid email format. Please enter a valid email.",
+    tooManyRequests: "Too many login attempts. Please try again later.",
+    genericLoginError: "Please check your email or password and try again.",
+
     explore: "Explore",
+    enterCity: "Enter country or city...",
+    backToDestinations: "Back to Destination List",
+    backToCities: "Back to Cities List",
+    famousCities: "Famous Cities",
+    famousDestinations: "Famous Destinations in",
+    selectCollection: "Select a Collection",
+    noCollections: "No collections found. Create one first.",
+    close: "Close",
+    addToFavorites: "Add to Favorite",
+    showOnMap: "Show on Map",
+    savedToAlbum: "has been saved to your album!",
 
     saved: "Saved",
     savedCollections: "Saved Collections",
@@ -88,7 +116,35 @@ const i18n = new I18n({
     switchToVietnamese: "Switch to Vietnamese",
   },
   vi: {
+    email: "Email",
+    password: "Mật khẩu",
+    signIn: "Đăng nhập",
+    signUp: "Đăng ký",
+    noAccountYet: "Bạn chưa có tài khoản?",
+    missingFields: "Thiếu thông tin",
+    fillEmailPassword: "Vui lòng điền cả email và mật khẩu.",
+    emailNotVerified: "Email chưa được xác minh",
+    verifyEmailBeforeLogin: "Vui lòng xác minh email trước khi đăng nhập.",
+    loginFailed: "Đăng nhập thất bại",
+    userNotFound: "Không tìm thấy người dùng với email này. Vui lòng đăng ký.",
+    wrongPassword: "Sai mật khẩu. Vui lòng thử lại.",
+    invalidEmail: "Email không hợp lệ. Vui lòng nhập đúng định dạng.",
+    tooManyRequests:
+      "Tài khoản bị khóa do đăng nhập quá nhiều lần. Vui lòng thử lại sau.",
+    genericLoginError: "Vui lòng kiểm tra lại email hoặc mật khẩu của bạn.",
+
     explore: "Khám phá",
+    enterCity: "Nhập quốc gia hoặc thành phố...",
+    backToDestinations: "Trở lại danh sách điểm đến",
+    backToCities: "Trở lại danh sách thành phố",
+    famousCities: "Các thành phố nổi tiếng",
+    famousDestinations: "Điểm đến nổi tiếng ở",
+    selectCollection: "Chọn bộ sưu tập",
+    noCollections: "Không tìm thấy bộ sưu tập nào. Hãy tạo mới.",
+    close: "Đóng",
+    addToFavorites: "Thêm vào Yêu thích",
+    showOnMap: "Xem trên bản đồ",
+    savedToAlbum: "đã được lưu vào album của bạn!",
 
     saved: "Đã lưu",
     savedCollections: "Bộ sưu tập đã lưu",
@@ -177,7 +233,7 @@ const i18n = new I18n({
   },
 });
 
-i18n.locale = "en";
+i18n.locale = Localization.locale;
 i18n.enableFallback = true;
 
 export default i18n;

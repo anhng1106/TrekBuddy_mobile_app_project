@@ -16,6 +16,7 @@ import Slider from "./Slider";
 import { ImageSlider } from "../data/SliderData";
 import { GOOGLE_API_KEY } from "@env";
 import { SavedContext } from "../data/SavedContext";
+import i18n from "../utils/i18n";
 
 const HomeScreen = () => {
   const { theme } = useContext(ThemeContext);
@@ -42,6 +43,9 @@ const HomeScreen = () => {
         `https://maps.googleapis.com/maps/api/place/textsearch/json?query=cities+in+${searchTerm}&key=${GOOGLE_API_KEY}`
       );
       const data = await response.json();
+
+      console.log("Google Places API response:", data);
+
       if (data.results) {
         // Map city results to extract necessary data
         const cities = data.results.map((place) => ({
@@ -111,7 +115,10 @@ const HomeScreen = () => {
   const handleSaveToCollection = (collectionId) => {
     saveItemToCollection(collectionId, itemToSave); // Save the item to the selected collection
     setIsModalVisible(false); // Close the modal
-    Alert.alert("Success", `${itemToSave.name} has been saved to your album!`);
+    Alert.alert(
+      i18n.t("success"),
+      `${itemToSave.name} ${i18n.t("savedToAlbum")}`
+    );
   };
 
   const handleShowOnMap = (location) => {
@@ -149,13 +156,15 @@ const HomeScreen = () => {
           style={styles.saveToAlbumButton}
           onPress={() => saveToAlbum(item)}
         >
-          <Text style={styles.saveToAlbumButtonText}>Add to Favorite</Text>
+          <Text style={styles.saveToAlbumButtonText}>
+            {i18n.t("addToFavorites")}
+          </Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.showMapButton}
           onPress={() => handleShowOnMap(item.location)}
         >
-          <Text style={styles.showMapButtonText}>Show on Map</Text>
+          <Text style={styles.showMapButtonText}>{i18n.t("showOnMap")}</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -170,7 +179,7 @@ const HomeScreen = () => {
       <View style={styles.searchContainer}>
         <TextInput
           style={styles.searchBar}
-          placeholder="Enter country or city..."
+          placeholder={i18n.t("enterCity")}
           placeholderTextColor="#888"
           value={searchTerm}
           onChangeText={handleSearchTermChange}
@@ -193,7 +202,7 @@ const HomeScreen = () => {
             }}
           >
             <Text style={styles.backButtonText}>
-              ← Back to Destination List
+              ← {i18n.t("backToDestinations")}
             </Text>
           </TouchableOpacity>
           <MapView
@@ -222,10 +231,12 @@ const HomeScreen = () => {
             style={styles.backButton}
             onPress={() => setIsViewingDestinations(false)}
           >
-            <Text style={styles.backButtonText}>← Back to Cities List</Text>
+            <Text style={styles.backButtonText}>
+              ← {i18n.t("backToCities")}
+            </Text>
           </TouchableOpacity>
           <Text style={styles.sectionTitle}>
-            Famous Destinations in {selectedCity}
+            {i18n.t("famousDestinations")} {selectedCity}
           </Text>
           <FlatList
             data={touristDestinations}
@@ -236,7 +247,7 @@ const HomeScreen = () => {
         </>
       ) : famousCities.length > 0 ? (
         <>
-          <Text style={styles.sectionTitle}>Famous Cities</Text>
+          <Text style={styles.sectionTitle}>{i18n.t("famousCities")}</Text>
           <FlatList
             data={famousCities}
             renderItem={renderCityItem}
@@ -253,7 +264,7 @@ const HomeScreen = () => {
       <Modal visible={isModalVisible} transparent animationType="slide">
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>Select a Collection</Text>
+            <Text style={styles.modalTitle}>{i18n.t("selectCollection")}</Text>
             <FlatList
               data={collections}
               renderItem={({ item }) => (
@@ -266,16 +277,14 @@ const HomeScreen = () => {
               )}
               keyExtractor={(item) => item.id}
               ListEmptyComponent={
-                <Text style={styles.emptyText}>
-                  No collections found. Create one first.
-                </Text>
+                <Text style={styles.emptyText}>{i18n.t("noCollections")}</Text>
               }
             />
             <TouchableOpacity
               style={styles.closeButton}
               onPress={() => setIsModalVisible(false)}
             >
-              <Text style={styles.closeButtonText}>Close</Text>
+              <Text style={styles.closeButtonText}>{i18n.t("close")}</Text>
             </TouchableOpacity>
           </View>
         </View>

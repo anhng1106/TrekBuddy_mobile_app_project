@@ -10,18 +10,21 @@ import {
 } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
 import { ThemeContext } from "../ThemeContext";
+import { LanguageContext } from "../LanguageContext";
 import { signInWithEmailAndPassword } from "firebase/auth"; // Import Firebase Auth
 import { auth } from "../firebaseConfig";
+import i18n from "../utils/i18n";
 
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const { theme, toggleTheme } = useContext(ThemeContext);
+  const { language, toggleLanguage } = useContext(LanguageContext);
 
   const handleLogin = async () => {
     if (!email || !password) {
-      Alert.alert("Missing Fields", "Please fill in both email and password.");
+      Alert.alert(i18n.t("missingFields"), i18n.t("fillEmailPassword"));
       return;
     }
 
@@ -35,8 +38,8 @@ const LoginScreen = ({ navigation }) => {
 
       if (!user.emailVerified) {
         Alert.alert(
-          "Email Not Verified",
-          "Please verify your email before logging in."
+          i18n.t("emailNotVerified"),
+          i18n.t("verifyEmailBeforeLogin")
         );
         await auth.signOut(); // Sign out the user if the email is not verified
         return;
@@ -47,32 +50,21 @@ const LoginScreen = ({ navigation }) => {
     } catch (error) {
       switch (error.code) {
         case "auth/user-not-found":
-          Alert.alert(
-            "Login Failed",
-            "No user found with this email. Please sign up."
-          );
+          message = i18n.t("userNotFound");
           break;
         case "auth/wrong-password":
-          Alert.alert("Login Failed", "Incorrect password. Please try again.");
+          message = i18n.t("wrongPassword");
           break;
         case "auth/invalid-email":
-          Alert.alert(
-            "Login Failed",
-            "Invalid email format. Please enter a valid email."
-          );
+          message = i18n.t("invalidEmail");
           break;
         case "auth/too-many-requests":
-          Alert.alert(
-            "Account Locked",
-            "Too many login attempts. Please try again later."
-          );
+          message = i18n.t("tooManyRequests");
           break;
         default:
-          Alert.alert(
-            "Login Failed",
-            "Please check your email or password and try again."
-          );
+          message = i18n.t("genericLoginError");
       }
+      Alert.alert(i18n.t("loginFailed"), message);
     }
   };
 
@@ -85,20 +77,27 @@ const LoginScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.toggleButton} onPress={toggleTheme}>
-        <Icon
-          name={theme === "light" ? "moon" : "sunny"}
-          size={30}
-          color={theme === "light" ? "#000" : "#fff"}
-        />
-      </TouchableOpacity>
-      <Image
-        source={require("../assets/app_name.png")} // Adjust the path based on your directory structure
-        style={styles.logo}
-      />
+      <View style={styles.topIcons}>
+        <TouchableOpacity onPress={toggleLanguage} style={styles.iconButton}>
+          <Icon
+            name={language === "en" ? "flag-outline" : "globe-outline"}
+            size={26}
+            color={theme === "light" ? "#000" : "#fff"}
+          />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={toggleTheme} style={styles.iconButton}>
+          <Icon
+            name={theme === "light" ? "moon" : "sunny"}
+            size={26}
+            color={theme === "light" ? "#000" : "#fff"}
+          />
+        </TouchableOpacity>
+      </View>
+
+      <Image source={require("../assets/app_name.png")} style={styles.logo} />
       <TextInput
         style={styles.input}
-        placeholder="Email"
+        placeholder={i18n.t("email")}
         placeholderTextColor={theme === "light" ? "#999" : "#888"}
         value={email}
         onChangeText={setEmail}
@@ -107,19 +106,19 @@ const LoginScreen = ({ navigation }) => {
       />
       <TextInput
         style={styles.input}
-        placeholder="Password"
+        placeholder={i18n.t("password")}
         placeholderTextColor={theme === "light" ? "#999" : "#888"}
         value={password}
         onChangeText={setPassword}
         secureTextEntry
       />
       <TouchableOpacity style={styles.button} onPress={handleLogin}>
-        <Text style={styles.buttonText}>Sign In</Text>
+        <Text style={styles.buttonText}>{i18n.t("signIn")}</Text>
       </TouchableOpacity>
       <TouchableOpacity onPress={handleSignup}>
         <Text style={styles.signupText}>
-          Do not have an account yet?{" "}
-          <Text style={styles.signupLink}>Sign Up</Text>
+          {i18n.t("noAccountYet")}{" "}
+          <Text style={styles.signupLink}>{i18n.t("signUp")}</Text>
         </Text>
       </TouchableOpacity>
     </View>
@@ -133,6 +132,14 @@ const lightTheme = {
     justifyContent: "center",
     backgroundColor: "#fdeae2",
     padding: 20,
+  },
+  topIcons: {
+    flexDirection: "row",
+    position: "absolute",
+    top: 40,
+    right: 20,
+    gap: 12,
+    zIndex: 1,
   },
   logo: {
     width: 450,
@@ -189,6 +196,14 @@ const darkTheme = {
     justifyContent: "center",
     backgroundColor: "#545454",
     padding: 20,
+  },
+  topIcons: {
+    flexDirection: "row",
+    position: "absolute",
+    top: 40,
+    right: 20,
+    gap: 12,
+    zIndex: 1,
   },
   logo: {
     width: 450,

@@ -241,7 +241,9 @@ const SavedScreen = () => {
           </TouchableOpacity>
         )}
         <Text style={styles.headerTitle}>
-          {selectedCollection ? selectedCollection.title : "Saved Collections"}
+          {selectedCollection
+            ? selectedCollection.title
+            : i18n.t("savedCollections")}
         </Text>
       </View>
 
