@@ -60,6 +60,7 @@ const i18n = new I18n({
     addToFavorites: "Add to Favorite",
     showOnMap: "Show on Map",
     savedToAlbum: "has been saved to your album!",
+    weather: "Show Weather",
 
     saved: "Saved",
     savedCollections: "Saved Collections",
@@ -202,6 +203,7 @@ const i18n = new I18n({
     addToFavorites: "Thêm vào Yêu thích",
     showOnMap: "Xem trên bản đồ",
     savedToAlbum: "đã được lưu vào album của bạn!",
+    weather: "Xem thời tiết",
 
     saved: "Đã lưu",
     savedCollections: "Bộ sưu tập đã lưu",

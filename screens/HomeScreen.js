@@ -15,6 +15,8 @@ import { ThemeContext } from "../ThemeContext";
 import Slider from "./Slider";
 import { ImageSlider } from "../data/SliderData";
 import { GOOGLE_API_KEY } from "@env";
+import { OPENWEATHER_API_KEY } from "@env";
+
 import { SavedContext } from "../data/SavedContext";
 import i18n from "../utils/i18n";
 
@@ -30,6 +32,8 @@ const HomeScreen = () => {
   const [isViewingDestinations, setIsViewingDestinations] = useState(false); // Track current view
   const [isMapView, setIsMapView] = useState(false);
   const [focusedLocation, setFocusedLocation] = useState(null);
+  const [weatherInfo, setWeatherInfo] = useState(null);
+  const [weatherDataByCity, setWeatherDataByCity] = useState({});
 
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [itemToSave, setItemToSave] = useState(null);
@@ -68,6 +72,28 @@ const HomeScreen = () => {
     }
   };
 
+  const fetchWeather = async (lat, lon, cityId) => {
+    try {
+      const response = await fetch(
+        `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${OPENWEATHER_API_KEY}&units=metric`
+      );
+      const data = await response.json();
+
+      if (data?.main && data?.weather?.[0]) {
+        setWeatherDataByCity((prev) => ({
+          ...prev,
+          [cityId]: {
+            temp: data.main.temp,
+            condition: data.weather[0].main,
+            icon: data.weather[0].icon,
+          },
+        }));
+      }
+    } catch (error) {
+      console.error("Error fetching weather:", error);
+    }
+  };
+
   const fetchTouristDestinations = async (cityName) => {
     try {
       const response = await fetch(
@@ -88,6 +114,11 @@ const HomeScreen = () => {
         setTouristDestinations(destinations);
         setSelectedCity(cityName);
         setIsViewingDestinations(true);
+
+        if (data.results[0]?.geometry?.location) {
+          const { lat, lng } = data.results[0].geometry.location;
+          fetchWeather(lat, lng); // Call the weather fetching function
+        }
       } else {
         setTouristDestinations([]);
       }
@@ -133,18 +164,56 @@ const HomeScreen = () => {
     setIsMapView(true);
   };
 
-  const renderCityItem = ({ item }) => (
-    <TouchableOpacity
-      style={styles.placeItem}
-      onPress={() => fetchTouristDestinations(item.name)}
-    >
-      <Image source={{ uri: item.photo }} style={styles.placeImage} />
-      <View style={styles.placeInfo}>
-        <Text style={styles.placeName}>{item.name}</Text>
-        <Text style={styles.placeAddress}>{item.address}</Text>
-      </View>
-    </TouchableOpacity>
-  );
+  const renderCityItem = ({ item }) => {
+    const weather = weatherDataByCity[item.id];
+
+    return (
+      <TouchableOpacity
+        style={styles.placeItem}
+        onPress={() => fetchTouristDestinations(item.name)}
+      >
+        <Image source={{ uri: item.photo }} style={styles.placeImage} />
+        <View style={styles.placeInfo}>
+          <Text style={styles.placeName}>{item.name}</Text>
+          <Text style={styles.placeAddress}>{item.address}</Text>
+
+          <TouchableOpacity
+            style={styles.showWeatherButton}
+            onPress={(e) => {
+              e.stopPropagation(); // prevent triggering parent TouchableOpacity
+              if (item.location) {
+                fetchWeather(item.location.lat, item.location.lng, item.id);
+              }
+            }}
+          >
+            <Text style={styles.showWeatherButtonText}>
+              {i18n.t("weather")}
+            </Text>
+          </TouchableOpacity>
+
+          {weather && (
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                marginTop: 6,
+              }}
+            >
+              <Image
+                source={{
+                  uri: `https://openweathermap.org/img/wn/${weather.icon}@2x.png`,
+                }}
+                style={{ width: 32, height: 32 }}
+              />
+              <Text style={{ marginLeft: 8 }}>
+                {weather.temp}°C, {weather.condition}
+              </Text>
+            </View>
+          )}
+        </View>
+      </TouchableOpacity>
+    );
+  };
 
   const renderDestinationItem = ({ item }) => (
     <View style={styles.placeItem}>
@@ -238,6 +307,29 @@ const HomeScreen = () => {
           <Text style={styles.sectionTitle}>
             {i18n.t("famousDestinations")} {selectedCity}
           </Text>
+
+          {/* {weatherInfo && (
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                marginLeft: 16,
+                marginBottom: 10,
+              }}
+            >
+              <Image
+                source={{
+                  uri: `https://openweathermap.org/img/wn/${weatherInfo.icon}@2x.png`,
+                }}
+                style={{ width: 40, height: 40 }}
+              />
+              <Text style={{ fontSize: 16, marginLeft: 10 }}>
+                {i18n.t("weather")}: {weatherInfo.temp}°C,{" "}
+                {weatherInfo.condition}
+              </Text>
+            </View>
+          )} */}
+
           <FlatList
             data={touristDestinations}
             renderItem={renderDestinationItem}
@@ -424,6 +516,19 @@ const lightTheme = StyleSheet.create({
     alignItems: "center",
   },
   showMapButtonText: {
+    color: "#fff",
+    fontWeight: "bold",
+    fontSize: 13,
+  },
+  showWeatherButton: {
+    backgroundColor: "#6fa8dc",
+    paddingVertical: 7,
+    paddingHorizontal: 5,
+    borderRadius: 15,
+    marginTop: 10,
+    alignItems: "center",
+  },
+  showWeatherButtonText: {
     color: "#fff",
     fontWeight: "bold",
     fontSize: 13,
@@ -617,6 +722,20 @@ const darkTheme = StyleSheet.create({
     alignItems: "center",
   },
   showMapButtonText: {
+    color: "#fff",
+    fontWeight: "bold",
+    fontSize: 13,
+  },
+
+  showWeatherButton: {
+    backgroundColor: "#6fa8dc",
+    paddingVertical: 7,
+    paddingHorizontal: 5,
+    borderRadius: 15,
+    marginTop: 10,
+    alignItems: "center",
+  },
+  showWeatherButtonText: {
     color: "#fff",
     fontWeight: "bold",
     fontSize: 13,
