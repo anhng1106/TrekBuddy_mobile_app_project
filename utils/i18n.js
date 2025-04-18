@@ -156,6 +156,7 @@ const i18n = new I18n({
     next: "Next",
     quizCompleted: "Quiz Completed",
     yourScore: "Your score",
+    streak: "🔥 {{count}}-day streak! 🔥",
   },
   vi: {
     username: "Tên người dùng",
@@ -314,6 +315,7 @@ const i18n = new I18n({
     next: "Tiếp theo",
     quizCompleted: "Hoàn thành đố vui",
     yourScore: "Điểm số của bạn",
+    streak: "🔥 Duy trì chuỗi {{count}} ngày! 🔥",
   },
 });
 

@@ -31,6 +31,7 @@ const ProfileScreen = ({ navigation }) => {
 
   const [credit, setCredit] = useState(0);
   const [points, setPoints] = useState(0);
+  const [streak, setStreak] = useState(0);
 
   const { theme } = useContext(ThemeContext);
   const styles = theme === "light" ? lightTheme : darkTheme;
@@ -47,6 +48,7 @@ const ProfileScreen = ({ navigation }) => {
           setPhotoURL(userData.photoURL || null);
           setCredit(userData.credit || 0);
           setPoints(userData.points || 0);
+          setStreak(userData.streak || 0);
         } else {
           // Initialize user data in Firestore with default profile picture
           await setDoc(userDocRef, {
@@ -205,6 +207,10 @@ const ProfileScreen = ({ navigation }) => {
           <Icon name="pencil" size={24} color="#fc8fa7" />
         </TouchableOpacity>
       </View>
+
+      <Text style={styles.streakText}>
+        {i18n.t("streak", { count: streak })}
+      </Text>
 
       {/* Modal for editing username */}
       <Modal
@@ -379,6 +385,13 @@ const lightTheme = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center",
   },
+  streakText: {
+    textAlign: "center",
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "#000",
+    marginBottom: 5,
+  },
   editIcon: {
     fontSize: 18,
     marginLeft: 8,
@@ -552,6 +565,13 @@ const darkTheme = StyleSheet.create({
     textAlign: "center",
     color: "#fff",
   },
+  streakText: {
+    textAlign: "center",
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "#fff",
+    marginBottom: 5,
+  },
   editIcon: {
     fontSize: 18,
     marginLeft: 8,
@@ -592,7 +612,7 @@ const darkTheme = StyleSheet.create({
     color: "#fff",
   },
   quizButton: {
-    backgroundColor: "#8f8bd6",
+    backgroundColor: "#6aa84f",
     padding: 15,
     borderRadius: 8,
     alignItems: "center",

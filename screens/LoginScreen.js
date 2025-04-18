@@ -13,8 +13,38 @@ import Icon from "react-native-vector-icons/Ionicons";
 import { ThemeContext } from "../ThemeContext";
 import { LanguageContext } from "../LanguageContext";
 import { signInWithEmailAndPassword } from "firebase/auth"; // Import Firebase Auth
-import { auth } from "../firebaseConfig";
+import { auth, db } from "../firebaseConfig";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
+import moment from "moment";
 import i18n from "../utils/i18n";
+
+const updateLoginStreak = async () => {
+  const userRef = doc(db, "Users", auth.currentUser.uid);
+  const userSnap = await getDoc(userRef);
+
+  if (userSnap.exists()) {
+    const data = userSnap.data();
+    const today = moment().format("YYYY-MM-DD");
+    const yesterday = moment().subtract(1, "day").format("YYYY-MM-DD");
+    const lastLoginDate = data.lastLoginDate || null;
+    let newStreak = 1;
+
+    if (lastLoginDate === today) {
+      console.log("Already logged in today, no change to streak.");
+      return;
+    } else if (lastLoginDate === yesterday) {
+      newStreak = (data.streak || 0) + 1;
+    }
+
+    await updateDoc(userRef, {
+      streak: newStreak,
+      lastLoginDate: today,
+    });
+    console.log(`Streak updated: ${newStreak}`);
+  } else {
+    console.log("User document does not exist.");
+  }
+};
 
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
@@ -47,6 +77,7 @@ const LoginScreen = ({ navigation }) => {
       }
 
       console.log("User logged in:", user);
+      await updateLoginStreak();
       navigation.navigate("HomeScreen");
     } catch (error) {
       switch (error.code) {
