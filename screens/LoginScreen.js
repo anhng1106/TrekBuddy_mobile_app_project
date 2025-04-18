@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   Alert,
 } from "react-native";
+import RNPickerSelect from "react-native-picker-select";
 import Icon from "react-native-vector-icons/Ionicons";
 import { ThemeContext } from "../ThemeContext";
 import { LanguageContext } from "../LanguageContext";
@@ -78,19 +79,19 @@ const LoginScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <View style={styles.topIcons}>
-        <TouchableOpacity onPress={toggleLanguage} style={styles.iconButton}>
-          <Icon
-            name={language === "en" ? "flag-outline" : "globe-outline"}
-            size={26}
-            color={theme === "light" ? "#000" : "#fff"}
-          />
-        </TouchableOpacity>
         <TouchableOpacity onPress={toggleTheme} style={styles.iconButton}>
           <Icon
             name={theme === "light" ? "moon" : "sunny"}
             size={26}
             color={theme === "light" ? "#000" : "#fff"}
           />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={toggleLanguage} style={styles.iconButton}>
+          <View style={styles.languageIcon}>
+            <Text style={styles.languageText}>
+              {language === "vi" ? "VI" : "EN"}
+            </Text>
+          </View>
         </TouchableOpacity>
       </View>
 
@@ -132,6 +133,20 @@ const lightTheme = {
     justifyContent: "center",
     backgroundColor: "#fdeae2",
     padding: 20,
+  },
+  languageIcon: {
+    backgroundColor: "#fc8fa7",
+    borderRadius: 16,
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+
+  languageText: {
+    color: "#fff",
+    fontWeight: "bold",
+    fontSize: 14,
   },
   topIcons: {
     flexDirection: "row",
@@ -196,6 +211,20 @@ const darkTheme = {
     justifyContent: "center",
     backgroundColor: "#545454",
     padding: 20,
+  },
+  languageIcon: {
+    backgroundColor: "#fc8fa7",
+    borderRadius: 16,
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+
+  languageText: {
+    color: "#fff",
+    fontWeight: "bold",
+    fontSize: 14,
   },
   topIcons: {
     flexDirection: "row",
