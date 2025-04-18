@@ -11,6 +11,7 @@ import {
 import Icon from "react-native-vector-icons/Ionicons";
 import Mailer from "react-native-mail";
 import { ThemeContext } from "../ThemeContext";
+import i18n from "../utils/i18n";
 
 const DataProtectionPolicyPage = ({ navigation }) => {
   const { theme } = useContext(ThemeContext);
@@ -22,14 +23,12 @@ const DataProtectionPolicyPage = ({ navigation }) => {
     </View>
   );
 
-  // Function to build paragraphs with padding and styling
   const renderParagraph = (text) => (
     <View style={styles.paragraphContainer}>
       <Text style={styles.paragraph}>{text}</Text>
     </View>
   );
 
-  // Function to create an email link that opens the default mail app
   const renderEmailLink = (email) => (
     <TouchableOpacity
       onPress={() => {
@@ -63,42 +62,32 @@ const DataProtectionPolicyPage = ({ navigation }) => {
             color={theme === "light" ? "#000" : "#fff"}
           />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Data Protection Policy</Text>
+        <Text style={styles.headerTitle}>{i18n.t("dataPolicy")}</Text>
       </View>
+
       <ScrollView contentContainerStyle={styles.contentContainer}>
-        <Image
-          source={require("../assets/6.png")} // Replace with your image path
-          style={styles.appLogo}
-        />
-        {/* {renderSectionTitle("Data Protection Policy")} */}
-        {renderSectionTitle("1. Introduction")}
-        {renderParagraph(
-          "We are committed to protecting your personal data and ensuring its privacy, security, and confidentiality."
-        )}
-        {renderSectionTitle("2. Data Collection")}
-        {renderParagraph(
-          "We collect personal data that you provide to us directly, such as when you create an account, use our services, or contact us for support."
-        )}
-        {renderSectionTitle("3. Data Use")}
-        {renderParagraph(
-          "We use your personal data to provide and improve our services, communicate with you, and ensure the security of our platform."
-        )}
-        {renderSectionTitle("4. Data Sharing")}
-        {renderParagraph(
-          "We do not share your personal data with third parties except as necessary to provide our services, comply with legal obligations, or protect our rights."
-        )}
-        {renderSectionTitle("5. Data Security")}
-        {renderParagraph(
-          "We implement appropriate technical and organizational measures to protect your personal data against unauthorized access, loss, or misuse."
-        )}
-        {renderSectionTitle("6. Your Rights")}
-        {renderParagraph(
-          "You have the right to access, correct, or delete your personal data, as well as the right to object to or restrict certain processing of your data."
-        )}
-        {renderSectionTitle("7. Contact Us")}
-        {renderParagraph(
-          "If you have any questions or concerns about our data protection practices, please contact us at:"
-        )}
+        <Image source={require("../assets/6.png")} style={styles.appLogo} />
+
+        {renderSectionTitle(i18n.t("dp1"))}
+        {renderParagraph(i18n.t("dp1Text"))}
+
+        {renderSectionTitle(i18n.t("dp2"))}
+        {renderParagraph(i18n.t("dp2Text"))}
+
+        {renderSectionTitle(i18n.t("dp3"))}
+        {renderParagraph(i18n.t("dp3Text"))}
+
+        {renderSectionTitle(i18n.t("dp4"))}
+        {renderParagraph(i18n.t("dp4Text"))}
+
+        {renderSectionTitle(i18n.t("dp5"))}
+        {renderParagraph(i18n.t("dp5Text"))}
+
+        {renderSectionTitle(i18n.t("dp6"))}
+        {renderParagraph(i18n.t("dp6Text"))}
+
+        {renderSectionTitle(i18n.t("dp7"))}
+        {renderParagraph(i18n.t("dp7Text"))}
         {renderEmailLink("support@trekbuddy.com")}
       </ScrollView>
     </View>

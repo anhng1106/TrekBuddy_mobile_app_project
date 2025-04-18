@@ -11,6 +11,8 @@ import { useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 import { ThemeContext } from "../ThemeContext";
 import Icon from "react-native-vector-icons/Ionicons";
+import i18n from "../utils/i18n";
+import { LanguageContext } from "../LanguageContext";
 
 const SettingScreen = () => {
   const { theme, toggleTheme } = useContext(ThemeContext);
@@ -18,24 +20,37 @@ const SettingScreen = () => {
 
   const navigation = useNavigation();
 
+  const { language, changeLanguage } = useContext(LanguageContext);
+
+  const toggleLanguage = () => {
+    const newLang = language === "en" ? "vi" : "en";
+    changeLanguage(newLang); // triggers full reactivity via context
+  };
+
   const settingsData = [
     {
       id: "1",
       icon: "shield-checkmark-outline",
-      title: "Data Protection Policy",
+      title: i18n.t("dataPolicy"),
       route: "DataProtectionPolicyPage",
     },
     {
       id: "2",
       icon: "information-circle-outline",
-      title: "About TrekBuddy",
+      title: i18n.t("about"),
       route: "AboutPage",
     },
     {
       id: "3",
       icon: "moon-outline",
-      title: "Dark Mode",
+      title: i18n.t("darkMode"),
       isToggle: true,
+    },
+    {
+      id: "4",
+      icon: "language-outline",
+      title: i18n.t("switchToVietnamese"),
+      isLanguageSwitch: true,
     },
   ];
 
@@ -43,7 +58,8 @@ const SettingScreen = () => {
     <TouchableOpacity
       style={styles.settingItem}
       onPress={() => {
-        if (!item.isToggle) navigation.navigate(item.route);
+        if (!item.isToggle && !item.isLanguageSwitch)
+          navigation.navigate(item.route);
       }}
     >
       <Ionicons
@@ -57,6 +73,12 @@ const SettingScreen = () => {
         <Switch
           value={theme === "dark"}
           onValueChange={toggleTheme}
+          style={styles.toggleSwitch}
+        />
+      ) : item.isLanguageSwitch ? (
+        <Switch
+          value={language === "vi"}
+          onValueChange={toggleLanguage}
           style={styles.toggleSwitch}
         />
       ) : (
@@ -83,7 +105,7 @@ const SettingScreen = () => {
             color={theme === "light" ? "#000" : "#fff"}
           />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Settings</Text>
+        <Text style={styles.headerTitle}>{i18n.t("settings")}</Text>
       </View>
       <FlatList
         data={settingsData}

@@ -12,8 +12,9 @@ import {
   createUserWithEmailAndPassword,
   sendEmailVerification,
 } from "firebase/auth";
-import { doc, setDoc } from "firebase/firestore";
-import { auth, db } from "../firebaseConfig";
+import { doc, setDoc } from "firebase/firestore"; // Import Firestore methods
+import { auth, db } from "../firebaseConfig"; // Import Firestore instance
+import i18n from "../utils/i18n";
 
 const SignupScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
@@ -25,18 +26,12 @@ const SignupScreen = ({ navigation }) => {
 
   const handleSignUp = async () => {
     if (!email || !username || !password || !confirmPassword) {
-      Alert.alert(
-        "Missing Fields",
-        "Please fill in all fields before signing up."
-      );
+      Alert.alert(i18n.t("missingFields"), i18n.t("fillAllFields"));
       return;
     }
 
     if (password !== confirmPassword) {
-      Alert.alert(
-        "Passwords do not match",
-        "Please ensure both passwords are the same."
-      );
+      Alert.alert(i18n.t("passwordsMismatch"), i18n.t("ensurePasswordsSame"));
       return;
     }
 
@@ -57,26 +52,16 @@ const SignupScreen = ({ navigation }) => {
 
       await sendEmailVerification(user);
 
-      Alert.alert(
-        "Verify Your Email",
-        "A verification email has been sent to your email address. Please verify your email before logging in.",
-        [
-          {
-            text: "OK",
-            onPress: () => navigation.navigate("LoginScreen"),
-          },
-        ]
-      );
+      Alert.alert(i18n.t("verifyEmailTitle"), i18n.t("verifyEmailMsg"), [
+        { text: "OK", onPress: () => navigation.navigate("LoginScreen") },
+      ]);
 
       await auth.signOut();
     } catch (error) {
       if (error.code === "auth/email-already-in-use") {
-        Alert.alert(
-          "Email Already Exists",
-          "The email address is already in use by another account. Please use a different email."
-        );
+        Alert.alert(i18n.t("emailInUse"), i18n.t("useDifferentEmail"));
       } else {
-        Alert.alert("Sign Up Failed", error.message);
+        Alert.alert(i18n.t("signupFailed"), error.message);
       }
     }
   };
@@ -91,7 +76,7 @@ const SignupScreen = ({ navigation }) => {
       />
       <TextInput
         style={styles.input}
-        placeholder="Email"
+        placeholder={i18n.t("email")}
         placeholderTextColor={theme === "light" ? "#999" : "#888"}
         value={email}
         onChangeText={setEmail}
@@ -100,7 +85,7 @@ const SignupScreen = ({ navigation }) => {
       />
       <TextInput
         style={styles.input}
-        placeholder="Username"
+        placeholder={i18n.t("username")}
         placeholderTextColor={theme === "light" ? "#999" : "#888"}
         value={username}
         onChangeText={setUsername}
@@ -108,7 +93,7 @@ const SignupScreen = ({ navigation }) => {
       />
       <TextInput
         style={styles.input}
-        placeholder="Password"
+        placeholder={i18n.t("password")}
         placeholderTextColor={theme === "light" ? "#999" : "#888"}
         value={password}
         onChangeText={setPassword}
@@ -116,20 +101,20 @@ const SignupScreen = ({ navigation }) => {
       />
       <TextInput
         style={styles.input}
-        placeholder="Confirm Password"
+        placeholder={i18n.t("confirmPassword")}
         placeholderTextColor={theme === "light" ? "#999" : "#888"}
         value={confirmPassword}
         onChangeText={setConfirmPassword}
         secureTextEntry
       />
       <TouchableOpacity style={styles.button} onPress={handleSignUp}>
-        <Text style={styles.buttonText}>Sign Up</Text>
+        <Text style={styles.buttonText}>{i18n.t("signUp")}</Text>
       </TouchableOpacity>
 
       <TouchableOpacity onPress={() => navigation.navigate("LoginScreen")}>
         <Text style={styles.signupText}>
-          Already have an account?{" "}
-          <Text style={styles.signupLink}>Sign In</Text>
+          {i18n.t("alreadyHaveAccount")}{" "}
+          <Text style={styles.signupLink}>{i18n.t("signIn")}</Text>
         </Text>
       </TouchableOpacity>
     </View>

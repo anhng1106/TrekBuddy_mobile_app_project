@@ -7,20 +7,54 @@ import {
   TouchableOpacity,
   Alert,
 } from "react-native";
+import RNPickerSelect from "react-native-picker-select";
 import Icon from "react-native-vector-icons/Ionicons";
 import { ThemeContext } from "../ThemeContext";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../firebaseConfig";
+import { LanguageContext } from "../LanguageContext";
+import { signInWithEmailAndPassword } from "firebase/auth"; // Import Firebase Auth
+import { auth, db } from "../firebaseConfig";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
+import moment from "moment";
+import i18n from "../utils/i18n";
+
+const updateLoginStreak = async () => {
+  const userRef = doc(db, "Users", auth.currentUser.uid);
+  const userSnap = await getDoc(userRef);
+
+  if (userSnap.exists()) {
+    const data = userSnap.data();
+    const today = moment().format("YYYY-MM-DD");
+    const yesterday = moment().subtract(1, "day").format("YYYY-MM-DD");
+    const lastLoginDate = data.lastLoginDate || null;
+    let newStreak = 1;
+
+    if (lastLoginDate === today) {
+      console.log("Already logged in today, no change to streak.");
+      return;
+    } else if (lastLoginDate === yesterday) {
+      newStreak = (data.streak || 0) + 1;
+    }
+
+    await updateDoc(userRef, {
+      streak: newStreak,
+      lastLoginDate: today,
+    });
+    console.log(`Streak updated: ${newStreak}`);
+  } else {
+    console.log("User document does not exist.");
+  }
+};
 
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const { theme, toggleTheme } = useContext(ThemeContext);
+  const { language, toggleLanguage } = useContext(LanguageContext);
 
   const handleLogin = async () => {
     if (!email || !password) {
-      Alert.alert("Missing Fields", "Please fill in both email and password.");
+      Alert.alert(i18n.t("missingFields"), i18n.t("fillEmailPassword"));
       return;
     }
 
@@ -34,44 +68,34 @@ const LoginScreen = ({ navigation }) => {
 
       if (!user.emailVerified) {
         Alert.alert(
-          "Email Not Verified",
-          "Please verify your email before logging in."
+          i18n.t("emailNotVerified"),
+          i18n.t("verifyEmailBeforeLogin")
         );
         await auth.signOut();
         return;
       }
 
       console.log("User logged in:", user);
+      await updateLoginStreak();
       navigation.navigate("HomeScreen");
     } catch (error) {
       switch (error.code) {
         case "auth/user-not-found":
-          Alert.alert(
-            "Login Failed",
-            "No user found with this email. Please sign up."
-          );
+          message = i18n.t("userNotFound");
           break;
         case "auth/wrong-password":
-          Alert.alert("Login Failed", "Incorrect password. Please try again.");
+          message = i18n.t("wrongPassword");
           break;
         case "auth/invalid-email":
-          Alert.alert(
-            "Login Failed",
-            "Invalid email format. Please enter a valid email."
-          );
+          message = i18n.t("invalidEmail");
           break;
         case "auth/too-many-requests":
-          Alert.alert(
-            "Account Locked",
-            "Too many login attempts. Please try again later."
-          );
+          message = i18n.t("tooManyRequests");
           break;
         default:
-          Alert.alert(
-            "Login Failed",
-            "An unexpected error occurred. Please check your email or password and try again."
-          );
+          message = i18n.t("genericLoginError");
       }
+      Alert.alert(i18n.t("loginFailed"), message);
     }
   };
 
@@ -84,17 +108,27 @@ const LoginScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.toggleButton} onPress={toggleTheme}>
-        <Icon
-          name={theme === "light" ? "moon" : "sunny"}
-          size={30}
-          color={theme === "light" ? "#000" : "#fff"}
-        />
-      </TouchableOpacity>
+      <View style={styles.topIcons}>
+        <TouchableOpacity onPress={toggleTheme} style={styles.iconButton}>
+          <Icon
+            name={theme === "light" ? "moon" : "sunny"}
+            size={26}
+            color={theme === "light" ? "#000" : "#fff"}
+          />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={toggleLanguage} style={styles.iconButton}>
+          <View style={styles.languageIcon}>
+            <Text style={styles.languageText}>
+              {language === "vi" ? "VI" : "EN"}
+            </Text>
+          </View>
+        </TouchableOpacity>
+      </View>
+
       <Image source={require("../assets/app_name.png")} style={styles.logo} />
       <TextInput
         style={styles.input}
-        placeholder="Email"
+        placeholder={i18n.t("email")}
         placeholderTextColor={theme === "light" ? "#999" : "#888"}
         value={email}
         onChangeText={setEmail}
@@ -103,19 +137,19 @@ const LoginScreen = ({ navigation }) => {
       />
       <TextInput
         style={styles.input}
-        placeholder="Password"
+        placeholder={i18n.t("password")}
         placeholderTextColor={theme === "light" ? "#999" : "#888"}
         value={password}
         onChangeText={setPassword}
         secureTextEntry
       />
       <TouchableOpacity style={styles.button} onPress={handleLogin}>
-        <Text style={styles.buttonText}>Sign In</Text>
+        <Text style={styles.buttonText}>{i18n.t("signIn")}</Text>
       </TouchableOpacity>
       <TouchableOpacity onPress={handleSignup}>
         <Text style={styles.signupText}>
-          Do not have an account yet?{" "}
-          <Text style={styles.signupLink}>Sign Up</Text>
+          {i18n.t("noAccountYet")}{" "}
+          <Text style={styles.signupLink}>{i18n.t("signUp")}</Text>
         </Text>
       </TouchableOpacity>
     </View>
@@ -129,6 +163,28 @@ const lightTheme = {
     justifyContent: "center",
     backgroundColor: "#fdeae2",
     padding: 20,
+  },
+  languageIcon: {
+    backgroundColor: "#fc8fa7",
+    borderRadius: 16,
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+
+  languageText: {
+    color: "#fff",
+    fontWeight: "bold",
+    fontSize: 14,
+  },
+  topIcons: {
+    flexDirection: "row",
+    position: "absolute",
+    top: 40,
+    right: 20,
+    gap: 12,
+    zIndex: 1,
   },
   logo: {
     width: 450,
@@ -185,6 +241,28 @@ const darkTheme = {
     justifyContent: "center",
     backgroundColor: "#545454",
     padding: 20,
+  },
+  languageIcon: {
+    backgroundColor: "#fc8fa7",
+    borderRadius: 16,
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+
+  languageText: {
+    color: "#fff",
+    fontWeight: "bold",
+    fontSize: 14,
+  },
+  topIcons: {
+    flexDirection: "row",
+    position: "absolute",
+    top: 40,
+    right: 20,
+    gap: 12,
+    zIndex: 1,
   },
   logo: {
     width: 450,

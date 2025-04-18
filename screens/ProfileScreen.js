@@ -16,6 +16,7 @@ import * as ImagePicker from "expo-image-picker";
 import Icon from "react-native-vector-icons/Ionicons";
 import { ThemeContext } from "../ThemeContext";
 import { uploadToFirebase } from "../firebaseConfig";
+import i18n from "../utils/i18n";
 
 const ProfileScreen = ({ navigation }) => {
   const [email, setEmail] = useState(auth.currentUser.email || "");
@@ -27,6 +28,10 @@ const ProfileScreen = ({ navigation }) => {
   const [errorMessage, setErrorMessage] = useState("");
   const [usernameInput, setUsernameInput] = useState("");
   const [isModalVisible, setModalVisible] = useState(false);
+
+  const [credit, setCredit] = useState(0);
+  const [points, setPoints] = useState(0);
+  const [streak, setStreak] = useState(0);
 
   const { theme } = useContext(ThemeContext);
   const styles = theme === "light" ? lightTheme : darkTheme;
@@ -41,6 +46,9 @@ const ProfileScreen = ({ navigation }) => {
           const userData = userDoc.data();
           setUsername(userData.username || "Unknown");
           setPhotoURL(userData.photoURL || null);
+          setCredit(userData.credit || 0);
+          setPoints(userData.points || 0);
+          setStreak(userData.streak || 0);
         } else {
           await setDoc(userDocRef, {
             username: "Unknown",
@@ -48,7 +56,7 @@ const ProfileScreen = ({ navigation }) => {
           });
         }
       } catch (error) {
-        setErrorMessage("Failed to fetch user data: " + error.message);
+        setErrorMessage(i18n.t("fetchUserFail") + error.message);
       }
     };
     fetchUserData();
@@ -56,7 +64,7 @@ const ProfileScreen = ({ navigation }) => {
 
   const updateUsername = async () => {
     if (usernameInput.trim() === "") {
-      setErrorMessage("Username cannot be empty.");
+      setErrorMessage(i18n.t("usernameEmptyError"));
       return;
     }
 
@@ -67,9 +75,9 @@ const ProfileScreen = ({ navigation }) => {
       setUsername(usernameInput.trim());
       setErrorMessage("");
       setModalVisible(false); // Close the modal
-      Alert.alert("Success", "Username updated successfully!");
+      Alert.alert(i18n.t("success"), i18n.t("usernameUpdated"));
     } catch (error) {
-      setErrorMessage("Failed to update username: " + error.message);
+      setErrorMessage(i18n.t("usernameUpdateFail") + error.message);
     }
   };
 
@@ -102,16 +110,13 @@ const ProfileScreen = ({ navigation }) => {
 
         setPhotoURL(uploadResp.downloadUrl);
 
-        Alert.alert("Success", "Profile picture updated successfully!");
+        Alert.alert(i18n.t("success"), i18n.t("profilePicUpdated"));
       } else {
         console.log("Image selection was canceled.");
       }
     } catch (error) {
-      console.error("Failed to update profile picture:", error);
-      Alert.alert(
-        "Error",
-        `Failed to update profile picture: ${error.message}`
-      );
+      console.error(i18n.t("profilePicFailed"), error);
+      Alert.alert(i18n.t("error"), i18n.t("profilePicFailed") + error.message);
     }
   };
 
@@ -170,7 +175,7 @@ const ProfileScreen = ({ navigation }) => {
             color={theme === "light" ? "#000" : "#fff"}
           />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Profile</Text>
+        <Text style={styles.headerTitle}>{i18n.t("profile")}</Text>
       </View>
 
       <View style={styles.profilePictureContainer}>
@@ -197,6 +202,10 @@ const ProfileScreen = ({ navigation }) => {
         </TouchableOpacity>
       </View>
 
+      <Text style={styles.streakText}>
+        {i18n.t("streak", { count: streak })}
+      </Text>
+
       {/* Modal for editing username */}
       <Modal
         animationType="slide"
@@ -206,30 +215,49 @@ const ProfileScreen = ({ navigation }) => {
       >
         <View style={styles.modalOverlay}>
           <View style={styles.modalContainer}>
-            <Text style={styles.modalTitle}>Edit Username</Text>
+            <Text style={styles.modalTitle}>{i18n.t("editUsername")}</Text>
             <TextInput
               style={styles.input}
-              placeholder="Enter new username"
+              placeholder={i18n.t("enterNewUsername")}
               placeholderTextColor="#999997"
               value={usernameInput}
               onChangeText={setUsernameInput}
             />
             <View style={styles.modalButtons}>
               <TouchableOpacity style={styles.button} onPress={updateUsername}>
-                <Text style={styles.buttonText}>Save</Text>
+                <Text style={styles.buttonText}>{i18n.t("save")}</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={[styles.button, styles.cancelButton]}
                 onPress={() => setModalVisible(false)}
               >
-                <Text style={styles.buttonText}>Cancel</Text>
+                <Text style={styles.buttonText}>{i18n.t("cancel")}</Text>
               </TouchableOpacity>
             </View>
           </View>
         </View>
       </Modal>
 
-      <Text style={styles.label}>Email</Text>
+      <View style={styles.statsRow}>
+        <View style={styles.statBox}>
+          <Text style={styles.statLabel}>{i18n.t("credit")}</Text>
+          <Text style={styles.statValue}>{credit}</Text>
+        </View>
+        <View style={styles.statBox}>
+          <Text style={styles.statLabel}>{i18n.t("points")}</Text>
+          <Text style={styles.statValue}>{points}</Text>
+        </View>
+      </View>
+
+      {/* Quiz Button */}
+      <TouchableOpacity
+        style={styles.quizButton}
+        onPress={() => navigation.navigate("QuizScreen")}
+      >
+        <Text style={styles.quizButtonText}>{i18n.t("takeQuiz")}</Text>
+      </TouchableOpacity>
+
+      <Text style={styles.label}>{i18n.t("email")}</Text>
       <Text style={styles.emailText}>{email}</Text>
       {/* <TouchableOpacity
         style={styles.button}
@@ -283,7 +311,7 @@ const ProfileScreen = ({ navigation }) => {
       </Modal> */}
 
       <TouchableOpacity style={styles.button} onPress={signOut}>
-        <Text style={styles.buttonText}>Sign Out</Text>
+        <Text style={styles.buttonText}>{i18n.t("signOut")}</Text>
       </TouchableOpacity>
 
       {errorMessage ? (
@@ -351,15 +379,62 @@ const lightTheme = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center",
   },
+  streakText: {
+    textAlign: "center",
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "#000",
+    marginBottom: 5,
+  },
   editIcon: {
     fontSize: 18,
     marginLeft: 8,
     color: "#007AFF",
   },
+  statsRow: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    marginVertical: 20,
+  },
+
+  statBox: {
+    flex: 1,
+    marginHorizontal: 10,
+    padding: 15,
+    borderRadius: 10,
+    backgroundColor: "#fff",
+    alignItems: "center",
+    elevation: 2,
+  },
+
+  statLabel: {
+    fontSize: 14,
+    color: "#888",
+    marginBottom: 5,
+  },
+
+  statValue: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#333",
+  },
+
   label: {
     fontSize: 16,
     fontWeight: "bold",
     marginVertical: 10,
+  },
+  quizButton: {
+    backgroundColor: "#6aa84f",
+    padding: 15,
+    borderRadius: 8,
+    alignItems: "center",
+    marginBottom: 20,
+  },
+  quizButtonText: {
+    color: "#fff",
+    fontSize: 16,
+    fontWeight: "bold",
   },
   input: {
     borderWidth: 1,
@@ -484,16 +559,63 @@ const darkTheme = StyleSheet.create({
     textAlign: "center",
     color: "#fff",
   },
+  streakText: {
+    textAlign: "center",
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "#fff",
+    marginBottom: 5,
+  },
   editIcon: {
     fontSize: 18,
     marginLeft: 8,
     color: "#fc8fa7",
   },
+  statsRow: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    marginVertical: 20,
+  },
+
+  statBox: {
+    flex: 1,
+    marginHorizontal: 10,
+    padding: 15,
+    borderRadius: 10,
+    backgroundColor: "#fff",
+    alignItems: "center",
+    elevation: 2,
+  },
+
+  statLabel: {
+    fontSize: 14,
+    color: "#888",
+    marginBottom: 5,
+  },
+
+  statValue: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#333",
+  },
+
   label: {
     fontSize: 16,
     fontWeight: "bold",
     marginVertical: 10,
     color: "#fff",
+  },
+  quizButton: {
+    backgroundColor: "#6aa84f",
+    padding: 15,
+    borderRadius: 8,
+    alignItems: "center",
+    marginBottom: 20,
+  },
+  quizButtonText: {
+    color: "#fff",
+    fontSize: 16,
+    fontWeight: "bold",
   },
   input: {
     borderWidth: 1,
