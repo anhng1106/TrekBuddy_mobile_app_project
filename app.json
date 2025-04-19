@@ -3,6 +3,7 @@
     "name": "TrekBuddy_mobile_app_project",
     "slug": "TrekBuddy_mobile_app_project",
     "version": "1.0.0",
+    "sdkVersion": "52.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -12,7 +13,8 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.nayoungg.trekbuddy"
     },
     "android": {
       "package": "com.nayoungg.trekbuddy",

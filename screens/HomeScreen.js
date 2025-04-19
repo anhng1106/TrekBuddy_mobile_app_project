@@ -9,6 +9,7 @@ import {
   FlatList,
   Modal,
   Alert,
+  Platform,
 } from "react-native";
 import MapView, { Marker } from "react-native-maps";
 import { ThemeContext } from "../ThemeContext";
@@ -302,25 +303,28 @@ const HomeScreen = () => {
               ← {i18n.t("backToDestinations")}
             </Text>
           </TouchableOpacity>
-          <MapView
-            style={styles.map}
-            initialRegion={{
-              latitude: focusedLocation?.lat || 60.200692,
-              longitude: focusedLocation?.lng || 24.934302,
-              latitudeDelta: 0.0322,
-              longitudeDelta: 0.0221,
-            }}
-          >
-            {focusedLocation && (
-              <Marker
-                coordinate={{
-                  latitude: focusedLocation.lat,
-                  longitude: focusedLocation.lng,
-                }}
-                title="Selected Location"
-              />
-            )}
-          </MapView>
+
+          {Platform.OS !== "web" && (
+            <MapView
+              style={styles.map}
+              initialRegion={{
+                latitude: focusedLocation?.lat || 60.200692,
+                longitude: focusedLocation?.lng || 24.934302,
+                latitudeDelta: 0.0322,
+                longitudeDelta: 0.0221,
+              }}
+            >
+              {focusedLocation && (
+                <Marker
+                  coordinate={{
+                    latitude: focusedLocation.lat,
+                    longitude: focusedLocation.lng,
+                  }}
+                  title="Selected Location"
+                />
+              )}
+            </MapView>
+          )}
         </View>
       ) : isViewingDestinations ? (
         <>
