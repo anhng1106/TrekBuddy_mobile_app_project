@@ -15,6 +15,8 @@
       "supportsTablet": true
     },
     "android": {
+      "package": "com.nayoungg.trekbuddy",
+      "versionCode": 1,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
@@ -23,6 +25,11 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "newArchEnabled": true
+    "newArchEnabled": true,
+    "extra": {
+      "eas": {
+        "projectId": "3612c9b8-f611-4197-acf9-a3c87b48a08b"
+      }
+    }
   }
 }
