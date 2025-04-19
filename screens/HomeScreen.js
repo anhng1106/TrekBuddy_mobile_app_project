@@ -28,12 +28,15 @@ const HomeScreen = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [famousCities, setFamousCities] = useState([]);
   const [touristDestinations, setTouristDestinations] = useState([]);
+  const [restaurants, setRestaurants] = useState([]);
+
   const [selectedCity, setSelectedCity] = useState("");
   const [isViewingDestinations, setIsViewingDestinations] = useState(false); // Track current view
   const [isMapView, setIsMapView] = useState(false);
   const [focusedLocation, setFocusedLocation] = useState(null);
   const [weatherInfo, setWeatherInfo] = useState(null);
   const [weatherDataByCity, setWeatherDataByCity] = useState({});
+  const [selectedTab, setSelectedTab] = useState("destinations");
 
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [itemToSave, setItemToSave] = useState(null);
@@ -127,6 +130,29 @@ const HomeScreen = () => {
     }
   };
 
+  const fetchRestaurants = async (cityName) => {
+    try {
+      const response = await fetch(
+        `https://maps.googleapis.com/maps/api/place/textsearch/json?query=restaurants+in+${cityName}&key=${GOOGLE_API_KEY}`
+      );
+      const data = await response.json();
+      if (data.results) {
+        const restaurants = data.results.map((place) => ({
+          id: place.place_id,
+          name: place.name,
+          address: place.formatted_address,
+          location: place.geometry?.location,
+          photo: place.photos
+            ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${place.photos[0].photo_reference}&key=${GOOGLE_API_KEY}`
+            : "https://via.placeholder.com/150",
+        }));
+        setRestaurants(restaurants);
+      }
+    } catch (error) {
+      console.error("Error fetching restaurants:", error);
+    }
+  };
+
   const handleSearchTermChange = (text) => {
     setSearchTerm(text);
 
@@ -170,7 +196,10 @@ const HomeScreen = () => {
     return (
       <TouchableOpacity
         style={styles.placeItem}
-        onPress={() => fetchTouristDestinations(item.name)}
+        onPress={() => {
+          fetchTouristDestinations(item.name);
+          fetchRestaurants(item.name);
+        }}
       >
         <Image source={{ uri: item.photo }} style={styles.placeImage} />
         <View style={styles.placeInfo}>
@@ -261,7 +290,6 @@ const HomeScreen = () => {
         style={styles.bannerImage}
       />
 
-      {/* Conditionally render slider, cities, or tourist destinations */}
       {isMapView ? (
         <View style={styles.mapContainer}>
           <TouchableOpacity
@@ -304,34 +332,58 @@ const HomeScreen = () => {
               ← {i18n.t("backToCities")}
             </Text>
           </TouchableOpacity>
-          <Text style={styles.sectionTitle}>
-            {i18n.t("famousDestinations")} {selectedCity}
-          </Text>
 
-          {/* {weatherInfo && (
-            <View
-              style={{
-                flexDirection: "row",
-                alignItems: "center",
-                marginLeft: 16,
-                marginBottom: 10,
+          <Text style={styles.sectionTitle}>{selectedCity}</Text>
+
+          {/* Toggle tabs */}
+          <View style={styles.tabRow}>
+            <TouchableOpacity
+              style={[
+                styles.tabButton,
+                selectedTab === "destinations" && styles.activeTab,
+              ]}
+              onPress={() => setSelectedTab("destinations")}
+            >
+              <Text
+                style={[
+                  styles.tabText,
+                  selectedTab === "destinations" && styles.activeTabText,
+                ]}
+              >
+                {i18n.t("destinations")}
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[
+                styles.tabButton,
+                selectedTab === "restaurants" && styles.activeTab,
+              ]}
+              onPress={() => {
+                setSelectedTab("restaurants");
+                fetchRestaurants(selectedCity);
               }}
             >
-              <Image
-                source={{
-                  uri: `https://openweathermap.org/img/wn/${weatherInfo.icon}@2x.png`,
-                }}
-                style={{ width: 40, height: 40 }}
-              />
-              <Text style={{ fontSize: 16, marginLeft: 10 }}>
-                {i18n.t("weather")}: {weatherInfo.temp}°C,{" "}
-                {weatherInfo.condition}
+              <Text
+                style={[
+                  styles.tabText,
+                  selectedTab === "restaurants" && styles.activeTabText,
+                ]}
+              >
+                {i18n.t("restaurants")}
               </Text>
-            </View>
-          )} */}
+            </TouchableOpacity>
+          </View>
+
+          <Text style={styles.sectionTitle}>
+            {selectedTab === "destinations"
+              ? `${i18n.t("famousDestinations")} `
+              : `${i18n.t("recommendedRestaurants")} `}
+          </Text>
 
           <FlatList
-            data={touristDestinations}
+            data={
+              selectedTab === "destinations" ? touristDestinations : restaurants
+            }
             renderItem={renderDestinationItem}
             keyExtractor={(item) => item.id}
             contentContainerStyle={styles.placesList}
@@ -353,6 +405,7 @@ const HomeScreen = () => {
         </View>
       )}
 
+      {/* Modal to choose collection */}
       <Modal visible={isModalVisible} transparent animationType="slide">
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
@@ -441,6 +494,34 @@ const lightTheme = StyleSheet.create({
     alignItems: "center",
     marginTop: 20,
   },
+  tabRow: {
+    flexDirection: "row",
+    justifyContent: "center",
+    marginVertical: 10,
+    gap: 10,
+  },
+
+  tabButton: {
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 20,
+    backgroundColor: "#ddd",
+  },
+
+  activeTab: {
+    backgroundColor: "#db5b2a",
+  },
+
+  tabText: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "#333",
+  },
+
+  activeTabText: {
+    color: "#fff",
+  },
+
   buttonText: {
     color: "#fff",
     fontSize: 18,
@@ -647,6 +728,34 @@ const darkTheme = StyleSheet.create({
     alignItems: "center",
     marginTop: 20,
   },
+  tabRow: {
+    flexDirection: "row",
+    justifyContent: "center",
+    marginVertical: 10,
+    gap: 10,
+  },
+
+  tabButton: {
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 20,
+    backgroundColor: "#ddd",
+  },
+
+  activeTab: {
+    backgroundColor: "#db5b2a",
+  },
+
+  tabText: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "#333",
+  },
+
+  activeTabText: {
+    color: "#fff",
+  },
+
   buttonText: {
     color: "#fff",
     fontSize: 18,
