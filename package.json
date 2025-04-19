@@ -7,7 +7,8 @@
     "android": "expo run:android",
     "ios": "expo run:ios",
     "web": "expo start --web",
-    "eas-build-pre-install": "npx expo prebuild --platform android"
+    "eas-build-pre-install": "npx expo prebuild --platform android",
+    "postinstall": "mkdir -p node_modules/expo-modules-autolinking/exports && cp node_modules/expo-modules-autolinking/exports.js node_modules/expo-modules-autolinking/exports/index.js"
   },
   "dependencies": {
     "@babel/plugin-transform-class-properties": "^7.25.9",
@@ -29,6 +30,7 @@
     "expo-file-system": "~18.0.4",
     "expo-image-picker": "~16.0.6",
     "expo-localization": "^16.0.1",
+    "expo-modules-autolinking": "^2.0.8",
     "expo-status-bar": "~2.0.1",
     "expo-system-ui": "^4.0.9",
     "firebase": "^11.0.1",
@@ -58,7 +60,10 @@
     "rimraf": "^4.4.1"
   },
   "devDependencies": {
-    "@babel/core": "^7.20.0"
+    "@babel/core": "^7.20.0",
+    "@tsconfig/node18": "^18.2.4",
+    "eas-cli": "^16.3.2",
+    "patch-package": "^8.0.0"
   },
   "expo": {
     "sdkVersion": "52.0.0"
