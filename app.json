@@ -26,7 +26,11 @@
       "favicon": "./assets/favicon.png"
     },
     "newArchEnabled": true,
-
-    "owner": "heomoi1106"
+    "owner": "heomoi1106",
+    "extra": {
+      "eas": {
+        "projectId": "47787953-771b-4baa-a7ca-eb18cc139178"
+      }
+    }
   }
 }
