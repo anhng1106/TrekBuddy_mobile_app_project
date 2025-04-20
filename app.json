@@ -3,6 +3,7 @@
     "name": "TrekBuddy_mobile_app_project",
     "slug": "TrekBuddy_mobile_app_project",
     "version": "1.0.0",
+    "sdkVersion": "52.0.11",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -15,6 +16,8 @@
       "supportsTablet": true
     },
     "android": {
+      "package": "com.nayoungg.trekbuddy",
+      "versionCode": 1,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
@@ -24,10 +27,7 @@
       "favicon": "./assets/favicon.png"
     },
     "newArchEnabled": true,
-    "extra": {
-      "eas": {
-        "projectId": "3612c9b8-f611-4197-acf9-a3c87b48a08b"
-      }
-    }
+
+    "owner": "heomoi1106"
   }
 }

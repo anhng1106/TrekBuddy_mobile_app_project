@@ -47,5 +47,8 @@
   "devDependencies": {
     "@babel/core": "^7.20.0"
   },
+  "expo": {
+    "sdkVersion": "52.0.11"
+  },
   "private": true
 }
