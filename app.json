@@ -3,7 +3,6 @@
     "name": "TrekBuddy_mobile_app_project",
     "slug": "TrekBuddy_mobile_app_project",
     "version": "1.0.0",
-    "sdkVersion": "52.0.11",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
