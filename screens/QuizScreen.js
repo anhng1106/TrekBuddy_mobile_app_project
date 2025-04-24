@@ -127,9 +127,9 @@ const QuizScreen = ({ navigation }) => {
         {
           text: "OK",
           onPress: () => {
-            navigation.reset({
-              index: 0,
-              routes: [{ name: "ProfileScreen", params: { refresh: true } }],
+            navigation.navigate("HomeScreen", {
+              screen: "Profile",
+              params: { refresh: true },
             });
           },
         },
