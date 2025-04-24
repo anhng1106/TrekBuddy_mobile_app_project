@@ -11,6 +11,7 @@ import {
   Alert,
 } from "react-native";
 import MapView, { Marker } from "react-native-maps";
+import { PROVIDER_GOOGLE } from react-native-maps;
 import { ThemeContext } from "../ThemeContext";
 import Slider from "./Slider";
 import { ImageSlider } from "../data/SliderData";
@@ -303,7 +304,7 @@ const HomeScreen = () => {
             </Text>
           </TouchableOpacity>
           <MapView
-            provider="google"
+            provider={PROVIDER_GOOGLE}
             style={styles.map}
             initialRegion={{
               latitude: focusedLocation?.lat || 60.200692,
