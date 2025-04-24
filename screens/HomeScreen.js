@@ -303,6 +303,7 @@ const HomeScreen = () => {
             </Text>
           </TouchableOpacity>
           <MapView
+            provider="google"
             style={styles.map}
             initialRegion={{
               latitude: focusedLocation?.lat || 60.200692,

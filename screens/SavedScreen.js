@@ -347,7 +347,11 @@ const SavedScreen = () => {
       >
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>{i18n.t("deleteItemConfirm")}</Text>
+            <Text style={styles.modalTitle}>
+              {i18n.t("deleteItemConfirm")}{" "}
+              <Text style={styles.collectionName}>{itemToDelete?.name}</Text>?
+            </Text>
+
             <View style={styles.modalButtons}>
               <TouchableOpacity
                 style={styles.noButton}

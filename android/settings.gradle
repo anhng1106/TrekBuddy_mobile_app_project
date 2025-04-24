@@ -21,7 +21,7 @@ extensions.configure(com.facebook.react.ReactSettingsExtension) { ex ->
   }
 }
 
-rootProject.name = 'TrekBuddymobileappproject'
+rootProject.name = 'TrekBuddy_mobile_app_project'
 
 dependencyResolutionManagement {
   versionCatalogs {

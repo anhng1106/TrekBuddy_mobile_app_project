@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "TrekBuddy_mobile_app_project",
+    "name": "TrekBuddy",
     "slug": "TrekBuddy_mobile_app_project",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -18,6 +18,11 @@
     "android": {
       "package": "com.nayoungg.trekbuddy",
       "versionCode": 1,
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyCQjBe1fwxL0vcF-bZ1Wl5gmBYi_YevYXg"
+        }
+      },
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
@@ -32,6 +37,10 @@
       "eas": {
         "projectId": "47787953-771b-4baa-a7ca-eb18cc139178"
       }
+    },
+    "runtimeVersion": "1.0.0",
+    "updates": {
+      "url": "https://u.expo.dev/47787953-771b-4baa-a7ca-eb18cc139178"
     }
   }
 }
