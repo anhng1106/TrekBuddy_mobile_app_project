@@ -179,7 +179,9 @@ const SavedScreen = () => {
       onPress={() => setSelectedCollection(item)}
     >
       <Text style={styles.collectionTitle}>{item.title}</Text>
-      {item.items && item.items.length > 0 ? (
+      {item.items &&
+      item.items.length > 0 &&
+      typeof item.items[0].photo === "string" ? (
         <Image
           source={{ uri: item.items[0].photo }}
           style={styles.collectionImage}
@@ -187,6 +189,7 @@ const SavedScreen = () => {
       ) : (
         <Icon name="images-outline" size={50} color="#ccc" />
       )}
+
       <TouchableOpacity
         style={styles.optionsIcon}
         onPress={() => openDeleteCollectionModal(item)}
@@ -198,7 +201,12 @@ const SavedScreen = () => {
 
   const renderSavedItem = ({ item }) => (
     <View style={styles.savedItem}>
-      <Image source={{ uri: item.photo }} style={styles.savedItemImage} />
+      {typeof item.photo === "string" ? (
+        <Image source={{ uri: item.photo }} style={styles.savedItemImage} />
+      ) : (
+        <Icon name="image-outline" size={50} color="#ccc" />
+      )}
+
       <View style={styles.savedItemInfo}>
         <Text style={styles.savedItemName}>{item.name}</Text>
         <Text style={styles.savedItemAddress}>{item.address}</Text>

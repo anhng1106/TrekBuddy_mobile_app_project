@@ -33,9 +33,10 @@ const RestaurantsScreen = ({ route, navigation }) => {
         id: place.place_id,
         name: place.name,
         address: place.formatted_address,
-        photo: place.photos
-          ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${place.photos[0].photo_reference}&key=${GOOGLE_API_KEY}`
-          : "https://via.placeholder.com/150",
+        photo:
+          place.photos && place.photos[0]?.photo_reference
+            ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${place.photos[0].photo_reference}&key=${GOOGLE_API_KEY}`
+            : "https://via.placeholder.com/150",
       }));
       setRestaurants(list);
     } catch (error) {

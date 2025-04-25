@@ -60,9 +60,10 @@ const HomeScreen = () => {
           name: place.name,
           address: place.formatted_address,
           location: place.geometry?.location,
-          photo: place.photos
-            ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${place.photos[0].photo_reference}&key=${GOOGLE_API_KEY}`
-            : "https://via.placeholder.com/150",
+          photo:
+            place.photos && place.photos[0]?.photo_reference
+              ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${place.photos[0].photo_reference}&key=${GOOGLE_API_KEY}`
+              : "https://via.placeholder.com/150",
         }));
         setFamousCities(cities);
         setTouristDestinations([]);
@@ -110,9 +111,10 @@ const HomeScreen = () => {
           name: place.name,
           address: place.formatted_address,
           location: place.geometry?.location,
-          photo: place.photos
-            ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${place.photos[0].photo_reference}&key=${GOOGLE_API_KEY}`
-            : "https://via.placeholder.com/150",
+          photo:
+            place.photos && place.photos[0]?.photo_reference
+              ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${place.photos[0].photo_reference}&key=${GOOGLE_API_KEY}`
+              : "https://via.placeholder.com/150",
         }));
         setTouristDestinations(destinations);
         setSelectedCity(cityName);
@@ -142,9 +144,10 @@ const HomeScreen = () => {
           name: place.name,
           address: place.formatted_address,
           location: place.geometry?.location,
-          photo: place.photos
-            ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${place.photos[0].photo_reference}&key=${GOOGLE_API_KEY}`
-            : "https://via.placeholder.com/150",
+          photo:
+            place.photos && place.photos[0]?.photo_reference
+              ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${place.photos[0].photo_reference}&key=${GOOGLE_API_KEY}`
+              : "https://via.placeholder.com/150",
         }));
         setRestaurants(restaurants);
       }
