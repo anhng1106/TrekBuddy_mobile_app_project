@@ -20,7 +20,7 @@
       "versionCode": 1,
       "config": {
         "googleMaps": {
-          "apiKey": "process.env.GOOGLE_MAPS_API_KEY"
+          "apiKey": "AIzaSyCQjBe1fwxL0vcF-bZ1Wl5gmBYi_YevYXg"
         }
       },
       "adaptiveIcon": {
