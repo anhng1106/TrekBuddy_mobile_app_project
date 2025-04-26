@@ -445,7 +445,7 @@ const lightTheme = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fdeae2",
-    paddingTop: 40,
+    paddingTop: 100,
   },
   topBar: {
     flexDirection: "row",
@@ -679,7 +679,7 @@ const darkTheme = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#545454",
-    paddingTop: 40,
+    paddingTop: 100,
   },
   topBar: {
     flexDirection: "row",

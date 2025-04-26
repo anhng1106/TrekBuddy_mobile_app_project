@@ -110,11 +110,13 @@ const LoginScreen = ({ navigation }) => {
     <View style={styles.container}>
       <View style={styles.topIcons}>
         <TouchableOpacity onPress={toggleTheme} style={styles.iconButton}>
-          <Icon
-            name={theme === "light" ? "moon" : "sunny"}
-            size={26}
-            color={theme === "light" ? "#000" : "#fff"}
-          />
+          <View style={styles.themeIcon}>
+            <Icon
+              name={theme === "light" ? "moon" : "sunny"}
+              size={26}
+              color={theme === "light" ? "#000" : "#fff"}
+            />
+          </View>
         </TouchableOpacity>
         <TouchableOpacity onPress={toggleLanguage} style={styles.iconButton}>
           <View style={styles.languageIcon}>
@@ -171,8 +173,13 @@ const lightTheme = {
     paddingVertical: 4,
     justifyContent: "center",
     alignItems: "center",
+    marginTop: 40,
   },
-
+  themeIcon: {
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 40,
+  },
   languageText: {
     color: "#fff",
     fontWeight: "bold",
@@ -185,6 +192,7 @@ const lightTheme = {
     right: 20,
     gap: 12,
     zIndex: 1,
+    marginTop: 40,
   },
   logo: {
     width: 450,
@@ -249,6 +257,7 @@ const darkTheme = {
     paddingVertical: 4,
     justifyContent: "center",
     alignItems: "center",
+    marginTop: 40,
   },
 
   languageText: {

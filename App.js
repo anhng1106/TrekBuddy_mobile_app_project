@@ -34,6 +34,7 @@ function HomeTabs() {
     <Tab.Navigator
       key={language}
       screenOptions={({ route }) => ({
+        headerShown: false,
         tabBarIcon: ({ color, size = 24 }) => {
           let iconName;
           if (route.name === "Explore") {
@@ -85,37 +86,37 @@ export default function App() {
               <Stack.Screen
                 name="LoginScreen"
                 component={LoginScreen}
-                options={{ title: "TREKBUDDY - Sign In" }}
+                options={{ headerShown: false }}
               />
               <Stack.Screen
                 name="SignupScreen"
                 component={SignupScreen}
-                options={{ title: "TREKBUDDY - Sign Up" }}
+                options={{ headerShown: false }}
               />
               <Stack.Screen
                 name="HomeScreen"
-                component={HomeTabs} // Replace HomeScreen with HomeTabs
-                options={{ title: "TREKBUDDY - Home", headerShown: false }}
+                component={HomeTabs}
+                options={{ headerShown: false }}
               />
               <Stack.Screen
                 name="ProfileScreen"
-                component={ProfileScreen} // Ensure ProfileScreen is here
-                options={{ title: "TREKBUDDY - Profile" }}
+                component={ProfileScreen}
+                options={{ headerShown: false }}
               />
               <Stack.Screen
                 name="AboutPage"
                 component={AboutPage}
-                options={{ title: "About" }}
+                options={{ headerShown: false }}
               />
               <Stack.Screen
                 name="DataProtectionPolicyPage"
                 component={DataProtectionPolicyPage}
-                options={{ title: "Data Protection Policy" }}
+                options={{ headerShown: false }}
               />
               <Stack.Screen
                 name="QuizScreen"
                 component={QuizScreen}
-                options={{ title: "Quiz Game" }}
+                options={{ headerShown: false }}
               />
             </Stack.Navigator>
           </NavigationContainer>

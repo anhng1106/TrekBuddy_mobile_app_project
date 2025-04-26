@@ -326,7 +326,8 @@ const lightTheme = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fdeae2", // Light theme background
-    paddingHorizontal: 15,
+    paddingHorizontal: 20,
+    paddingTop: 50,
   },
   header: {
     flexDirection: "row",
@@ -506,6 +507,7 @@ const darkTheme = StyleSheet.create({
     flex: 1,
     backgroundColor: "#545454", // Dark theme background
     paddingHorizontal: 20,
+    paddingTop: 50,
   },
   header: {
     flexDirection: "row",

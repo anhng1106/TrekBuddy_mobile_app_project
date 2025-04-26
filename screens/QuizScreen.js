@@ -185,6 +185,7 @@ const lightTheme = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fdeae2", // Light theme background
     paddingHorizontal: 15,
+    paddingTop: 50,
   },
   header: {
     flexDirection: "row",
@@ -245,35 +246,68 @@ const lightTheme = StyleSheet.create({
 });
 
 const darkTheme = {
-  ...lightTheme,
   container: {
-    ...lightTheme.container,
+    flex: 1,
     backgroundColor: "#545454",
+    paddingHorizontal: 15,
+    paddingTop: 50,
   },
   header: {
-    ...lightTheme.header,
-    color: "#fff",
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#545454",
+    paddingVertical: 16,
+    paddingHorizontal: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: "#ddd",
   },
   headerTitle: {
-    ...lightTheme.headerTitle,
+    flex: 1,
+    fontSize: 20,
+    fontWeight: "bold",
     color: "#fff",
+    textAlign: "center",
   },
   logo: {
-    ...lightTheme.logo,
+    width: "100%",
     height: "30%",
+    alignSelf: "center",
+    marginBottom: "2%",
+    marginTop: "2%",
   },
   question: {
-    ...lightTheme.question,
+    fontSize: 18,
+    marginBottom: 10,
+    fontWeight: "bold",
     color: "#fff",
   },
   option: {
-    ...lightTheme.option,
-    backgroundColor: "#333",
-    borderColor: "#555",
+    backgroundColor: "#fff",
+    padding: 14,
+    marginVertical: 6,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: "#ddd",
+  },
+  selectedOption: {
+    borderColor: "#fc8fa7",
+    backgroundColor: "#ffe3ec",
   },
   optionText: {
-    ...lightTheme.optionText,
+    fontSize: 16,
+    color: "#000",
+  },
+  button: {
+    backgroundColor: "#fc8fa7",
+    padding: 12,
+    borderRadius: 8,
+    marginTop: 20,
+    alignItems: "center",
+  },
+  buttonText: {
     color: "#fff",
+    fontSize: 18,
+    fontWeight: "bold",
   },
 };
 

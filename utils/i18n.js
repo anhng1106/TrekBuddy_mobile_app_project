@@ -27,7 +27,8 @@ const i18n = new I18n({
     wrongPassword: "Incorrect password. Please try again.",
     invalidEmail: "Invalid email format. Please enter a valid email.",
     tooManyRequests: "Too many login attempts. Please try again later.",
-    genericLoginError: "Please check your email or password and try again.",
+    genericLoginError:
+      "Please check your email and password or internet connection and try again.",
     emailInUse: "Email Already Exists",
     useDifferentEmail:
       "The email address is already in use by another account. Please use a different email.",
@@ -185,7 +186,8 @@ const i18n = new I18n({
     wrongPassword: "Mật khẩu không đúng. Vui lòng thử lại.",
     invalidEmail: "Định dạng email không hợp lệ. Vui lòng nhập email hợp lệ.",
     tooManyRequests: "Đăng nhập quá nhiều lần. Vui lòng thử lại sau.",
-    genericLoginError: "Vui lòng kiểm tra lại email hoặc mật khẩu.",
+    genericLoginError:
+      "Vui lòng kiểm tra lại email hoặc mật khẩu và kết nối internet.",
     emailInUse: "Email đã được sử dụng",
     useDifferentEmail:
       "Địa chỉ email này đã được sử dụng bởi tài khoản khác. Vui lòng sử dụng email khác.",
