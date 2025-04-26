@@ -6,6 +6,7 @@ import {
   FlatList,
   TouchableOpacity,
   Switch,
+  Dimensions,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
@@ -13,6 +14,8 @@ import { ThemeContext } from "../ThemeContext";
 import Icon from "react-native-vector-icons/Ionicons";
 import i18n from "../utils/i18n";
 import { LanguageContext } from "../LanguageContext";
+
+const { width, height } = Dimensions.get("window");
 
 const SettingScreen = () => {
   const { theme, toggleTheme } = useContext(ThemeContext);
@@ -122,7 +125,7 @@ const lightTheme = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fdeae2",
-    paddingTop: 50,
+    paddingVertical: height * 0.06,
   },
   header: {
     flexDirection: "row",
@@ -189,7 +192,7 @@ const darkTheme = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#545454",
-    paddingTop: 50,
+    paddingVertical: height * 0.06,
   },
   header: {
     flexDirection: "row",

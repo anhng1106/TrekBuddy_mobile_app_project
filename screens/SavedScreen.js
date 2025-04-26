@@ -10,6 +10,7 @@ import {
   TouchableOpacity,
   Image,
   Alert,
+  Dimensions,
 } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
 import { ThemeContext } from "../ThemeContext";
@@ -25,6 +26,8 @@ import {
   arrayRemove,
 } from "firebase/firestore";
 import i18n from "../utils/i18n";
+
+const { width, height } = Dimensions.get("window");
 
 const SavedScreen = () => {
   const { theme } = useContext(ThemeContext);
@@ -378,6 +381,7 @@ const lightTheme = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fdeae2",
+    paddingVertical: height * 0.06,
   },
   header: {
     flexDirection: "row",
@@ -558,6 +562,7 @@ const darkTheme = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#545454",
+    paddingVertical: height * 0.06,
   },
   header: {
     flexDirection: "row",
@@ -565,7 +570,7 @@ const darkTheme = StyleSheet.create({
     paddingVertical: 16,
     paddingHorizontal: 20,
     borderBottomWidth: 1,
-    borderBottomColor: "#444",
+    borderBottomColor: "#fff",
   },
   backButton: {
     position: "absolute",

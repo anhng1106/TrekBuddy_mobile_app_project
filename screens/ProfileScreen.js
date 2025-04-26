@@ -9,6 +9,7 @@ import {
   StyleSheet,
   Modal,
   Button,
+  Dimensions,
 } from "react-native";
 import { auth, db, storage } from "../firebaseConfig";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
@@ -17,6 +18,8 @@ import Icon from "react-native-vector-icons/Ionicons";
 import { ThemeContext } from "../ThemeContext";
 import { uploadToFirebase } from "../firebaseConfig";
 import i18n from "../utils/i18n";
+
+const { width, height } = Dimensions.get("window");
 
 const ProfileScreen = ({ navigation }) => {
   const [email, setEmail] = useState(auth.currentUser.email || "");
@@ -326,8 +329,8 @@ const lightTheme = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fdeae2", // Light theme background
-    paddingHorizontal: 20,
-    paddingTop: 50,
+    paddingVertical: height * 0.06,
+    paddingHorizontal: width * 0.03,
   },
   header: {
     flexDirection: "row",
@@ -506,8 +509,8 @@ const darkTheme = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#545454", // Dark theme background
-    paddingHorizontal: 20,
-    paddingTop: 50,
+    paddingVertical: height * 0.06,
+    paddingHorizontal: width * 0.03,
   },
   header: {
     flexDirection: "row",

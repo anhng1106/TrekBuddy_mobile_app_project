@@ -6,6 +6,7 @@ import {
   Image,
   TouchableOpacity,
   Alert,
+  Dimensions,
 } from "react-native";
 import RNPickerSelect from "react-native-picker-select";
 import Icon from "react-native-vector-icons/Ionicons";
@@ -16,6 +17,8 @@ import { auth, db } from "../firebaseConfig";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import moment from "moment";
 import i18n from "../utils/i18n";
+
+const { width, height } = Dimensions.get("window");
 
 const updateLoginStreak = async () => {
   const userRef = doc(db, "Users", auth.currentUser.uid);
@@ -164,7 +167,8 @@ const lightTheme = {
     flex: 1,
     justifyContent: "center",
     backgroundColor: "#fdeae2",
-    padding: 20,
+    paddingTop: height * 0.15,
+    paddingHorizontal: width * 0.05,
   },
   languageIcon: {
     backgroundColor: "#fc8fa7",
@@ -173,12 +177,12 @@ const lightTheme = {
     paddingVertical: 4,
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 40,
+    marginTop: 30,
   },
   themeIcon: {
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 40,
+    marginTop: 30,
   },
   languageText: {
     color: "#fff",
@@ -248,7 +252,8 @@ const darkTheme = {
     flex: 1,
     justifyContent: "center",
     backgroundColor: "#545454",
-    padding: 20,
+    paddingTop: height * 0.15,
+    paddingHorizontal: width * 0.05,
   },
   languageIcon: {
     backgroundColor: "#fc8fa7",
@@ -257,9 +262,13 @@ const darkTheme = {
     paddingVertical: 4,
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 40,
+    marginTop: 30,
   },
-
+  themeIcon: {
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 30,
+  },
   languageText: {
     color: "#fff",
     fontWeight: "bold",
@@ -272,6 +281,7 @@ const darkTheme = {
     right: 20,
     gap: 12,
     zIndex: 1,
+    marginTop: 40,
   },
   logo: {
     width: 450,

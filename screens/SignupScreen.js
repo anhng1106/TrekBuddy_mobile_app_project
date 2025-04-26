@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   Alert,
   Image,
+  Dimensions,
 } from "react-native";
 import { ThemeContext } from "../ThemeContext";
 import {
@@ -15,6 +16,8 @@ import {
 import { doc, setDoc } from "firebase/firestore"; // Import Firestore methods
 import { auth, db } from "../firebaseConfig"; // Import Firestore instance
 import i18n from "../utils/i18n";
+
+const { width, height } = Dimensions.get("window");
 
 const SignupScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
@@ -127,7 +130,8 @@ const lightTheme = {
     flex: 1,
     justifyContent: "center",
     backgroundColor: "#fdeae2",
-    padding: 20,
+    paddingTop: height * 0.1,
+    paddingHorizontal: width * 0.05,
   },
   logo: {
     width: 450,
@@ -178,6 +182,8 @@ const darkTheme = {
     justifyContent: "center",
     backgroundColor: "#545454",
     padding: 20,
+    paddingTop: height * 0.1,
+    paddingHorizontal: width * 0.05,
   },
   logo: {
     width: 450,

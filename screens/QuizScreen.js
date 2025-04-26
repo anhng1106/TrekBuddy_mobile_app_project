@@ -6,12 +6,15 @@ import {
   StyleSheet,
   Alert,
   Image,
+  Dimensions,
 } from "react-native";
 import { auth, db } from "../firebaseConfig";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import i18n from "../utils/i18n";
 import { ThemeContext } from "../ThemeContext";
 import Icon from "react-native-vector-icons/Ionicons";
+
+const { width, height } = Dimensions.get("window");
 
 const questions = [
   {
@@ -184,8 +187,8 @@ const lightTheme = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fdeae2", // Light theme background
-    paddingHorizontal: 15,
-    paddingTop: 50,
+    paddingVertical: height * 0.06,
+    paddingHorizontal: width * 0.03,
   },
   header: {
     flexDirection: "row",
@@ -195,6 +198,10 @@ const lightTheme = StyleSheet.create({
     paddingHorizontal: 20,
     borderBottomWidth: 1,
     borderBottomColor: "#ddd",
+  },
+  backButton: {
+    position: "absolute",
+    left: 10,
   },
   headerTitle: {
     flex: 1,
@@ -249,8 +256,8 @@ const darkTheme = {
   container: {
     flex: 1,
     backgroundColor: "#545454",
-    paddingHorizontal: 15,
-    paddingTop: 50,
+    paddingVertical: height * 0.06,
+    paddingHorizontal: width * 0.03,
   },
   header: {
     flexDirection: "row",
@@ -260,6 +267,10 @@ const darkTheme = {
     paddingHorizontal: 20,
     borderBottomWidth: 1,
     borderBottomColor: "#ddd",
+  },
+  backButton: {
+    position: "absolute",
+    left: 10,
   },
   headerTitle: {
     flex: 1,

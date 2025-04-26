@@ -8,10 +8,13 @@ import {
   Linking,
   Alert,
   Image,
+  Dimensions,
 } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
 import { ThemeContext } from "../ThemeContext";
 import i18n from "../utils/i18n";
+
+const { width, height } = Dimensions.get("window");
 
 // AboutPage component displays information about the app
 const AboutPage = ({ navigation }) => {
@@ -98,7 +101,7 @@ const lightTheme = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fdeae2",
-    paddingTop: 50,
+    paddingVertical: height * 0.06,
   },
   header: {
     flexDirection: "row",
@@ -174,7 +177,7 @@ const darkTheme = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#545454",
-    paddingTop: 50,
+    paddingVertical: height * 0.06,
   },
   header: {
     flexDirection: "row",

@@ -9,6 +9,7 @@ import {
   FlatList,
   Modal,
   Alert,
+  Dimensions,
 } from "react-native";
 import MapView, { Marker } from "react-native-maps";
 import { PROVIDER_GOOGLE } from "react-native-maps";
@@ -20,6 +21,8 @@ import { OPENWEATHER_API_KEY } from "@env";
 
 import { SavedContext } from "../data/SavedContext";
 import i18n from "../utils/i18n";
+
+const { width, height } = Dimensions.get("window");
 
 const HomeScreen = () => {
   const { theme } = useContext(ThemeContext);
@@ -445,7 +448,7 @@ const lightTheme = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fdeae2",
-    paddingTop: 100,
+    paddingTop: height * 0.11,
   },
   topBar: {
     flexDirection: "row",
@@ -679,7 +682,7 @@ const darkTheme = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#545454",
-    paddingTop: 100,
+    paddingTop: height * 0.11,
   },
   topBar: {
     flexDirection: "row",

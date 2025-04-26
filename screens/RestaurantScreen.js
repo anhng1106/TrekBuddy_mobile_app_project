@@ -7,6 +7,7 @@ import {
   Image,
   TouchableOpacity,
   StyleSheet,
+  Dimensions,
 } from "react-native";
 import { ThemeContext } from "../ThemeContext";
 import i18n from "../utils/i18n";
